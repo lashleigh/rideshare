@@ -1,8 +1,10 @@
+var infoWindow = new google.maps.InfoWindow();
 var mapLine;
 var map;
 var seattle = new google.maps.LatLng(47.609722, -122.333056);
 var detroit = new google.maps.LatLng(42.331389, -83.045833);
 var newyork = new google.maps.LatLng(43, -75);
+var routes = [];
 
 $(function() {
   // Initialize the map with default UI.
@@ -19,6 +21,9 @@ $(function() {
                                      });
   mapLine.runEdit(true);
   mapLine.setMap(map);
+
+  $(cities).each(drawCity);
+  $(routes).each(drawRoute);
   new google.maps.event.addListener(map, 'click', function(event) {
     var path = mapLine.getPath();
     path.push(event.latLng);
@@ -26,3 +31,16 @@ $(function() {
     mapLine.runEdit();
   }); 
 });
+
+function drawCity(i, placeObj) {
+   var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(placeObj.lat, placeObj.lon),
+    map: map,
+    title: placeObj.name,
+    //draggable: true,
+  });
+  google.maps.event.addListener(marker, 'click', function() {
+    infoWindow.setContent('<div class="place_form"><h2>'+ placeObj.name +'</h2></div>');
+    infoWindow.open(map, marker);
+  });
+}
