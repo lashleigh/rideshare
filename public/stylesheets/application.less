@@ -1,8 +1,103 @@
 html { 
   height: 100% 
 }
-body { height: 100%; margin: 0px; padding: 0px }
+body { 
+  height: 100%; 
+  margin: 0px; 
+  padding: 0px; 
+  a {
+    color: #3D5C9D;
+    text-decoration: none;
+  }
+}
+p {
+padding: 0;
+margin: 10px 0;
+}
 #map_container {
-  width: 500px;
+  width: 100%;
   height: 500px;
+}
+#wrap {
+  margin: 0;
+  padding: 0;
+}
+
+#content {
+  background-color: white;
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 0 40px;
+  -webkit-box-shadow: #CCC 4px 0 10px,#CCC -4px 0 10px,#AAA 0 38px 36px -24px;
+  -moz-box-shadow: #CCC 4px 0 10px,#CCC -4px 0 10px,#AAA 0 38px 36px -24px;
+  box-shadow: #CCC 4px 0 10px,#CCC -4px 0 10px,#AAA 0 38px 36px -24px;
+}
+header {
+  border-bottom: 2px solid #222;
+  overflow: hidden;
+  padding-top: 11px;
+}
+#title {
+  font-size: 50px;
+  font-style: normal;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0;
+  float: left;
+  letter-spacing: -0.09em;
+  img {
+    width: 45px;
+    height: 45px;
+    position: relative;
+    top: 5px;
+    left: 1px;
+  }
+}
+header nav {
+  float: right;
+  a {
+    font-family: 'Droid Sans',Arial,sans-serif;
+  }
+  ul {
+    padding-left: 0;
+    list-style: none;
+    margin: 8px 0 5px 0;
+    li {
+      display: inline;
+      margin-left: 10px;
+    }
+  }
+}
+#index {
+  overflow: hidden;
+  margin-bottom: 0;
+  padding: 20px 3px;
+  border-bottom: 1px solid #DDD;
+  text-align: center;
+}
+
+footer {
+clear: both;
+text-align: left;
+padding: 20px 0 10px 0;
+font-size: 12px;
+border-top: 2px solid #222;
+display: inline-block;
+width: 100%;
+color: #BBB;
+}
+.madeby {
+float: right;
+margin-top: -2px;
+text-align: right;
+}
+#town {
+position: relative;
+float: left;
+display: block;
+background: url(/images/home-town.png) 10px 0 no-repeat;
+width: 420px;
+height: 325px;
+padding: 0 0 0 520px;
+margin: 40px 0 0 0;
 }
