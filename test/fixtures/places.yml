@@ -2,8 +2,10 @@
 
 one:
   address: MyString
-  coordinates: 
+  latitude: 1.5
+  longitude: 1.5
 
 two:
   address: MyString
-  coordinates: 
+  latitude: 1.5
+  longitude: 1.5

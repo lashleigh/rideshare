@@ -45,7 +45,7 @@ function drawRoute(i, routeObj) {
 
 function drawCity(i, placeObj) {
    var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(placeObj.coordinates[1], placeObj.coordinates[0]),
+    position: new google.maps.LatLng(placeObj.latitude, placeObj.longitude),
     map: map,
     title: placeObj.address,
     //draggable: true,
