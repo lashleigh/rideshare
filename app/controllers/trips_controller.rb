@@ -10,7 +10,7 @@ class TripsController < ApplicationController
 
   def index
     @trips = Trip.all
-    @cities = City.all
+    @cities = Place.all
 
     respond_to do |format|
       format.html # index.html.erb

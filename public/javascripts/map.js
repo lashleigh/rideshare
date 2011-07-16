@@ -45,13 +45,13 @@ function drawRoute(i, routeObj) {
 
 function drawCity(i, placeObj) {
    var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(placeObj.lat, placeObj.lon),
+    position: new google.maps.LatLng(placeObj.coordinates[1], placeObj.coordinates[0]),
     map: map,
-    title: placeObj.name,
+    title: placeObj.address,
     //draggable: true,
   });
   google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.setContent('<div class="place_form"><h2>'+ placeObj.name +'</h2></div>');
+    infoWindow.setContent('<div class="place_form"><h2><a href="/places/'+ placeObj.id+'">'+placeObj.address+'</a></h2></div>');
     infoWindow.open(map, marker);
   });
 }
