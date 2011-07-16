@@ -1,12 +1,16 @@
-<div style="position: relative; overflow-x: hidden; overflow-y: hidden; " id="town">
-  <div style="position: relative; overflow-x: hidden; overflow-y: hidden; " id="home-create">
+<%= javascript_include_tag 'map_index' %>
 
-    <div class="gwt-HTML"><h1>Find and share great day trips</h1></div>
-  </div>
-  <div style="position: relative; overflow-x: hidden; overflow-y: hidden; " class="panel">
-    <div style="position: relative; overflow-x: hidden; overflow-y: hidden; " class="wrap"><input type="text" tabindex="0" class="gwt-TextBox" style="width: 260px; " maxlength="200">
-      <div tabindex="0" class="gwt-PushButton query gwt-PushButton-up" role="button" aria-pressed="false"><input type="text" tabindex="-1" style="opacity: 0; height: 1px; width: 1px; z-index: -1; overflow-x: hidden; overflow-y: hidden; position: absolute; ">
-      </div>
-    </div>
-  </div>
-</div>
+<%= form_tag( :action => 'show') do %>
+  Search for trips starting in
+  <%= text_field_tag 'origin', nil, :placeholder => 'Seattle, WA' %>
+  <%= hidden_field_tag 'origin_lat' %>
+  <%= hidden_field_tag 'origin_lon' %>
+  and ending in
+  <%= text_field_tag 'destination', nil, :placeholder => 'New York, NY' %>
+  <%= hidden_field_tag 'destination_lat' %>
+  <%= hidden_field_tag 'destination_lon' %>
+  <%= submit_tag 'Search', :id => 'home_search' %>
+<% end %>
+
+<div id="map_container"> </div>
+

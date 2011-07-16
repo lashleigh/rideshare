@@ -1,9 +1,5 @@
 var infoWindow = new google.maps.InfoWindow();
 var map;
-var seattle = new google.maps.LatLng(47.609722, -122.333056);
-var detroit = new google.maps.LatLng(42.331389, -83.045833);
-var newyork = new google.maps.LatLng(43, -75);
-var poly_routes= [];
 
 $(function() {
   // Initialize the map with default UI.
@@ -14,8 +10,8 @@ $(function() {
   });
 
   $(cities).each(drawCity);
-  $(routes).each(drawRoute);
-  
+  $(trips).each(drawRoute);
+
   //new google.maps.event.addListener(map, 'click', function(event) {
   //  var path = mapLine.getPath();
   //  path.push(event.latLng);
@@ -28,14 +24,23 @@ function drawRoute(i, routeObj) {
   for(var i=0; i<routeObj.route.length; i++) {routeLatLng.push(new google.maps.LatLng(routeObj.route[i][0], routeObj.route[i][1]))}
 
   var mapLine = new google.maps.Polyline({map : map,
-      strokeColor   : '#ff0000',
+      strokeColor   : routeObj.has_car ? '#0000ff' : '#00ff00',
       strokeOpacity : 0.6,
       strokeWeight  : 4,
       path: routeLatLng
   });
-  poly_routes.push(mapLine);
-  mapLine.runEdit(true);
   mapLine.setMap(map);
+  new google.maps.event.addListener(mapLine, 'mouseover', function() {
+    this.setOptions({strokeWeight: 8, strokeColor: '#CD00CD'});
+  });
+  new google.maps.event.addListener(mapLine, 'mouseout', function() {
+    this.setOptions({strokeWeight: 4, strokeColor:  routeObj.has_car ? '#0000ff' : '#00ff00'});
+  });
+  new google.maps.event.addListener(mapLine, 'click', function(event) {
+    infoWindow.setContent('<div class="place_form"><h2><a href="/trips/'+routeObj.id+'">'+ routeObj.id +'</a></h2></div>');
+    infoWindow.position = event.latLng;
+    infoWindow.open(map);
+  });
 }
 
 function drawCity(i, placeObj) {
@@ -49,4 +54,11 @@ function drawCity(i, placeObj) {
     infoWindow.setContent('<div class="place_form"><h2>'+ placeObj.name +'</h2></div>');
     infoWindow.open(map, marker);
   });
+}
+
+function drawInterstate() {
+  //var georssLayer = new google.maps.KmlLayer('http://gmaps-samples.googlecode.com/svn/trunk/ggeoxml/cta.kml');
+  var georssLayer = new google.maps.KmlLayer('Interstate5.kml');
+  console.log(georssLayer);
+  georssLayer.setMap(map);
 }

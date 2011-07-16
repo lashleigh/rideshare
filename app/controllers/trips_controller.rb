@@ -22,6 +22,7 @@ class TripsController < ApplicationController
   # GET /trips/1.xml
   def show
     @trip = Trip.find(params[:id])
+    @trips = Trip.all
 
     respond_to do |format|
       format.html # show.html.erb
@@ -33,9 +34,11 @@ class TripsController < ApplicationController
   # GET /trips/new.xml
   def new
     @trip = Trip.new
+    @trip.save
+    @trips = Trip.all
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { redirect_to @trip } 
       format.xml  { render :xml => @trip }
     end
   end

@@ -1,5 +1,15 @@
 <h1>New trip</h1>
+<%= javascript_include_tag 'polylineEdit' %>
+<%= javascript_include_tag 'map_for_trip' %>
+<script type="text/javascript">
+  var trip = <%= @trip.to_json.html_safe %>;
+  var trips = <%= @trips.to_json.html_safe %>;
+</script>
 
-<%= render 'form' %>
+<div id="map_container"> </div>
+
+<p id="notice"><%= notice %></p>
+
+<input id="save_trip" type="button" value="Save" onclick="saveTrip()">
 
 <%= link_to 'Back', trips_path %>
