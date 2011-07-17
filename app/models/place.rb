@@ -6,7 +6,7 @@ class Place
 
   key :address, String
   key :coords, Array
-  Place.ensure_index([["coords", Mongo::GEO2D]])
+  #Place.ensure_index([["coords", Mongo::GEO2D]])
 
   key :active_rides, Array
   key :num_rides, Integer, :default => 0

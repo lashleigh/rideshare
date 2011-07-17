@@ -62,10 +62,6 @@ function drawRoute() {
 }
 function saveTrip() {
   r = [];
-  /*var a = mapLine.getPath().getArray()
-  for(var i=0; i < a.length; i++) {
-    r.push([a[i].lat(), a[i].lng()])
-  }*/
   var places = $(".city_select");
   for(var i=0; i<places.length; i++) {
     r.push($(places[i]).find(":selected").val());
