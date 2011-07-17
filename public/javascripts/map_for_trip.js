@@ -10,7 +10,7 @@ $(function() {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
 
-  $(trips).each(drawOthers);
+  $(trips).each(drawRouteFromPlaces);
   drawRoute();
   new google.maps.event.addListener(map, 'click', function(event) {
     var path = mapLine.getPath();
@@ -20,22 +20,28 @@ $(function() {
   }); 
 
 });
-function drawOthers(i, routeObj) {
+
+function drawRouteFromPlaces(i, routeObj) {
   var routeLatLng = [];
-  for(var i=0; i<routeObj.route.length; i++) {routeLatLng.push(new google.maps.LatLng(routeObj.route[i][0], routeObj.route[i][1]))}
+  for(var i=0; i<routeObj.route.length; i++) {
+    var coords = cities_hash[routeObj.route[i]].coords;
+    routeLatLng.push(new google.maps.LatLng(coords[0], coords[1]));
+  }
 
   var mapLine = new google.maps.Polyline({map : map,
-      strokeColor   : '#555555',
+      strokeColor   : '#555555', 
       strokeOpacity : 0.6,
       strokeWeight  : 4,
       path: routeLatLng
   });
   mapLine.setMap(map);
 }
-  
 function drawRoute() {
   var routeLatLng = [];
-  for(var i=0; i<trip.route.length; i++) {routeLatLng.push(new google.maps.LatLng(trip.route[i][0], trip.route[i][1]))}
+  for(var i=0; i<trip.route.length; i++) {
+    var coords = cities_hash[trip.route[i]].coords;
+    routeLatLng.push(new google.maps.LatLng(coords[0], coords[1]));
+  }
 
   mapLine = new google.maps.Polyline({map : map,
       strokeColor   : '#ff0000',

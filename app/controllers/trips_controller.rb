@@ -23,7 +23,8 @@ class TripsController < ApplicationController
   # GET /trips/1.xml
   def show
     @trip = Trip.find(params[:id])
-    @trips = Trip.all
+    @trips = Trip.all - @trip.to_a
+    @cities_hash = Hash[Place.all.map { |r| [r.id, r] }]
 
     respond_to do |format|
       format.html # show.html.erb

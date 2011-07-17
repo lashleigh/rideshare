@@ -3,6 +3,7 @@
 <script type="text/javascript">
   var trip = <%= @trip.to_json.html_safe %>;
   var trips = <%= @trips.to_json.html_safe %>;
+  var cities_hash = <%= @cities_hash.to_json.html_safe %>;
 </script>
 
 <div id="map_container"> </div>
