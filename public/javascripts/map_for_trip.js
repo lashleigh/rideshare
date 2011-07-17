@@ -55,12 +55,13 @@ $(function() {
 });
 
 function drawCity(i, placeObj) {
-   var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(placeObj.coords[0], placeObj.coords[1]),
+   var marker = new google.maps.Circle({
+    center: new google.maps.LatLng(placeObj.coords[0], placeObj.coords[1]),
+    radius: 50000,
     map: map,
     title: placeObj.address,
-    icon: gYellowIcon,
-    shadow: gSmallShadow,
+    fillColor: '#00ff00',
+    fillOpacity: 0.7,
     //draggable: true,
   });
   new google.maps.event.addListener(marker, 'click', function() {
@@ -68,16 +69,19 @@ function drawCity(i, placeObj) {
     infoWindow.open(map, marker);
   });
   new google.maps.event.addListener(marker, 'mouseover', function() {
-     marker.setIcon(gRedIcon);
+    //marker.setIcon(gRedIcon);
+    marker.setOptions({fillColor: '#0000ff'});
+
     infoWindow.setContent('<div class="place_form"><h2><a href="/places/'+ placeObj.id+'">'+placeObj.address+'</a></h2></div>');
-     infoWindow.open(map, marker);
-     hovering = true;
-     hover_latlng = marker.getPosition();
+    infoWindow.open(map, marker);
+    hovering = true;
+    hover_latlng = marker.getCenter();
   });
   new google.maps.event.addListener(marker, 'mouseout', function() {
-     marker.setIcon(gYellowIcon);
-     infoWindow.close();
-     hovering = false;
+    marker.setOptions({fillColor: '#00ff00'});
+
+    infoWindow.close();
+    hovering = false;
   });
 }
 function drawRouteFromPlaces(i, routeObj) {

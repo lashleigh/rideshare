@@ -65,7 +65,7 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
           ghostPath.getPath().setAt(1, hover_latlng);
           // revert ghost marker position
         } else {
-          // ghostPath.getPath().setAt(1, this.getPosition());
+          ghostPath.getPath().setAt(1, this.getPosition());
           // revert marker location
         }
       };
@@ -88,11 +88,12 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
         }
       };
       var vertexGhostDragEnd = function () {
+        // hovering or not I want the ghostPath to go away
+        ghostPath.getPath().forEach(function () {
+          ghostPath.getPath().pop();
+        });
         if(hovering) {
-          ghostPath.getPath().forEach(function () {
-            ghostPath.getPath().pop();
-          });
-          self.getPath().insertAt(this.marker.inex + 1, this.getPosition());
+          self.getPath().insertAt(this.marker.inex + 1, hover_latlng);
           createMarkerVertex(self.getPath().getAt(this.marker.inex + 1)).inex = this.marker.inex + 1;
           moveGhostMarkers(this.marker);
           createGhostMarkerVertex(self.getPath().getAt(this.marker.inex + 1));
@@ -101,6 +102,10 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
               vertex.marker.inex = inex;
             }
           });
+        } else {
+          //ghostPath.setMap(null);
+          mapLine.stopEdit();
+          mapLine.runEdit();
         }
       };
       var createGhostMarkerVertex = function (point) {
