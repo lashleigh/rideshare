@@ -67,8 +67,13 @@ function drawCity(i, placeObj) {
     //draggable: true,
   });
   new google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.setContent('<div class="place_form"><h2><a href="/places/'+ placeObj.id+'">'+placeObj.address+'</a></h2></div>');
-    infoWindow.open(map, marker);
+    //infoWindow.setContent('<div class="place_form"><h2><a href="/places/'+ placeObj.id+'">'+placeObj.address+'</a></h2></div>');
+    //infoWindow.open(map, marker);
+    var path = mapLine.getPath();
+    path.push(new google.maps.LatLng(placeObj.coords[0], placeObj.coords[1]));
+    r.push(placeObj.id);
+    mapLine.stopEdit();
+    mapLine.runEdit();
   });
   new google.maps.event.addListener(marker, 'mouseover', function() {
     //marker.setIcon(gRedIcon);

@@ -178,6 +178,7 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
           }
         }
         r.splice(this.inex, 1);
+        if (r.length <= 1) { r = [] }
       } 
       else {
         self.getPath().removeAt(this.inex);

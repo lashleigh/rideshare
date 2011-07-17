@@ -9,18 +9,10 @@
 
 <div id="map_container"> </div>
 
-<div class="ui-widget">
-  <label for="tags">Tags: </label>
-  <input id="tags">
-</div>
-
 <p id="notice"><%= notice %></p>
 
 <% form_for(@trip) do |f| %>
   <div class="field">
-    <% @trip.route.each do |r| %>
-      <%= select("place", r,  Place.all.collect {|p| [ p.address, p.id ] }, { :selected => r }, :class => "city_select") %>
-    <% end %>
     <%= f.label :has_car %><br />
     <%= f.check_box :has_car %>
   </div>
