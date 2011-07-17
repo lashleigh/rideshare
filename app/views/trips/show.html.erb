@@ -4,14 +4,19 @@
   var trip = <%= @trip.to_json.html_safe %>;
   var trips = <%= @trips.to_json.html_safe %>;
   var cities_hash = <%= @cities_hash.to_json.html_safe %>;
+  var avail_places = <%= @avail_places.to_json.html_safe %>;
 </script>
 
 <div id="map_container"> </div>
 
 <p id="notice"><%= notice %></p>
+<%= select("place", "place_id",  Place.all.collect {|p| [ p.address, p.id ] }, { :include_blank => true }) %>
 
 <% form_for(@trip) do |f| %>
   <div class="field">
+    <% @trip.route.each do |r| %>
+      <%= select("place", r,  Place.all.collect {|p| [ p.address, p.id ] }, { :selected => r }, :class => "city_select") %>
+    <% end %>
     <%= f.label :has_car %><br />
     <%= f.check_box :has_car %>
   </div>
