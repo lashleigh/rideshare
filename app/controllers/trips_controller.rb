@@ -11,6 +11,7 @@ class TripsController < ApplicationController
   def index
     @trips = Trip.all
     @cities = Place.all
+    @cities_hash = Hash[@cities.map { |r| [r.id, r] }]
 
     respond_to do |format|
       format.html # index.html.erb
