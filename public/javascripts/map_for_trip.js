@@ -4,6 +4,7 @@ var mapLine;
 var r = [];
 var hovering = false;
 var hover_latlng;
+var hover_id;
 var gYellowIcon = new google.maps.MarkerImage(
     "http://labs.google.com/ridefinder/images/mm_20_yellow.png",
     new google.maps.Size(12, 20),
@@ -32,6 +33,7 @@ $(function() {
   $(trips).each(drawRouteFromPlaces);
   for(var i in cities_hash) { drawCity(i, cities_hash[i]) }
   drawRoute();
+  r = trip.route;
 
   /*new google.maps.event.addListener(map, 'click', function(event) {
     var path = mapLine.getPath();
@@ -76,6 +78,7 @@ function drawCity(i, placeObj) {
     infoWindow.open(map, marker);
     hovering = true;
     hover_latlng = marker.getCenter();
+    hover_id = placeObj.id;
   });
   new google.maps.event.addListener(marker, 'mouseout', function() {
     marker.setOptions({fillColor: '#00ff00'});
@@ -116,11 +119,11 @@ function drawRoute() {
   mapLine.setMap(map);
 }
 function saveTrip() {
-  r = [];
-  var places = $(".city_select");
+  /*var places = $(".city_select");
   for(var i=0; i<places.length; i++) {
     r.push($(places[i]).find(":selected").val());
-  }
+  }*/
+
   r = JSON.stringify(r);
 
   $.post("/trips/update_location", {id: trip.id, route: r})

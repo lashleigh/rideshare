@@ -94,6 +94,7 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
         });
         if(hovering) {
           self.getPath().insertAt(this.marker.inex + 1, hover_latlng);
+          r.splice(this.marker.inex + 1, 0, hover_id);
           createMarkerVertex(self.getPath().getAt(this.marker.inex + 1)).inex = this.marker.inex + 1;
           moveGhostMarkers(this.marker);
           createGhostMarkerVertex(self.getPath().getAt(this.marker.inex + 1));
@@ -146,7 +147,6 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
     var vertexDrag = function () {
       if (hovering) {
         var movedVertex = hover_latlng; //this.getPosition();
-        console.log(this);
         movedVertex.marker = this;
         movedVertex.ghostMarker = self.getPath().getAt(this.inex).ghostMarker;
         self.getPath().setAt(this.inex, movedVertex);
@@ -156,6 +156,7 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
       }
     };
     var vertexDragEnd = function() {
+      r.splice(this.inex, 1, hover_id);
       mapLine.stopEdit();
       mapLine.runEdit();
     };
@@ -176,6 +177,7 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
             prevVertex.ghostMarker = undefined;
           }
         }
+        r.splice(this.inex, 1);
       } 
       else {
         self.getPath().removeAt(this.inex);
