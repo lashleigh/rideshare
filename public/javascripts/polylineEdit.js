@@ -60,8 +60,14 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
       var vertexGhostDrag = function () {
         if (ghostPath.getPath().getLength() === 0) {
           ghostPath.setPath([this.marker.getPosition(), this.getPosition(), self.getPath().getAt(this.marker.inex + 1)]);
-        }  
-        ghostPath.getPath().setAt(1, this.getPosition());
+        } 
+        if (hovering) {
+          ghostPath.getPath().setAt(1, hover_latlng);
+          // revert ghost marker position
+        } else {
+          // ghostPath.getPath().setAt(1, this.getPosition());
+          // revert marker location
+        }
       };
       var moveGhostMarkers = function (marker) {
         var Vertex = self.getPath().getAt(marker.inex);
@@ -82,18 +88,20 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
         }
       };
       var vertexGhostDragEnd = function () {
-        ghostPath.getPath().forEach(function () {
-          ghostPath.getPath().pop();
-        });
-        self.getPath().insertAt(this.marker.inex + 1, this.getPosition());
-        createMarkerVertex(self.getPath().getAt(this.marker.inex + 1)).inex = this.marker.inex + 1;
-        moveGhostMarkers(this.marker);
-        createGhostMarkerVertex(self.getPath().getAt(this.marker.inex + 1));
-        self.getPath().forEach(function (vertex, inex) {
-          if (vertex.marker) {
-            vertex.marker.inex = inex;
-          }
-        });
+        if(hovering) {
+          ghostPath.getPath().forEach(function () {
+            ghostPath.getPath().pop();
+          });
+          self.getPath().insertAt(this.marker.inex + 1, this.getPosition());
+          createMarkerVertex(self.getPath().getAt(this.marker.inex + 1)).inex = this.marker.inex + 1;
+          moveGhostMarkers(this.marker);
+          createGhostMarkerVertex(self.getPath().getAt(this.marker.inex + 1));
+          self.getPath().forEach(function (vertex, inex) {
+            if (vertex.marker) {
+              vertex.marker.inex = inex;
+            }
+          });
+        }
       };
       var createGhostMarkerVertex = function (point) {
         if (point.marker.inex < self.getPath().getLength() - 1) {
@@ -131,13 +139,20 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
       this.setIcon(imgVertex);
     };
     var vertexDrag = function () {
-      var movedVertex = this.getPosition();
-      movedVertex.marker = this;
-      movedVertex.ghostMarker = self.getPath().getAt(this.inex).ghostMarker;
-      self.getPath().setAt(this.inex, movedVertex);
+      if (hovering) {
+        var movedVertex = hover_latlng; //this.getPosition();
+        console.log(this);
+        movedVertex.marker = this;
+        movedVertex.ghostMarker = self.getPath().getAt(this.inex).ghostMarker;
+        self.getPath().setAt(this.inex, movedVertex);
+      }
       if (flag) {
         moveGhostMarkers(this);
       }
+    };
+    var vertexDragEnd = function() {
+      mapLine.stopEdit();
+      mapLine.runEdit();
     };
     var vertexRightClick = function () {
       if (flag) {
@@ -181,6 +196,7 @@ if (typeof(google.maps.Polyline.prototype.runEdit) === "undefined") {
       google.maps.event.addListener(markerVertex, "mouseover", vertexMouseOver);
       google.maps.event.addListener(markerVertex, "mouseout", vertexMouseOut);
       google.maps.event.addListener(markerVertex, "drag", vertexDrag);
+      google.maps.event.addListener(markerVertex, "dragend", vertexDragEnd);
       google.maps.event.addListener(markerVertex, "rightclick", vertexRightClick);
       point.marker = markerVertex;
       return markerVertex;

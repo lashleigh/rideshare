@@ -9,8 +9,12 @@
 
 <div id="map_container"> </div>
 
+<div class="ui-widget">
+  <label for="tags">Tags: </label>
+  <input id="tags">
+</div>
+
 <p id="notice"><%= notice %></p>
-<%= select("place", "place_id",  Place.all.collect {|p| [ p.address, p.id ] }, { :include_blank => true }) %>
 
 <% form_for(@trip) do |f| %>
   <div class="field">
@@ -20,7 +24,7 @@
     <%= f.label :has_car %><br />
     <%= f.check_box :has_car %>
   </div>
-      <%= f.submit 'Save' %>
+  <%= f.submit 'Save check box' %>
 <% end %>
 <input id="save_trip" type="button" value="Save" onclick="saveTrip()">
 

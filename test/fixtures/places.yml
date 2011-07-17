@@ -2,10 +2,12 @@
 
 one:
   address: MyString
-  latitude: 1.5
-  longitude: 1.5
+  coords: 
+  active_rides: 
+  num_rides: 1
 
 two:
   address: MyString
-  latitude: 1.5
-  longitude: 1.5
+  coords: 
+  active_rides: 
+  num_rides: 1

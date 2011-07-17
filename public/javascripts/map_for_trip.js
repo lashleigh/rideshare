@@ -1,6 +1,25 @@
 var map;
+var infoWindow = new google.maps.InfoWindow();
 var mapLine;
 var r = [];
+var hovering = false;
+var hover_latlng;
+var gYellowIcon = new google.maps.MarkerImage(
+    "http://labs.google.com/ridefinder/images/mm_20_yellow.png",
+    new google.maps.Size(12, 20),
+    new google.maps.Point(0, 0),
+    new google.maps.Point(6, 20));
+var gRedIcon = new google.maps.MarkerImage(
+  "http://labs.google.com/ridefinder/images/mm_20_red.png",
+  new google.maps.Size(12, 20),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(6, 20));
+var gSmallShadow = new google.maps.MarkerImage(
+  "http://labs.google.com/ridefinder/images/mm_20_shadow.png",
+  new google.maps.Size(22, 20),
+  new google.maps.Point(0, 0),
+  new google.maps.Point(6, 20));
+
 
 $(function() {
   // Initialize the map with default UI.
@@ -11,13 +30,18 @@ $(function() {
   });
 
   $(trips).each(drawRouteFromPlaces);
+  for(var i in cities_hash) { drawCity(i, cities_hash[i]) }
   drawRoute();
+
   /*new google.maps.event.addListener(map, 'click', function(event) {
     var path = mapLine.getPath();
     path.push(event.latLng);
     mapLine.stopEdit();
     mapLine.runEdit();
   });*/ 
+  $( "#tags" ).autocomplete({
+    source: avail_places
+  });
   $(".city_select").change(function(){
     var where = $(this).index();
     var which = $(this).val();
@@ -29,6 +53,33 @@ $(function() {
     return false;
   })
 });
+
+function drawCity(i, placeObj) {
+   var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(placeObj.coords[0], placeObj.coords[1]),
+    map: map,
+    title: placeObj.address,
+    icon: gYellowIcon,
+    shadow: gSmallShadow,
+    //draggable: true,
+  });
+  new google.maps.event.addListener(marker, 'click', function() {
+    infoWindow.setContent('<div class="place_form"><h2><a href="/places/'+ placeObj.id+'">'+placeObj.address+'</a></h2></div>');
+    infoWindow.open(map, marker);
+  });
+  new google.maps.event.addListener(marker, 'mouseover', function() {
+     marker.setIcon(gRedIcon);
+    infoWindow.setContent('<div class="place_form"><h2><a href="/places/'+ placeObj.id+'">'+placeObj.address+'</a></h2></div>');
+     infoWindow.open(map, marker);
+     hovering = true;
+     hover_latlng = marker.getPosition();
+  });
+  new google.maps.event.addListener(marker, 'mouseout', function() {
+     marker.setIcon(gYellowIcon);
+     infoWindow.close();
+     hovering = false;
+  });
+}
 function drawRouteFromPlaces(i, routeObj) {
   var routeLatLng = [];
   for(var i=0; i<routeObj.route.length; i++) {
@@ -57,7 +108,7 @@ function drawRoute() {
       strokeWeight  : 4,
       path: routeLatLng
   });
-  //mapLine.runEdit(true);
+  mapLine.runEdit(true);
   mapLine.setMap(map);
 }
 function saveTrip() {

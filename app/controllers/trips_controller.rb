@@ -39,6 +39,8 @@ class TripsController < ApplicationController
     @trip = Trip.new
     @trip.save
     @trips = Trip.all
+    @cities_hash = Hash[Place.all.map { |r| [r.id, r] }]
+    @avail_places = Place.all.as_json(:only => :address).map {|r| r.to_a.flatten[1]}
 
     respond_to do |format|
       format.html { redirect_to @trip } 
