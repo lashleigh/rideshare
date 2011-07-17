@@ -1,8 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.0.9'
-#gem "mongo_mapper"
-gem "mongoid", "~> 2.0"
+gem "mongo_mapper"
 
 gem 'bson_ext'
 
