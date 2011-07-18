@@ -3,8 +3,19 @@ class TripsController < ApplicationController
   # GET /trips.xml
   def update_location
     trip = Trip.find(params[:id])
+    oldroute = trip.route
     trip.route = ActiveSupport::JSON.decode(params[:route])
     trip.save
+
+    oldroute.each do |p|
+      place = Place.find_by_id(p)
+      place.remove_trip(trip.id)
+    end
+    trip.route.each do |p|
+      place = Place.find_by_id(p)
+      place.add_trip(trip.id)
+    end
+
     render :text => trip.to_json
   end
 
@@ -96,4 +107,5 @@ class TripsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
 end

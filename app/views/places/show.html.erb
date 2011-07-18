@@ -12,7 +12,9 @@
 
 <p>
   <b>Active rides:</b>
-  <%= @place.active_rides %>
+  <% @place.active_rides.each do |ride| %>
+    <%= ride.id %> <br />
+  <% end %>
 </p>
 
 <p>
