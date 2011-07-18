@@ -1,16 +1,17 @@
 <%= javascript_include_tag 'map_index' %>
 
+<script type="text/javascript">
+  var avail_places = <%= @avail_places.to_json.html_safe %>;
+</script>
 <%= form_tag( :action => 'show') do %>
   Search for trips starting in
   <%= text_field_tag 'origin', nil, :placeholder => 'Seattle, WA' %>
-  <%= hidden_field_tag 'origin_lat' %>
-  <%= hidden_field_tag 'origin_lon' %>
+  <%= hidden_field_tag 'origin_city' %>
   and ending in
   <%= text_field_tag 'destination', nil, :placeholder => 'New York, NY' %>
-  <%= hidden_field_tag 'destination_lat' %>
-  <%= hidden_field_tag 'destination_lon' %>
-  <%= submit_tag 'Search', :id => 'home_search' %>
+  <%= hidden_field_tag 'destination_city' %>
 <% end %>
+<input id="Search" type="button" value="Save" onclick="place_origin_destination()">
 
 <div id="map_container"> </div>
 

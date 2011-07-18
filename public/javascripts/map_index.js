@@ -1,4 +1,5 @@
-var geocoder = new google.maps.Geocoder();
+var geocoder = [new google.maps.Geocoder(), new google.maps.Geocoder]
+var markersArray =[];
 
 $('#home_search').live('click', function() {
   console.log(start_mark);
@@ -15,14 +16,20 @@ $(function() {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
 
-  start_mark = drawMark("Seattle", 45, -122);
-  end_mark = drawMark("New York", 40, -75);
-  update_hidden_fields(start_mark, "origin");
-  update_hidden_fields(end_mark, "destination");
+  /*$("#origin").autocomplete({
+    source: avail_places
+  });
+  $("#destination").autocomplete({
+    source: avail_places
+  });*/
+  autocomplete("#origin");
+  autocomplete("#destination");
 
+});
+function autocomplete(which) {
   var geo = new google.maps.Geocoder();       
   $(function() {
-    $("#origin").autocomplete({
+    $(which).autocomplete({
       source: function(request, response) {
           geo.geocode( {'address': request.term}, function(results, status) {
             response($.map(results, function(item) {
@@ -38,41 +45,39 @@ $(function() {
       minLength: 3,
     });
   });
-});
-function update_hidden_fields(marker, which) {
-  new google.maps.event.addListener(marker, 'dragend', function(evt) {
-    var position = marker.getPosition()
-    $("#"+which+"_lat").val(position.lat());
-    $("#"+which+"_lon").val(position.lng());
-    var address = $.get("http://maps.googleapis.com/maps/api/geocode/json?latlng="+position.lat()+","+position.lng()+"&sensor=true")
-    console.log(address);
-  });
-  new google.maps.event.addListener(marker, 'click', function(event) {
-    infoWindow.setContent('<div class="place_form"><h2>'+ name +'</h2></div>');
-    infoWindow.open(map);
-  });
-
 }
-function drawMark(name, lat, lon) {
+function place_origin_destination() {
+  clearOverlays();
+  codeAddress("origin", 0);
+  codeAddress("destination", 1);
+}
+function draw_poly() {
+  var geodesicOptions = {
+    strokeColor: '#CC0099',
+    strokeOpacity: 1.0,
+    strokeWeight: 3,
+    geodesic: true
+  }
+  var geodesic = new google.maps.Polyline(geodesicOptions);
+  geodesic.setPath([markersArray[0].getPosition(), markersArray[1].getPosition()]);
+  geodesic.setMap(map);
+}
+function drawResult(result, i) {
   var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(lat, lon),
+    position: result.geometry.location,
     map: map,
-    title: name,
-    draggable: true,
+    title: result.address_components[0].long_name,
+    draggable: false,
   });
-  return marker;
+  marker.setMap(map);
+  markersArray.push(marker);
 }
-function codeAddress() {
-  deleteOverlays();
-  var address = document.getElementById("origin").value;
-  geocoder.geocode( { 'address': address}, function(results, status) {
+function codeAddress(which, i) {
+  var address = document.getElementById(which).value;
+  geocoder[i].geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
-      $(results).each(drawResult);
-      savedResult = results[0];
-      savedAddress = savedResult.formatted_address;
-      savedName = savedResult.address_components[0].long_name;
-      savedLatLng = savedResult.geometry.location;
-      placeMap.setCenter(savedLatLng);
+      //$(results).each(drawResult);
+      drawResult(results[0], i);
 
     } else {
       alert("Geocode was not successful for the following reason: " + status);

@@ -1,3 +1,9 @@
+<script type="text/javascript">
+  var trip = <%= @trip.to_json.html_safe %>;
+  var trips = <%= @trips.to_json.html_safe %>;
+  var cities_hash = <%= @cities_hash.to_json.html_safe %>;
+  var avail_places = <%= @avail_places.to_json.html_safe %>;
+</script>
 <%= @origin %>
 <%= @destination %>
 

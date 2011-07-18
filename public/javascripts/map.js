@@ -1,6 +1,5 @@
 var infoWindow = new google.maps.InfoWindow();
 var map;
-var markerManager; 
 
 $(function() {
   // Initialize the map with default UI.
@@ -13,17 +12,6 @@ $(function() {
   //$(cities).each(drawCity);
   $(trips).each(drawRouteFromPlaces);
 
-  var markerManagerOptions = {
-    icon: {
-      src: "http://maps.google.com/mapfiles/ms/micons/partly_cloudy.png",
-      shadow: "http://maps.google.com/mapfiles/ms/micons/partly_cloudy.shadow.png"
-    },
-    cell: {
-      width: 48,
-      height: 96
-    }
-  };
-  markerManager = new GmapsMarkerManager(map, markerManagerOptions);
   for(var i in cities_hash) { drawCity(i, cities_hash[i]) }
 });
 
@@ -91,7 +79,6 @@ function drawCity(i, placeObj) {
                          +'</div>');
     infoWindow.open(map, marker);
   });
-  markerManager.addMarker(marker);
 }
 
 function drawInterstate() {
