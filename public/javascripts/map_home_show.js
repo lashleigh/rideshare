@@ -1,6 +1,13 @@
 var map;
 var infoWindow = new google.maps.InfoWindow();
+var origin, destination;
+var origin_trips, destination_trips, perfect_matches;
 $(function() {
+  origin = result_hash["origin"]["loc"]
+  destination = result_hash["destination"]["loc"]
+  origin_trips = result_hash["origin_trips"]
+  destination_trips = result_hash["destination_trips"]
+  perfect_matches = result_hash["perfect_matches"]
   map = new google.maps.Map(document.getElementById("map_container"), {
     center: new google.maps.LatLng(origin.coords[0], origin.coords[1]),
     zoom: 4,
