@@ -1,6 +1,5 @@
 Rideshare::Application.routes.draw do
   resources :places
-
   resources :trips
 
   match 'home/show' => 'home#show'

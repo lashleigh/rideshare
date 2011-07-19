@@ -1,9 +1,13 @@
+<%= javascript_include_tag 'map_shared' %>
+<%= javascript_include_tag 'map_home_show' %>
 <script type="text/javascript">
-  var trip = <%= @trip.to_json.html_safe %>;
-  var trips = <%= @trips.to_json.html_safe %>;
+  var origin = <%= @origin.to_json.html_safe %>;
+  var destination = <%= @destination.to_json.html_safe %>;
+  var origin_trips = <%= @origin_trips.to_json.html_safe %>;
+  var destination_trips = <%= @destination_trips.to_json.html_safe %>;
+  var perfect_matches = <%= @perfect_matches.to_json.html_safe %>;
   var cities_hash = <%= @cities_hash.to_json.html_safe %>;
   var avail_places = <%= @avail_places.to_json.html_safe %>;
 </script>
-<%= @origin %>
-<%= @destination %>
 
+<div id="map_container"> </div>

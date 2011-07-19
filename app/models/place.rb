@@ -6,7 +6,7 @@ class Place
 
   key :address, String
   key :coords, Array
-  Place.ensure_index([["coords", Mongo::GEO2D]])
+  Place.ensure_index(:coords) #[["coords", Mongo::GEO2D]])
 
   key :active_rides, Array
   key :num_rides, Integer, :default => 0
@@ -15,7 +15,7 @@ class Place
 
   def nearby 
     coll = MongoMapper.database.collection("places")
-    coll.find({"coords" => {"$near" => coords, "$maxDistance" => 5}}, {:limit => 4}).as_json
+    coll.find({"coords" => {"$near" => coords}}, {:limit => 4}).as_json
   end
 
   def add_trip(trip_id)

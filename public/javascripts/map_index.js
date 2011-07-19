@@ -1,32 +1,65 @@
 var geocoder = [new google.maps.Geocoder(), new google.maps.Geocoder]
 var markersArray =[];
 
-$('#home_search').live('click', function() {
-  console.log(start_mark);
-});
 var map;
 var start_mark; 
 var end_mark; 
 var infoWindow = new google.maps.InfoWindow();
 
 $(function() {
-  map = new google.maps.Map(document.getElementById("map_container"), {
+  /*map = new google.maps.Map(document.getElementById("map_container"), {
     center: new google.maps.LatLng(42.03, -100.22),
     zoom: 4,
     mapTypeId: google.maps.MapTypeId.ROADMAP
-  });
+  });*/
 
-  /*$("#origin").autocomplete({
+  $("#origin").autocomplete({
     source: avail_places
   });
   $("#destination").autocomplete({
     source: avail_places
-  });*/
-  autocomplete("#origin");
-  autocomplete("#destination");
+  });
+  //autocomplete("#origin");
 
 });
 function autocomplete(which) {
+  $(which).autocomplete({
+    source: function( request, response ) {
+      $.ajax({
+        url: "http://ws.geonames.org/searchJSON",
+        dataType: "jsonp",
+        data: {
+          featureClass: "P",
+          style: "full",
+          maxRows: 12,
+          name_startsWith: request.term
+        },
+        success: function( data ) {
+          response( $.map( data.geonames, function( item ) {
+            return {
+              label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
+              value: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
+            }
+          }));
+        }
+      });
+    },
+    minLength: 2,
+    select: function( event, ui ) {
+      //log( ui.item ?
+      //  "Selected: " + ui.item.label :
+      //  "Nothing selected, input was " + this.value);
+    },
+    open: function() {
+      $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+    },
+    close: function() {
+      $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+    }
+  });
+};
+
+function gmpas_autocomplete(which) {
   var geo = new google.maps.Geocoder();       
   $(function() {
     $(which).autocomplete({
@@ -49,7 +82,6 @@ function autocomplete(which) {
 function place_origin_destination() {
   clearOverlays();
   codeAddress("origin", 0);
-  codeAddress("destination", 1);
 }
 function draw_poly() {
   var geodesicOptions = {
@@ -78,6 +110,8 @@ function codeAddress(which, i) {
     if (status == google.maps.GeocoderStatus.OK) {
       //$(results).each(drawResult);
       drawResult(results[0], i);
+      map.setCenter(results[0].geometry.location);
+      map.setZoom(7);
 
     } else {
       alert("Geocode was not successful for the following reason: " + status);
