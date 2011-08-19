@@ -1,9 +1,8 @@
-<%= javascript_include_tag 'map_shared' %>
-<%= javascript_include_tag 'map_home_show' %>
+<%= javascript_include_tag 'index_map' %>
 <script type="text/javascript">
-  var result_hash = <%= @result_hash.to_json.html_safe %>;
-  var cities_hash = <%= @cities_hash.to_json.html_safe %>;
-  var avail_places = <%= @avail_places.to_json.html_safe %>;
+  var origin = <%= @origin.to_json.html_safe %>;
+  var destination = <%= @destination.to_json.html_safe %>;
+  var trips = <%= @trips.to_json.html_safe %>;
 </script>
 
-<div id="map_container"> </div>
+<div id="map_canvas"> </div>

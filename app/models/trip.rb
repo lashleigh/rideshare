@@ -1,26 +1,59 @@
 class Trip
   include MongoMapper::Document
 
-  key :name, String
-  key :route, Array
+  key :title, String
+  key :route, Array, :typecast => 'Array'
+  key :origin, String
+  key :start_date, Date
+  key :destination, String
+  key :end_date, Date
+  key :tags, Array
+  key :google_options, Hash
   key :has_car, Boolean, :default => true
   key :will_drive, Boolean, :default => true
-  key :num_stops, Integer, :default => 2
 
-  many :places, :in => :routes
+  #many :routes, :in => :route_ids
+  #ensure_index [[[:route],'2d']]
   timestamps!
 
-  def add_place(place_id)
-    coll = MongoMapper.database.collection("trips")
-    coll.update({'_id' => id, 'route' => {'$ne' => place_id}}, 
-                {'$inc' => {'num_stops' => 1}, '$push' => {'route' => place_id}})
-    Place.find(place_id).add_trip(id)
+  def self.nearest(coords, options={})
+    options[:limit] ||= 20
+
+    nearest_trips = []
+    Trip.all.each do |trip|
+      dist = trip.route.map{|point| Geocoder::Calculations::distance_between(point, coords)}.min
+      nearest_trips.push({"trip" => trip.id, "dist" => dist})
+    end
+    return nearest_trips.sort_by{|a| a["dist"]}.first(options[:limit])
   end
 
-  def remove_place(place_id)
-    coll = MongoMapper.database.collection("trips")
-    coll.update({'_id' => id, 'route' => place_id}, 
-                {'$inc' => {'num_stops' => -1}, '$pull' => {'route' => place_id}})
-    Place.find(place_id).remove_trip(id)
+  def self.nearest_with_index(coords)
+    all_trips_distance = []
+    Trip.all.each do |trip|
+      i = 0
+      trip.route.each do |point|
+        dist = Geocoder::Calculations::distance_between(point, coords)
+        all_trips_distance.push({"trip" => trip.id, "dist" => dist, "index" => i})
+        i+=1
+      end
+    end
+    return all_trips_distance.sort_by{|obj| obj["dist"]}.first(20)
   end
+
+  def self.find_all_within_bounds(bounds) 
+    where(:route => {'$within' => {'$box' => bounds}}).all
+  end
+ 
+  def custom_update(params)
+    Trip.set({:id => id.as_json},
+              :title => params[:title],
+              :origin => params[:origin],
+              :destination => params[:destination],
+              :route => params[:route],
+              :tags => params[:tags],
+              :will_drive => params[:will_drive],
+              :has_car => params[:has_car]
+            )
+  end
+  
 end

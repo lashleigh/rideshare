@@ -2,7 +2,8 @@ class User
   include MongoMapper::Document
 
   key :name, String
+  key :trip_ids, Array
 
-  many :routes
+  many :trips, :in => :trip_ids
 
 end

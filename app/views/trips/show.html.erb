@@ -1,24 +1,32 @@
-<%= javascript_include_tag 'polylineEdit' %>
-<%= javascript_include_tag 'map_for_trip' %>
+<%= javascript_include_tag 'trip_map' %>
+
 <script type="text/javascript">
   var trip = <%= @trip.to_json.html_safe %>;
-  var trips = <%= @trips.to_json.html_safe %>;
-  var cities_hash = <%= @cities_hash.to_json.html_safe %>;
-  var avail_places = <%= @avail_places.to_json.html_safe %>;
 </script>
 
-<div id="map_container"> </div>
-
-<p id="notice"><%= notice %></p>
-
-<% form_for(@trip) do |f| %>
-  <div class="field">
-    <%= f.label :has_car %><br />
-    <%= f.check_box :has_car %>
+<aside class="trip_details">
+  <div class="title">
+    <%= @trip.title %>
   </div>
-  <%= f.submit 'Save check box' %>
-<% end %>
-<input id="save_trip" type="button" value="Save" onclick="saveTrip()">
+  <div id="has_car">
+    <% if @trip.has_car %>
+      has car: yes
+    <% else %>
+      has car: no
+    <% end %>
+  </div>
+  <div id="will_drive">
+    <% if @trip.will_drive %>
+      has car: yes
+    <% else %>
+      will drive: no
+    <% end %>
+  </div>
+  route length: <%= @trip.route.length %>
+</aside>
+
+<div id="map_canvas"> </div>
+<div id="directionsPanel" > </div>
 
 <%= link_to 'Edit', edit_trip_path(@trip) %> |
 <%= link_to 'Back', trips_path %>

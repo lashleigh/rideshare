@@ -13,6 +13,44 @@ class Place
 
   many :trips, :in => :active_rides
 
+  def trips_distribution
+    result = Hash.new
+    result["starting"] = []
+    result["ending"] = []
+    result["containing"] = []
+    active_rides.each do |trip|
+      t = Trip.find_by_id(trip)
+      if t.route[0] == id.as_json
+        result["starting"].push(t)
+      elsif t.route.last == id.as_json
+        result["ending"].push(t)
+      else
+        result["containing"].push(t)
+      end
+    end
+    return result
+  end
+
+  def ending_in 
+    trips = []
+    active_rides.each do |trip|
+      t = Trip.find_by_id(trip)
+      if t.route.last == id.as_json
+        trips.push(t)
+      end
+    end
+    return trips
+  end
+  def starting_from
+    trips = []
+    active_rides.each do |trip|
+      t = Trip.find_by_id(trip)
+      if t.route.first == id.as_json
+        trips.push(t)
+      end
+    end
+    return trips
+  end
   def nearby 
     coll = MongoMapper.database.collection("places")
     coll.find({"coords" => {"$near" => coords}}, {:limit => 4}).as_json

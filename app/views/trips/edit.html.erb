@@ -1,6 +1,14 @@
-<h1>Editing trip</h1>
+<%= javascript_include_tag 'trip_map' %>
 
-<%= render 'form' %>
-
+<aside id="detail_panel">
+  <div id="DIRECTIONS_details" class="detail_alternate">
+    <div id="day" style="float:left;">
+      <%= render 'form' %>
+    </div>
+    <div id="directionsPanel" > </div>
+  </div>
 <%= link_to 'Show', @trip %> |
 <%= link_to 'Back', trips_path %>
+</aside>
+
+<div id="map_canvas"> </div>

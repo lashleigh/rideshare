@@ -7,22 +7,11 @@ class TripsController < ApplicationController
     trip.route = ActiveSupport::JSON.decode(params[:route])
     trip.save
 
-    oldroute.each do |p|
-      place = Place.find_by_id(p)
-      place.remove_trip(trip.id)
-    end
-    trip.route.each do |p|
-      place = Place.find_by_id(p)
-      place.add_trip(trip.id)
-    end
-
     render :text => trip.to_json
   end
 
   def index
     @trips = Trip.all
-    @cities = Place.all
-    @cities_hash = Hash[@cities.map { |r| [r.id, r] }]
 
     respond_to do |format|
       format.html # index.html.erb
@@ -34,9 +23,6 @@ class TripsController < ApplicationController
   # GET /trips/1.xml
   def show
     @trip = Trip.find(params[:id])
-    @trips = Trip.all - @trip.to_a
-    @cities_hash = Hash[Place.all.map { |r| [r.id, r] }]
-    @avail_places = Place.all.as_json(:only => :address).map {|r| r.to_a.flatten[1]}
 
     respond_to do |format|
       format.html # show.html.erb
@@ -49,12 +35,9 @@ class TripsController < ApplicationController
   def new
     @trip = Trip.new
     @trip.save
-    @trips = Trip.all
-    @cities_hash = Hash[Place.all.map { |r| [r.id, r] }]
-    @avail_places = Place.all.as_json(:only => :address).map {|r| r.to_a.flatten[1]}
 
     respond_to do |format|
-      format.html { redirect_to @trip } 
+      format.html { redirect_to edit_trip_path(@trip) } 
       format.xml  { render :xml => @trip }
     end
   end
@@ -84,16 +67,23 @@ class TripsController < ApplicationController
   # PUT /trips/1.xml
   def update
     @trip = Trip.find(params[:id])
-
-    respond_to do |format|
-      if @trip.update_attributes(params[:trip])
-        format.html { redirect_to(@trip, :notice => 'Trip was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @trip.errors, :status => :unprocessable_entity }
-      end
+    if params[:trip][:route]
+      params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route])
     end
+    @trip.assign(params[:trip])
+    @trip.save
+    @trip.reload
+
+    render :json => @trip.to_json
+    #respond_to do |format|
+    #  if @trip.save!
+    #    format.html { redirect_to(@trip, :notice => 'Trip was successfully updated.') }
+    #    format.xml  { head :ok }
+    #  else
+    #    format.html { render :action => "edit" }
+    #    format.xml  { render :xml => @trip.errors, :status => :unprocessable_entity }
+    #  end
+    #end
   end
 
   # DELETE /trips/1

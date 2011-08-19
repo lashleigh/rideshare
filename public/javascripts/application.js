@@ -28,3 +28,11 @@ function deleteOverlays() {
     markersArray.length = 0;
   }
 }
+function set_heights() {
+  var base = window.innerHeight - $("header").outerHeight() - $("footer").outerHeight() - 10;
+  var baseWidth = window.innerWidth - $("#detail_panel").outerWidth() -5;
+  $("#content").css("height", base+"px");
+  $("#map_canvas").css("height", base-10+"px");
+  $("#detail_panel").css("height", base-10+"px")
+}
+

@@ -12,10 +12,31 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :route %><br />
-    <%= f.text_field :route %>
+    <%= f.text_field :title, :placeholder => "Seattle to San Diego fast as lightening" %>
+  </div>
+  <dl id="trip_origin_div" class="field">
+    <dt><%= image_tag 'a.png' %></dt>
+    <dd><%= f.text_field :origin, :size => 30 %></dd>
+  </dl>
+  <dl class="field">
+    <dt><%= image_tag 'b.png' %></dt>
+    <dd><%= f.text_field :destination, :size => 30 %></dd>
+  </dl>
+
+  <div class="field checkbox">
+    <%= f.label :will_drive %>
+    <%= f.check_box :will_drive %>
+  </div>
+  <div class="field checkbox">
+    <%= f.label :has_car %>
+    <%= f.check_box :has_car %>
+  </div>
+  <div class="field">
+    <%= f.hidden_field :route %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit 'Save' %>
   </div>
+  <input id="get_directions" type="button" value="Search" onclick="calcRoute()">
+
 <% end %>

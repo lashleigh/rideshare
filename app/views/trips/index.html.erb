@@ -1,12 +1,8 @@
-<%= javascript_include_tag 'polylineEdit' %>
-<%= javascript_include_tag 'map_shared' %>
-<%= javascript_include_tag 'map' %>
 <script type="text/javascript">
-  var cities = <%= @cities.to_json.html_safe %>;
-  var cities_hash = <%= @cities_hash.to_json.html_safe %>;
   var trips = <%= @trips.to_json.html_safe %>;
 </script>
 
-<div id="map_container"> </div>
-
+<% @trips.each do |t| %>
+  <%= link_to t.id, t %></br>
+<% end %>
 <%= link_to 'New Trip', new_trip_path %>

@@ -3,8 +3,11 @@ class Route
 
   key :name, String
   key :route, Array
+  key :trip_id, String
   timestamps!
 
-  belongs_to :user
+  ensure_index [[:route,'2d']]
+
+  belongs_to :trip
 
 end

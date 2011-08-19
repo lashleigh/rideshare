@@ -1,8 +1,20 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;}
+
 html { 
-  height: 100% 
+  height: 100%; 
+  width: 100%;
 }
 body { 
   height: 100%; 
+  width: 100%;
   margin: 0px; 
   padding: 0px; 
   a {
@@ -10,27 +22,50 @@ body {
     text-decoration: none;
   }
 }
+ol, ul {
+  list-style:none;
+}
 p {
-padding: 0;
-margin: 10px 0;
+  padding: 0;
+  margin: 10px 0;
 }
-#map_container {
-  width: 100%;
-  height: 500px;
+#map_canvas {
+  width: 65%;
+  height: 75%;
+  float: right;
 }
+#directionsPanel {
+  margin: 0 5%;
+  float: left;
+  clear: both;
+}
+.edit_trip {
+  float: left;
+}
+dl {
+  clear: both;
+  dd, dt {
+    float: left;
+    margin: 0 5px;
+  }
+}
+.rule {
+  clear: both;
+  margin: 15px 0;
+  height: 0;
+  overflow: hidden;
+  border-bottom: 1px solid #DDD;
+}
+
 #wrap {
   margin: 0;
   padding: 0;
+  width:100%;
+  height:100%;
 }
 
 #content {
   background-color: white;
-  max-width: 750px;
-  margin: 0 auto;
-  padding: 0 40px;
-  -webkit-box-shadow: #CCC 4px 0 10px,#CCC -4px 0 10px,#AAA 0 38px 36px -24px;
-  -moz-box-shadow: #CCC 4px 0 10px,#CCC -4px 0 10px,#AAA 0 38px 36px -24px;
-  box-shadow: #CCC 4px 0 10px,#CCC -4px 0 10px,#AAA 0 38px 36px -24px;
 }
 header {
   border-bottom: 2px solid #222;
@@ -74,6 +109,8 @@ header nav {
   padding: 20px 3px;
   border-bottom: 1px solid #DDD;
   text-align: center;
+  width:100%;
+  height:100%;
 }
 
 footer {
@@ -90,4 +127,46 @@ footer {
   float: right;
   margin-top: -2px;
   text-align: right;
+}
+
+// Straight from touring
+#detail_panel {
+  position: absolute;
+  left: 0;
+  width:35%;
+  height: 100%;
+  overflow: auto;
+  margin-top: .5em;
+  z-index: 2;
+}
+
+.selected {
+  background: red;
+  //background-image: -webkit-linear-gradient(top,#4D90FE,#4787ED);
+  //background-image: -moz-radial-gradient(#4D90FE, #4787ED);
+  //background-image: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 35, from(@blue), to(saturate(@blue, 5%)));
+  background: -webkit-gradient(linear,left top,left bottom,from(#ddd),to(#d0d0d0));
+  background: -moz-linear-gradient(top,#DD4B39,#D14836);
+}
+.unselected {
+  background: #cccccc;
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#f1f1f1));
+  background-image: -moz-linear-gradient(top,#DD4B39,#D14836);
+}
+#day {
+  float: left;
+  overflow: hidden;
+  width:90%;
+  margin: 0 5% 19px;
+  border-bottom: 1px solid #CCC;
+  padding-bottom: 12px;
+}
+#trip_origin, #trip_destination {
+  margin: 3px 0 8px 18px;
+  padding: 4px;
+  font-size: 100%;
+  width: 100%;
+}
+.edit_trip .checkbox {
+  display: none;
 }
