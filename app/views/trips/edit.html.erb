@@ -1,5 +1,8 @@
 <%= javascript_include_tag 'trip_map' %>
 
+<script type="text/javascript">
+  var trip = <%= @trip.to_json.html_safe %>;
+</script>
 <aside id="detail_panel">
   <div id="DIRECTIONS_details" class="detail_alternate">
     <div id="day" style="float:left;">

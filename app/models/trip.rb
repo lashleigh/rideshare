@@ -8,13 +8,39 @@ class Trip
   key :destination, String
   key :end_date, Date
   key :tags, Array
-  key :google_options, Hash
+  key :google_options, Hash, :default => {"avoid_highways" => false, "avoid_tolls" => false, "waypoints" => []} 
   key :has_car, Boolean, :default => true
   key :will_drive, Boolean, :default => true
 
   #many :routes, :in => :route_ids
   #ensure_index [[[:route],'2d']]
   timestamps!
+
+  def self.find_match(start, finish, options = {})
+    options[:limit] ||= 20
+    dist  = Geocoder::Calculations::distance_between(start, finish)
+    options[:radius] ||= dist*0.1
+
+    geo_o = Geocoder.search(start)
+    geo_d = Geocoder.search(finish)
+    origin      = [geo_o[0].latitude, geo_o[0].longitude]
+    destination = [geo_d[0].latitude, geo_d[0].longitude]
+    nearest_match = []
+    Trip.all.each do |trip|
+      dist_origin = trip.route.map{|point| Geocoder::Calculations::distance_between(point, origin)}.min
+      dist_destination = trip.route.map{|point| Geocoder::Calculations::distance_between(point, destination)}.min
+      res_hash = {"trip" => trip.origin+" "+trip.destination, "dist_origin" => dist_origin, "dist_destination" => dist_destination}
+      res_hash["type"] = []
+      if dist_origin <= dist 
+        res_hash["type"].push("origin")
+      end
+      if dist_destination <= dist
+        res_hash["type"].push("destination")
+      end
+      nearest_match.push(res_hash)
+    end
+    return nearest_match.sort_by{|a| a["dist_origin"]}.first(options[:limit])
+  end
 
   def self.nearest(coords, options={})
     options[:limit] ||= 20

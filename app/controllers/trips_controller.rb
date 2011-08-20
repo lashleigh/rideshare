@@ -70,6 +70,9 @@ class TripsController < ApplicationController
     if params[:trip][:route]
       params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route])
     end
+    if params[:trip][:google_options]
+      params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options])
+    end
     @trip.assign(params[:trip])
     @trip.save
     @trip.reload

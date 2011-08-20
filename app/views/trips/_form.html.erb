@@ -11,7 +11,7 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div id="trip_title_div" class="field">
     <%= f.text_field :title, :placeholder => "Seattle to San Diego fast as lightening" %>
   </div>
   <dl id="trip_origin_div" class="field">
@@ -22,7 +22,13 @@
     <dt><%= image_tag 'b.png' %></dt>
     <dd><%= f.text_field :destination, :size => 30 %></dd>
   </dl>
-
+  <div id="options_toggle"><%= link_to 'Show options', '#'%></div>
+  <div id="driving_options" style="display:none;">
+    <%= check_box_tag :avoid_highways, nil, @trip.google_options["avoid_highways"] %>
+    <%= label_tag :avoid_highways %>
+    <%= check_box_tag :avoid_tolls, nil, @trip.google_options["avoid_tolls"] %>
+    <%= label_tag :avoid_tolls %>
+  </div>
   <div class="field checkbox">
     <%= f.label :will_drive %>
     <%= f.check_box :will_drive %>
@@ -31,7 +37,8 @@
     <%= f.label :has_car %>
     <%= f.check_box :has_car %>
   </div>
-  <div class="field">
+  <div class="field hidden_fields">
+    <%= f.hidden_field :google_options %>
     <%= f.hidden_field :route %>
   </div>
   <div class="actions">
