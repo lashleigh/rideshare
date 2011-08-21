@@ -74,19 +74,17 @@ class TripsController < ApplicationController
       params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options])
     end
     @trip.assign(params[:trip])
-    @trip.save
-    @trip.reload
 
-    render :json => @trip.to_json
-    #respond_to do |format|
-    #  if @trip.save!
-    #    format.html { redirect_to(@trip, :notice => 'Trip was successfully updated.') }
-    #    format.xml  { head :ok }
-    #  else
-    #    format.html { render :action => "edit" }
-    #    format.xml  { render :xml => @trip.errors, :status => :unprocessable_entity }
-    #  end
-    #end
+    respond_to do |format|
+      if @trip.save
+        @trip.reload
+        format.html { render :action => "edit" } #redirect_to(@trip, :notice => 'Trip was successfully updated.') }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @trip.errors, :status => :unprocessable_entity }
+      end
+    end
   end
 
   # DELETE /trips/1

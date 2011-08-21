@@ -3,47 +3,45 @@ class Trip
 
   key :title, String
   key :route, Array, :typecast => 'Array'
+  key :encoded_poly, String
   key :origin, String
   key :start_date, Date
   key :destination, String
   key :end_date, Date
   key :tags, Array
-  key :google_options, Hash, :default => {"avoid_highways" => false, "avoid_tolls" => false, "waypoints" => []} 
   key :has_car, Boolean, :default => true
   key :will_drive, Boolean, :default => true
 
-  #many :routes, :in => :route_ids
-  #ensure_index [[[:route],'2d']]
+  one :google_options
+  # many :routes, :in => :route_ids
+  # validates_presence_of :origin, :destination
+  # ensure_index [[[:route],'2d']]
   timestamps!
 
   def self.find_match(start, finish, options = {})
     options[:limit] ||= 20
-    dist  = Geocoder::Calculations::distance_between(start, finish)
+
+    coords_start  = [ start.latitude, start.longitude]
+    coords_finish = [finish.latitude, finish.longitude]
+    dist  = Geocoder::Calculations::distance_between(coords_start, coords_finish)
     options[:radius] ||= dist*0.1
 
-    geo_o = Geocoder.search(start)
-    geo_d = Geocoder.search(finish)
-    origin      = [geo_o[0].latitude, geo_o[0].longitude]
-    destination = [geo_d[0].latitude, geo_d[0].longitude]
     nearest_match = []
     Trip.all.each do |trip|
-      dist_origin = trip.route.map{|point| Geocoder::Calculations::distance_between(point, origin)}.min
-      dist_destination = trip.route.map{|point| Geocoder::Calculations::distance_between(point, destination)}.min
-      res_hash = {"trip" => trip.origin+" "+trip.destination, "dist_origin" => dist_origin, "dist_destination" => dist_destination}
-      res_hash["type"] = []
-      if dist_origin <= dist 
-        res_hash["type"].push("origin")
-      end
-      if dist_destination <= dist
-        res_hash["type"].push("destination")
-      end
-      nearest_match.push(res_hash)
+      dist_start  = trip.route.map{|point| Geocoder::Calculations::distance_between(point, coords_start)}.min
+      dist_finish = trip.route.map{|point| Geocoder::Calculations::distance_between(point, coords_finish)}.min
+      nearest_match.push({"trip" => trip.id, "dist_start" => dist_start, "dist_finish" => dist_finish})
     end
-    return nearest_match.sort_by{|a| a["dist_origin"]}.first(options[:limit])
+    res = {}
+    res["perfect"]     = nearest_match.select {|k| k["dist_start"] < options[:radius] and k["dist_finish"] < options[:radius]} 
+    res["start_only"]  = nearest_match.select {|k| k["dist_start"] < options[:radius] and k["dist_finish"] > options[:radius]} 
+    res["finish_only"] = nearest_match.select {|k| k["dist_start"] > options[:radius] and k["dist_finish"] < options[:radius]} 
+    return res 
   end
 
-  def self.nearest(coords, options={})
+  def self.nearest(some_geo, options={})
     options[:limit] ||= 20
+    coords = [some_geo.latitude, some_geo.longitude]
 
     nearest_trips = []
     Trip.all.each do |trip|
@@ -53,23 +51,44 @@ class Trip
     return nearest_trips.sort_by{|a| a["dist"]}.first(options[:limit])
   end
 
-  def self.nearest_with_index(coords)
-    all_trips_distance = []
+  def self.nearest_with_index(coords, options = {})
+    options[:radius] ||= 25
+
+    case coords
+      when Array; coords
+      when String; coords = Geocoder.coordinates(coords)
+      else coords = [coords.latitude, coords.longitude]
+    end
+
+    hash_trips = {}
     Trip.all.each do |trip|
-      i = 0
-      trip.route.each do |point|
+      last_index = trip.route.length
+      min ||= options[:radius]
+
+      trip.route.each_with_index do |point, i|
         dist = Geocoder::Calculations::distance_between(point, coords)
-        all_trips_distance.push({"trip" => trip.id, "dist" => dist, "index" => i})
-        i+=1
+        if dist < min
+          min = dist
+          hash_trips[trip.id] = {"min" => min, "index" => i, "last_index" => i+1==last_index}
+        end
       end
     end
-    return all_trips_distance.sort_by{|obj| obj["dist"]}.first(20)
+    res = {}
+    res["end"]     = hash_trips.select {|k, v| v["last_index"] == true} 
+    res["start"]   = hash_trips.select {|k, v| v["index"] == 0 } 
+    res["through"] = hash_trips.select {|k, v| v["index"] != 0 and v["last_index"] == false } 
+    return res
   end
 
-  def self.find_all_within_bounds(bounds) 
-    where(:route => {'$within' => {'$box' => bounds}}).all
+  def distance_between_points
+    zipped = route.slice(1..-1).zip(route)
+    distances = zipped.map {|point1, point2| Geocoder::Calculations::distance_between(point1, point2) }
+    avg = distances.sum / distances.length
+    max = distances.max
+    min = distances.min
+    return {"avg" => avg, "max" => max, "min" => min}
   end
- 
+
   def custom_update(params)
     Trip.set({:id => id.as_json},
               :title => params[:title],

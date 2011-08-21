@@ -1,10 +1,12 @@
 <%= form_tag( :action => 'show') do %>
+  <% if flash[:error] %>
+    <p class="error"><%= flash[:error] %></p>
+  <% end %>
+
   Search for trips starting near
   <%= text_field_tag 'origin', nil, :placeholder => 'Seattle, WA' %>
   and ending in 
   <%= text_field_tag 'destination', nil, :placeholder => 'New York, NY' %>
   <%= submit_tag 'Search', :id => 'home_search' %>
 <% end %>
-
-<div id="map_canvas"> </div>
 

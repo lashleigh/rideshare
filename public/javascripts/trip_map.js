@@ -114,11 +114,13 @@ function watch_waypoints() {
 }
 function save_waypoints() {
   var path = directionsDisplay.directions.routes[0].legs[0].via_waypoints.map(function(a) { return [a.lat(), a.lng()];});
+  var encoded = directionsDisplay.directions.routes[0].overview_polyline.points
   var google_options = {};
   google_options["avoid_highways"] = $("#avoid_highways:checked").length ? true : false;
   google_options["avoid_tolls"] = $("#avoid_tolls:checked").length ? true : false;
   google_options["waypoints"] = path;
-  $("#trip_google_options").val(JSON.stringify(google_options))
+  $("#trip_google_options").val(JSON.stringify(google_options));
+  $("#trip_encoded_poly").val(encoded);
 }
 
 function waypoint_html(as_str) {

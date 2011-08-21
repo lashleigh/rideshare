@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  avoid_highways: false
+  avoid_tolls: false
+  waypoints: 
+  encoded_poly: MyString
+
+two:
+  avoid_highways: false
+  avoid_tolls: false
+  waypoints: 
+  encoded_poly: MyString

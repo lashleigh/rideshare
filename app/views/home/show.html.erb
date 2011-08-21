@@ -1,7 +1,39 @@
-<%= javascript_include_tag 'index_map' %>
 <script type="text/javascript">
   var origin = <%= @origin.to_json.html_safe %>;
   var destination = <%= @destination.to_json.html_safe %>;
   var trips = <%= @trips.to_json.html_safe %>;
 </script>
+<%= form_tag(:action => 'show') do %>
+  <% if flash[:error] %>
+    <p class="error"><%= flash[:error] %></p>
+  <% end %>
+
+  Search for trips starting near
+  <%= text_field_tag 'origin', @origin, :placeholder => 'Seattle, WA' %>
+  and ending in 
+  <%= text_field_tag 'destination', @destination, :placeholder => 'New York, NY' %>
+  <%= submit_tag 'Search', :id => 'home_search' %>
+<% end %>
+
+<% if @matches %>
+Your search for trips between <%=@origin%> and <%=@destination%> returned these results. </br>
+  <% @matches.each do |match_type, matches| %>
+    <div id="<%=match_type%>">
+      <%= match_type %></br>
+      <% matches.each do |trip| %>
+        <%= trip["trip"]["origin"] %></br> 
+      <% end %>
+    </div>
+  <% end %>
+<% elsif @match_one %>
+  Only a partial match was found
+  <% @match_one.each do |match_type, matches| %>
+    <div id="<%=match_type%>">
+      <%= match_type %></br>
+      <% matches.each do |trip| %>
+        <%= trip["trip"]["origin"] %></br> 
+      <% end %>
+    </div>
+ 
+<% end %>
 <div id="map_canvas"> </div>

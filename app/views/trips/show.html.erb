@@ -1,4 +1,4 @@
-<%= javascript_include_tag 'trip_map' %>
+<%= javascript_include_tag 'trip_show_map' %>
 
 <script type="text/javascript">
   var trip = <%= @trip.to_json.html_safe %>;
@@ -21,6 +21,12 @@
     <% else %>
       will drive: no
     <% end %>
+  </div>
+  <div id="trip_origin">
+    <%= @trip.origin %>
+  </div>
+  <div id="trip_destination">
+    <%= @trip.destination %>
   </div>
   route length: <%= @trip.route.length %>
 </aside>
