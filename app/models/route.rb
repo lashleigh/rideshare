@@ -3,11 +3,10 @@ class Route
 
   key :name, String
   key :route, Array
-  key :trip_id, String
+  key :encoded_poly, String
   timestamps!
 
-  ensure_index [[:route,'2d']]
-
+  one :google_options
   belongs_to :trip
 
 end

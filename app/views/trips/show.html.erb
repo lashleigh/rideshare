@@ -1,38 +1,36 @@
 <%= javascript_include_tag 'trip_show_map' %>
+<div id="trip_show">
+  <aside class="trip_details">
+    <div id="trip_origin">
+      <%= @trip.origin %>
+    </div>
+    <div id="trip_destination">
+      <%= @trip.destination %>
+    </div>
+    <div id="trip_duration">
+      <%= distance_of_time_in_words @trip.duration %> (<%= (@trip.duration/3600).round %> hrs) of nonstop driving 
+      <% if @trip.with_sleep(10) %>
+        or <%= distance_of_time_in_words @trip.with_sleep(10) %> (<%= @trip.with_sleep(10)/3600.round %> hrs) with 10 hours off per 24
+      <% end %>
+    </div>
+    <div id="has_car">
+      <% if @trip.has_car %>
+        Has car <%= image_tag 'check.png' %>
+      <% else %>
+        has car <%= image_tag 'redx.png' %>
+      <% end %>
+    </div>
+    <div id="will_drive">
+      <% if @trip.will_drive %>
+        Will drive <%= image_tag 'check.png' %>
+      <% else %>
+        Will drive <%= image_tag 'redx.png' %>
+      <% end %>
+    </div>
+  </aside>
 
-<script type="text/javascript">
-  var trip = <%= @trip.to_json.html_safe %>;
-</script>
-
-<aside class="trip_details">
-  <div class="title">
-    <%= @trip.title %>
-  </div>
-  <div id="has_car">
-    <% if @trip.has_car %>
-      has car: yes
-    <% else %>
-      has car: no
-    <% end %>
-  </div>
-  <div id="will_drive">
-    <% if @trip.will_drive %>
-      has car: yes
-    <% else %>
-      will drive: no
-    <% end %>
-  </div>
-  <div id="trip_origin">
-    <%= @trip.origin %>
-  </div>
-  <div id="trip_destination">
-    <%= @trip.destination %>
-  </div>
-  route length: <%= @trip.route.length %>
-</aside>
-
-<div id="map_canvas"> </div>
-<div id="directionsPanel" > </div>
-
-<%= link_to 'Edit', edit_trip_path(@trip) %> |
-<%= link_to 'Back', trips_path %>
+  <%= image_tag static_map(@trip.encoded_poly), :id => "static_map" %>
+  <div class="rule"></div>
+  <%= link_to 'Edit', edit_trip_path(@trip) %> |
+  <%= link_to 'Back', trips_path %>
+</div>

@@ -66,6 +66,7 @@ dl {
 
 #content {
   background-color: white;
+  min-height: 500px;
 }
 header {
   border-bottom: 2px solid #222;
@@ -114,7 +115,7 @@ header nav {
 }
 
 footer {
-  position: absolute;
+  position: relative;
   bottom: 0;
   clear: both;
   text-align: left;
@@ -163,12 +164,65 @@ footer {
   border-bottom: 1px solid #CCC;
   padding-bottom: 12px;
 }
-#trip_origin, #trip_destination {
-  margin: 3px 0 8px 18px;
-  padding: 4px;
-  font-size: 100%;
-  width: 100%;
+
+span.hint {
+  font-size: 0.7em;
+  display: block;
+  clear: both;
+  margin-left: 30px;
+  margin-bottom: 0.55em;
 }
-.edit_trip .checkbox {
-  display: none;
+.quiet {
+  color: #A0A098;
+}
+.adp-summary {
+  cursor: pointer;
+  .adp-directions {
+    display:none;  
+  }
+}
+#new_trip, .edit_trip {
+  #trip_title, #trip_origin, #trip_destination {
+  }
+  #trip_origin {
+    background: url(/images/a.png) 10px 12px no-repeat
+  }
+  #trip_destination {
+    background: url(/images/b.png) 10px 12px no-repeat
+  }
+  #trip_start_date {
+    background: url(/images/calendar.png) 10px 12px no-repeat
+  }
+  #trip_duration :input {
+    background: url(/images/time.png) 10px 12px no-repeat
+  }
+  input[type="text"] {
+    margin: 3px 0 0px 30px;
+    padding: 5px 5px 5px 34px;
+    height: 30px;
+    background: white;
+    border-bottom-left-radius: 0.25em 0.25em;
+    border-bottom-right-radius: 0.25em 0.25em;
+    border-top-left-radius: 0.25em 0.25em;
+    border-top-right-radius: 0.25em 0.25em;
+    font-size: 100%;
+    margin-bottom: 0.25em;
+  }
+}
+#trip_show {
+  .trip_details {
+    float: left;
+  }
+  #static_map {
+    float: right;
+  }
+  #trip_origin {
+    background: url(/images/a.png) 10px 2px no-repeat;
+    padding: 0 32px;
+  }
+  #trip_destination {
+    background: url(/images/b.png) 10px 2px no-repeat;
+    padding: 0 32px;
+  }
+
 }

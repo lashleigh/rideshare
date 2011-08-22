@@ -1,19 +1,23 @@
 class Trip
   include MongoMapper::Document
 
-  key :title, String
+  key :origin, String, :required => true
+  key :start_date, Time, :required => true
+  key :start_time, String, :in => (1..23).to_a.push("a", "r", "m", "n", "e", "l")
+  key :start_flexibility, Array
+  key :destination, String, :required => true
+  key :distance, Float #in meters
+  key :duration, Float #in hours
+  
+  key :tags, Array
+
   key :route, Array, :typecast => 'Array'
   key :encoded_poly, String
-  key :origin, String
-  key :start_date, Date
-  key :destination, String
-  key :end_date, Date
-  key :tags, Array
   key :has_car, Boolean, :default => true
   key :will_drive, Boolean, :default => true
 
   one :google_options
-  # many :routes, :in => :route_ids
+  # many :routes
   # validates_presence_of :origin, :destination
   # ensure_index [[[:route],'2d']]
   timestamps!
@@ -87,6 +91,15 @@ class Trip
     max = distances.max
     min = distances.min
     return {"avg" => avg, "max" => max, "min" => min}
+  end
+
+  def with_sleep(n)
+    if duration > 72000 #60*60*20
+      d = duration + (duration/86400)*n*3600
+      d
+    else
+      nil
+    end
   end
 
   def custom_update(params)

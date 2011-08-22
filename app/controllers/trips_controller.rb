@@ -10,6 +10,15 @@ class TripsController < ApplicationController
     render :text => trip.to_json
   end
 
+  def settings
+    @trip = Trip.find(params[:id])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @trips }
+    end
+  end
+
   def index
     @trips = Trip.all
 
@@ -34,10 +43,9 @@ class TripsController < ApplicationController
   # GET /trips/new.xml
   def new
     @trip = Trip.new
-    @trip.save
 
     respond_to do |format|
-      format.html { redirect_to edit_trip_path(@trip) } 
+      format.html # { redirect_to edit_trip_path(@trip) } 
       format.xml  { render :xml => @trip }
     end
   end
@@ -51,10 +59,11 @@ class TripsController < ApplicationController
   # POST /trips.xml
   def create
     @trip = Trip.new(params[:trip])
+    @trip.google_options = GoogleOptions.new
 
     respond_to do |format|
       if @trip.save
-        format.html { redirect_to(@trip, :notice => 'Trip was successfully created.') }
+        format.html { redirect_to edit_trip_path(@trip) } #(@trip, :notice => 'Trip was successfully created.') }
         format.xml  { render :xml => @trip, :status => :created, :location => @trip }
       else
         format.html { render :action => "new" }

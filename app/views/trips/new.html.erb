@@ -1,5 +1,25 @@
 <h1>New trip</h1>
+<script type="text/javascript">
+  var origin_auto = <%=Trip.all.map{|t| t.origin}.uniq.to_json.html_safe%>; 
+  var finish_auto = <%=Trip.all.map{|t| t.destination}.uniq.to_json.html_safe%>; 
 
-<div id="map_canvas"> </div>
+  $(function() {
+    $("#trip_origin").autocomplete({
+      source: origin_auto
+    });
+    $("#trip_destination").autocomplete({
+      source: finish_auto
+    });
+    $('#trip_start_date').datepicker({
+      setDate: new Date(),
+      dateFormat: 'D, dd M yy' 
+    });  
+    $("#myDatesFlexible").live("click", function() {
+      $("#trip_start_flexibility").show();   
+      $(this).hide();
+    })
+  })
+</script>
 
+<%= render 'new_form' %>
 <%= link_to 'Back', trips_path %>

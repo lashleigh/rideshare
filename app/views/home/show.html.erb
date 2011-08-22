@@ -21,7 +21,7 @@ Your search for trips between <%=@origin%> and <%=@destination%> returned these 
     <div id="<%=match_type%>">
       <%= match_type %></br>
       <% matches.each do |trip| %>
-        <%= trip["trip"]["origin"] %></br> 
+        <%= Trip.find(trip["trip"]).origin+"=>"+Trip.find(trip["trip"]).destination %></br> 
       <% end %>
     </div>
   <% end %>
@@ -30,10 +30,11 @@ Your search for trips between <%=@origin%> and <%=@destination%> returned these 
   <% @match_one.each do |match_type, matches| %>
     <div id="<%=match_type%>">
       <%= match_type %></br>
-      <% matches.each do |trip| %>
-        <%= trip["trip"]["origin"] %></br> 
+      <% matches.each do |trip, vals| %>
+        <%= Trip.find(trip).origin %></br> 
       <% end %>
     </div>
- 
+
+  <% end %>
 <% end %>
 <div id="map_canvas"> </div>

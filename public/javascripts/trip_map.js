@@ -121,6 +121,10 @@ function save_waypoints() {
   google_options["waypoints"] = path;
   $("#trip_google_options").val(JSON.stringify(google_options));
   $("#trip_encoded_poly").val(encoded);
+  $("#trip_distance").val(directionsDisplay.directions.routes[0].legs[0].distance.value);
+  $("#trip_duration").val(directionsDisplay.directions.routes[0].legs[0].duration.value);
+  $("#trip_origin").val(directionsDisplay.directions.routes[0].legs[0].start_address); 
+  $("#trip_destination").val(directionsDisplay.directions.routes[0].legs[0].end_address);
 }
 
 function waypoint_html(as_str) {

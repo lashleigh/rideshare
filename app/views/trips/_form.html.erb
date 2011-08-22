@@ -1,3 +1,20 @@
+<script type="text/javascript">
+  var origin_auto = <%=Trip.all.map{|t| t.origin}.uniq.to_json.html_safe%>; 
+  var finish_auto = <%=Trip.all.map{|t| t.destination}.uniq.to_json.html_safe%>; 
+
+  $(function() {
+    $("#trip_origin").autocomplete({
+      source: origin_auto
+    });
+    $("#trip_destination").autocomplete({
+      source: finish_auto
+    });
+    $('#trip_start_date').datepicker({
+      setDate: new Date(),
+      dateFormat: 'D, dd M yy' 
+    });  
+  })
+</script>
 <%= form_for(@trip) do |f| %>
   <% if @trip.errors.any? %>
     <div id="error_explanation">
@@ -11,22 +28,32 @@
     </div>
   <% end %>
 
-  <div id="trip_title_div" class="field">
-    <%= f.text_field :title, :placeholder => "Seattle to San Diego fast as lightening" %>
-  </div>
-  <dl id="trip_origin_div" class="field">
-    <dt><%= image_tag 'a.png' %></dt>
-    <dd><%= f.text_field :origin, :size => 30 %></dd>
-  </dl>
-  <dl class="field">
-    <dt><%= image_tag 'b.png' %></dt>
-    <dd><%= f.text_field :destination, :size => 30 %></dd>
-  </dl>
+  <%= f.text_field :origin, :size => 30 %>
+  <span class="hint quiet"></span>
+  <%= f.text_field :destination, :size => 30 %></br>
+  <span class="hint quiet"></span>
+  Departing on: </br>
+  <%= f.text_field :start_date %>
+  <%= f.select :start_flexibility, [["Use exact date above", [0, 0]], 
+                                    ["1 day before",         [1, 0]], 
+                                    ["1 day after",          [0, 1]], 
+                                    ["1 day before and after", [1, 1]], 
+                                    ["2 days before and after", [2, 2]], 
+                                    ["3 days before and after", [3, 3]]] %></br>
+  at 
+  <%= f.select :start_time, [["Anytime", "a"], ["Early (4a-8a)", "r"], ["Morning (8a-12p)", "m"], 
+                             ["Afternoon (12p-5p)", "n"], ["Evening (5p-9p)", "e"], ["Night (9p-12a)", "l"], 
+                             ["1:00 am", 1], ["2:00 am", 2], ["3:00 am", 3], ["4:00 am", 4], ["5:00 am", 5], 
+                             ["6:00 am", 6], ["7:00 am", 7], ["8:00 am", 8], ["9:00 am", 9], ["10:00 am", 10], 
+                             ["11:00 am", 11], ["Noon ", 12], ["1:00 pm", 13], ["2:00 pm", 14], ["3:00 pm", 15], 
+                             ["4:00 pm", 16], ["5:00 pm", 17], ["6:00 pm", 18], ["7:00 pm", 19], ["8:00 pm", 20], 
+                             ["9:00 pm", 21], ["10:00 pm", 22], ["11:00 pm", 23]] %>
+
   <div id="options_toggle"><%= link_to 'Show options', '#'%></div>
   <div id="driving_options" style="display:none;">
-    <%= check_box_tag :avoid_highways, nil, @trip.google_options["avoid_highways"] %>
+    <%= check_box_tag :avoid_highways, nil, @trip.google_options.avoid_highways %>
     <%= label_tag :avoid_highways %>
-    <%= check_box_tag :avoid_tolls, nil, @trip.google_options["avoid_tolls"] %>
+    <%= check_box_tag :avoid_tolls, nil, @trip.google_options.avoid_tolls %>
     <%= label_tag :avoid_tolls %>
   </div>
   <div class="field checkbox">
@@ -38,6 +65,8 @@
     <%= f.check_box :has_car %>
   </div>
   <div class="field hidden_fields">
+    <%= f.hidden_field :distance %>
+    <%= f.hidden_field :duration %>
     <%= f.hidden_field :google_options %>
     <%= f.hidden_field :encoded_poly %>
     <%= f.hidden_field :route %>
