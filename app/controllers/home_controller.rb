@@ -25,36 +25,39 @@ class HomeController < ApplicationController
   end
 
   def show
-    @origin = params[:origin]
-    @destination = params[:destination]
+    @origin = params[:origin] unless params[:origin].blank? 
+    @destination = params[:destination] unless params[:destination].blank? 
     start = Geocoder.coordinates(params[:origin])
     finish = Geocoder.coordinates(params[:destination])
     respond_to do |format|
-      unless params[:origin].blank? and params[:destination].blank?
-        if params[:origin].blank?
-          @trips = Trip.find_all_finishing_in(finish).all 
-          @center = finish
-          format.html { render :action => "show" }
-        elsif params[:destination].blank?
-          @trips = Trip.find_all_starting_in(start).all 
-          @center = start
-          format.html { render :action => "show" }
-        else
-          if not start.nil? and not finish.nil?
-            @trips = Trip.find_all_exact_match(start, finish).all
-            @center = Geocoder::Calculations::geographic_center([start, finish]) 
-            format.html { render :action => "show" } #redirect_to(@trip, :notice => 'Trip was successfully updated.') }
-            format.xml  { head :ok }
-          else 
-            flash[:error] = "There was a problem geocoding the provided strings"
-            format.html { render :action => "show" }
-          end
-        end
-      else
-        flash[:error] = "Please provide a starting and/or an ending point"
-        format.html { render :action => "show" }
-      end
+      @trips, @center = show_helper(params, start, finish) 
+      format.html { render :action => "show" }
+      format.xml  { head :ok }
     end
   end
 
+  def show_helper(params, start, finish)
+    if params[:origin] and params[:destination]
+      if start and finish
+        return Trip.find_all_exact_match(start, finish).all, Geocoder::Calculations::geographic_center([start, finish]) 
+      else 
+        flash[:error] = "There was a problem geocoding the provided strings"
+      end
+    elsif params[:origin]
+      if start
+        return Trip.find_all_starting_in(start).all, start
+      else
+        flash[:error] = "There was a problem geocoding the starting location"
+      end
+    elsif params[:destination]
+      if finish
+        return Trip.find_all_finishing_in(finish).all, finish
+      else
+        flash[:error] = "There was a problem geocoding the ending location"
+      end
+    else
+      flash[:error] = "Please provide a starting and/or an ending point"
+    end
+  end
+ 
 end

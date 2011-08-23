@@ -26,7 +26,7 @@ class Trip
 
   #scope :find_all_starting_in, lambda {|start| where(:origin => start) }
   scope :find_all_starting_in,  lambda {|start,  options={}| where(:id => {'$in' => Trip.starts_at(start, options)})}
-  scope :find_all_finishing_in, lambda {|finish, options={}| where(:id => {'$in' => Trip.ends_at(start, options)})}
+  scope :find_all_finishing_in, lambda {|finish, options={}| where(:id => {'$in' => Trip.ends_at(finish, options)})}
   scope :find_all_exact_match,  lambda {|s,ends, options={}| where(:id => {'$in' => Trip.starts_at(s, options) & Trip.ends_at(ends, options) }) }
   scope :find_all_near,         lambda {|coords, options={}| where(:id => {'$in' => Trip.near_wrapper(coords)}) } 
 

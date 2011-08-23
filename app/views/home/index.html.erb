@@ -1,13 +1,17 @@
 <script type="text/javascript">
-  var origin_auto = <%=Trip.all.map{|t| t.origin}.uniq.to_json.html_safe%>; 
-  var finish_auto = <%=Trip.all.map{|t| t.destination}.uniq.to_json.html_safe%>; 
+  var origin_auto = <%=Trip.all.map{|t| t.origin}.uniq.sort.to_json.html_safe%>; 
+  var finish_auto = <%=Trip.all.map{|t| t.destination}.uniq.sort.to_json.html_safe%>; 
 
   $(function() {
     $("#origin").autocomplete({
-      source: origin_auto
+      source: origin_auto,
+      minLength: 0,
+      delay: 600
     });
     $("#destination").autocomplete({
-      source: finish_auto
+      source: finish_auto,
+      minLength: 0,
+      delay: 600
     });
   })
 </script>
