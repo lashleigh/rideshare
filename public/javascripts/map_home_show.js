@@ -23,7 +23,7 @@ function drawRoute(trip) {
   var mapLine = new google.maps.Polyline({
       map : map,
       strokeColor   : color,
-      strokeOpacity : 0.6,
+      strokeOpacity : 0.3,
       strokeWeight  : 4,
       path: trip.route.map(function(c) {return new google.maps.LatLng(c[0], c[1]); }) 
   });
@@ -32,13 +32,13 @@ function drawRoute(trip) {
     this.setOptions({strokeWeight: 6, strokeOpacity: 1.0});
   });
   new google.maps.event.addListener(mapLine, 'mouseout', function() {
-    this.setOptions({strokeWeight: 4, strokeOpacity: 0.7});
+    this.setOptions({strokeWeight: 4, strokeOpacity: 0.3});
   });
   new google.maps.event.addListener(mapLine, 'click', function(event) {
     infoWindow.setContent('<div class="place_form"><h2><a href="/trips/'+trip.id+'">'+ trip.id +'</a></h2><p>'+trip.bearing+'</div>');
     infoWindow.setPosition(event.latLng);
     infoWindow.open(map);
-    });
+  });
   bounds.extend(new google.maps.LatLng(trip.route[trip.route.length-1][0], trip.route[trip.route.length-1][1]));
   bounds.extend(new google.maps.LatLng(trip.route[0][0], trip.route[0][1]));
 }

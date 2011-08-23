@@ -12,8 +12,7 @@ class HomeController < ApplicationController
           format.html {render :action => "explore" }
           format.xml {head :ok}
         else
-          @matches = Trip.nearest_with_index(city)
-          @trips = @matches["end"].map{|k, v| Trip.find(k)}
+          @trips = Trip.find_all_near(city).all 
           @center = city
           format.html {render :action => "explore" }
           format.xml {head :ok}
@@ -33,19 +32,16 @@ class HomeController < ApplicationController
     respond_to do |format|
       unless params[:origin].blank? and params[:destination].blank?
         if params[:origin].blank?
-          @match_one = Trip.nearest_with_index(finish)
-          @trips = @match_one["end"].map{|k, v| Trip.find(k) }
+          @trips = Trip.find_all_finishing_in(finish).all 
           @center = finish
           format.html { render :action => "show" }
         elsif params[:destination].blank?
-          @match_one = Trip.nearest_with_index(start)
-          @trips = @match_one["start"].map{|k,v| Trip.find(k)}
+          @trips = Trip.find_all_starting_in(start).all 
           @center = start
           format.html { render :action => "show" }
         else
           if not start.nil? and not finish.nil?
-            @matches = Trip.find_match(start, finish)
-            @trips = @matches["perfect"].map{|k| Trip.find(k["trip"]) }
+            @trips = Trip.find_all_exact_match(start, finish).all
             @center = Geocoder::Calculations::geographic_center([start, finish]) 
             format.html { render :action => "show" } #redirect_to(@trip, :notice => 'Trip was successfully updated.') }
             format.xml  { head :ok }

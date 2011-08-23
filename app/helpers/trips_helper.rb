@@ -20,5 +20,21 @@ module TripsHelper
       end
     end
   end
+  def option_for_shared_driving(val) 
+    [["Meh", 0], ["Yes, a must", 1], ["No, I will do all driving", 2]]
+      .map{|a,b| [a,b,b==val ? "selected='selected'" : ""]}
+      .map{|a,b,c| "<option value=#{b} #{c}>#{a}</option>"}.join.html_safe
+  end
+  
+  def option_for_max_passengers(val)
+    (0..8).map{|v| [v, v==val ? "selected='selected'" : ""]}
+      .map{|a,b| "<option value=#{a} #{b}>#{a}</option>"}.join.html_safe
+  end
+
+  def option_for_max_luggage(val)
+    [["None", 0], ["Small backpack", 1], ["Several bags", 2], ["As much as you want", 3]]
+      .map{|a,b| [a,b,b==val ? "selected='selected'" : ""]}
+      .map{|a,b,c| "<option value=#{b} #{c}>#{a}</option>"}.join.html_safe
+  end
 
 end

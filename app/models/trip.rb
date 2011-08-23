@@ -1,5 +1,6 @@
 class Trip
   include MongoMapper::Document
+  before_create :create_google_and_trip_options
 
   key :origin, String, :required => true
   key :start_date, Time, :required => true
@@ -13,10 +14,9 @@ class Trip
 
   key :route, Array, :typecast => 'Array'
   key :encoded_poly, String
-  key :has_car, Boolean, :default => true
-  key :will_drive, Boolean, :default => true
 
   one :google_options
+  one :trip_options
   # many :routes
   # validates_presence_of :origin, :destination
   timestamps!
@@ -24,9 +24,37 @@ class Trip
   scope :by_duration_in_hours, lambda {|low, high| where(:duration.gte => low*3600,  :duration.lte => high*3600) }
   scope :by_distance_in_miles, lambda {|low, high| where(:distance.gte => low*1609.344, :distance.lte => high*1609.344) }
 
-  scope :by_start, lambda {|start| where(:origin => start) }
-  scope :by_finish, lambda {|finish| where(:destination => finish)}
-  scope :near_coords, lambda {|coords| where(:id => {'$in' => Trip.near(coords)}) } 
+  #scope :find_all_starting_in, lambda {|start| where(:origin => start) }
+  scope :find_all_starting_in,  lambda {|start,  options={}| where(:id => {'$in' => Trip.starts_at(start, options)})}
+  scope :find_all_finishing_in, lambda {|finish, options={}| where(:id => {'$in' => Trip.ends_at(start, options)})}
+  scope :find_all_exact_match,  lambda {|s,ends, options={}| where(:id => {'$in' => Trip.starts_at(s, options) & Trip.ends_at(ends, options) }) }
+  scope :find_all_near,         lambda {|coords, options={}| where(:id => {'$in' => Trip.near_wrapper(coords)}) } 
+
+  def self.starts_at(coords, options = {}) 
+    options[:radius] ||= 60
+    case coords
+      when Array; coords
+      when String; coords = Geocoder.coordinates(coords)
+    end
+    Trip.all.select {|trip| Geocoder::Calculations::distance_between(trip.route[0], coords) < options[:radius] }.map {|t| t.id }
+  end
+
+  def self.ends_at(coords, options ={}) 
+    options[:radius] ||= 60
+    case coords
+      when Array; coords
+      when String; coords = Geocoder.coordinates(coords)
+    end
+    Trip.all.select {|trip| Geocoder::Calculations::distance_between(trip.route.last, coords) < options[:radius] }.map {|t| t.id }
+  end
+
+  def self.near_wrapper(coords, options={})
+    if String === coords || Float === coords[0]
+      Trip.near(coords, options)
+    else
+      Trip.intersect(coords, options)
+    end
+  end
 
   def self.intersect(coords_array, options = {})
     res = Trip.near(coords_array[0], options)
@@ -47,7 +75,6 @@ class Trip
       when Array; coords
       when String; coords = Geocoder.coordinates(coords)
     end
-    puts coords
 
     trips = {}
     options[:trips].each do |trip|
@@ -154,5 +181,10 @@ class Trip
               :has_car => params[:has_car]
             )
   end
-  
+
+  private
+  def create_google_and_trip_options
+    self.google_options = GoogleOptions.new
+    self.trip_options = TripOptions.new
+  end
 end

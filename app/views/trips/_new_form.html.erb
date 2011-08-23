@@ -33,14 +33,14 @@
   <span id="myDatesFlexible">
     <%= link_to 'My dates are flexible', '#' %>
   </span>
-  <div class="field checkbox">
-    <%= f.label :will_drive %>
-    <%= f.check_box :will_drive %>
+
+  <div class="trip_options">
+    <% fields_for 'trip[trip_options]', @trip.trip_options do |opt| %>
+      <%= opt.label :shared_driving %>
+      <%= opt.select :shared_driving, [["Meh", 0], ["Yes, a must", 1], ["No, I will do all driving", 2]] %>
+    <% end %>
   </div>
-  <div class="field checkbox">
-    <%= f.label :has_car %>
-    <%= f.check_box :has_car %>
-  </div>
+
   <div class="actions">
     <%= f.submit 'Save' %>
   </div>

@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  shared_driving: 1
+  max_passengers: 1
+  max_luggage: MyString
+  car_type: 1
+
+two:
+  shared_driving: 1
+  max_passengers: 1
+  max_luggage: MyString
+  car_type: 1

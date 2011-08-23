@@ -59,7 +59,6 @@ class TripsController < ApplicationController
   # POST /trips.xml
   def create
     @trip = Trip.new(params[:trip])
-    @trip.google_options = GoogleOptions.new
 
     respond_to do |format|
       if @trip.save
