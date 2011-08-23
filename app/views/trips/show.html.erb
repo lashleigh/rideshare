@@ -8,9 +8,9 @@
       <%= @trip.destination %>
     </div>
     <div id="trip_duration">
-      <%= distance_of_time_in_words @trip.duration %> (<%= (@trip.duration/3600).round %> hrs) of nonstop driving 
-      <% if @trip.with_sleep(10) %>
-        or <%= distance_of_time_in_words @trip.with_sleep(10) %> (<%= @trip.with_sleep(10)/3600.round %> hrs) with 10 hours off per 24
+      <%= trip_duration_in_words(@trip.duration) %> of nonstop driving 
+      <% if @trip.duration > 72000 %>
+        or <%= trip_duration_in_words(@trip.with_sleep(10)) %> with 10 hours off per day.
       <% end %>
     </div>
     <div id="has_car">
@@ -30,7 +30,7 @@
   </aside>
 
   <%= image_tag static_map(@trip.encoded_poly), :id => "static_map" %>
-  <div class="rule"></div>
+
   <%= link_to 'Edit', edit_trip_path(@trip) %> |
   <%= link_to 'Back', trips_path %>
 </div>

@@ -1,7 +1,20 @@
+<%= javascript_include_tag 'map_home_show' %>
 <script type="text/javascript">
-  var origin = <%= @origin.to_json.html_safe %>;
-  var destination = <%= @destination.to_json.html_safe %>;
+  var center = <%= @center.to_json.html_safe %>;
   var trips = <%= @trips.to_json.html_safe %>;
+
+  var origin_auto = <%=Trip.all.map{|t| t.origin}.uniq.to_json.html_safe%>; 
+  var finish_auto = <%=Trip.all.map{|t| t.destination}.uniq.to_json.html_safe%>; 
+
+  $(function() {
+    $("#origin").autocomplete({
+      source: origin_auto
+    });
+    $("#destination").autocomplete({
+      source: finish_auto
+    });
+  })
+
 </script>
 <%= form_tag(:action => 'show') do %>
   <% if flash[:error] %>
@@ -13,9 +26,10 @@
   and ending in 
   <%= text_field_tag 'destination', @destination, :placeholder => 'New York, NY' %>
   <%= submit_tag 'Search', :id => 'home_search' %>
+  <%= link_to 'Show options', '#' %>
 <% end %>
 
-<% if @matches %>
+<% if @matches_x %>
 Your search for trips between <%=@origin%> and <%=@destination%> returned these results. </br>
   <% @matches.each do |match_type, matches| %>
     <div id="<%=match_type%>">
@@ -25,7 +39,7 @@ Your search for trips between <%=@origin%> and <%=@destination%> returned these 
       <% end %>
     </div>
   <% end %>
-<% elsif @match_one %>
+<% elsif @match_one_x %>
   Only a partial match was found
   <% @match_one.each do |match_type, matches| %>
     <div id="<%=match_type%>">
@@ -37,4 +51,4 @@ Your search for trips between <%=@origin%> and <%=@destination%> returned these 
 
   <% end %>
 <% end %>
-<div id="map_canvas"> </div>
+<div id="map_canvas" style="width:500px; height: 500px;"> </div>

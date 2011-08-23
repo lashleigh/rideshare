@@ -3,6 +3,6 @@
 </script>
 
 <% @trips.each do |t| %>
-  <%= link_to t.origin+" => "+t.destination, edit_trip_path(t) %></br>
+  <%= link_to t.origin+" => "+t.destination, t %></br>
 <% end %>
 <%= link_to 'New Trip', new_trip_path %>

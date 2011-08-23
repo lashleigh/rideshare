@@ -1,3 +1,16 @@
+<script type="text/javascript">
+  var origin_auto = <%=Trip.all.map{|t| t.origin}.uniq.to_json.html_safe%>; 
+  var finish_auto = <%=Trip.all.map{|t| t.destination}.uniq.to_json.html_safe%>; 
+
+  $(function() {
+    $("#origin").autocomplete({
+      source: origin_auto
+    });
+    $("#destination").autocomplete({
+      source: finish_auto
+    });
+  })
+</script>
 <%= form_tag( :action => 'show') do %>
   <% if flash[:error] %>
     <p class="error"><%= flash[:error] %></p>

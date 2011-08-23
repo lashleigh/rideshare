@@ -9,14 +9,14 @@ fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td {margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;}
 
 html { 
-  height: 100%; 
-  width: 100%;
+  background-color: #F3F3F3;
 }
 body { 
-  height: 100%; 
-  width: 100%;
-  margin: 0px; 
-  padding: 0px; 
+  background-color: #F3F3F3;
+  font-size: 13px;
+  color: black;
+  text-align: left;
+  font-family: Tahoma,"Lucida Grande",Sindbad,Kalimati,Verdana,Arial,sans-serif;
   a {
     color: #3D5C9D;
     text-decoration: none;
@@ -56,54 +56,38 @@ dl {
   overflow: hidden;
   border-bottom: 1px solid #DDD;
 }
-
-#wrap {
-  margin: 0;
-  padding: 0;
-  width:100%;
-  height:100%;
-}
-
 #content {
-  background-color: white;
-  min-height: 500px;
+  background-color: #F9F9F9;
+  min-height: 400px;
+  min-width: 600px;
 }
 header {
-  border-bottom: 2px solid #222;
+  border-bottom: 1px solid #ddd;
   overflow: hidden;
-  padding-top: 11px;
-}
-#title {
-  font-size: 50px;
-  font-style: normal;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin: 0;
-  float: left;
-  letter-spacing: -0.09em;
-  img {
-    width: 45px;
-    height: 45px;
-    position: relative;
-    top: 5px;
-    left: 1px;
+  h1 {
+    font-size: 3em;
+    font-weight: normal;
+    margin: .4em;
+    float: left;
+    letter-spacing: -0.09em;
   }
-}
-header nav {
-  float: right;
-  a {
-    font-family: 'Droid Sans',Arial,sans-serif;
-  }
-  ul {
-    padding-left: 0;
-    list-style: none;
-    margin: 8px 0 5px 0;
-    li {
-      display: inline;
-      margin-left: 10px;
+  nav {
+    float: right;
+    a {
+
+    }
+    ul {
+      padding-left: 0;
+      list-style: none;
+      margin: 8px 0 5px 0;
+      li {
+        display: inline;
+        margin-left: 10px;
+      }
     }
   }
 }
+
 #index {
   overflow: hidden;
   margin-bottom: 0;
@@ -121,7 +105,7 @@ footer {
   text-align: left;
   padding: 20px 0 10px 0;
   font-size: 12px;
-  border-top: 2px solid #222;
+  border-top: 2px solid #333;
   display: inline-block;
   width: 100%;
   color: #BBB;
@@ -212,9 +196,10 @@ span.hint {
 #trip_show {
   .trip_details {
     float: left;
+    max-width: 500px;
   }
   #static_map {
-    float: right;
+  float: right;
   }
   #trip_origin {
     background: url(/images/a.png) 10px 2px no-repeat;

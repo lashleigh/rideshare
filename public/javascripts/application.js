@@ -3,10 +3,11 @@
 
 $(function() {
   var base = window.innerHeight - $("header").outerHeight() - $("footer").outerHeight() - 10;
-  $("#content").css("min-height", base+"px");
+  base = Math.max(base, parseInt($("#content").css("min-height")))
+  $("#content").css("height", base+"px");
   $(window).resize(function() {
     var base = window.innerHeight - $("header").outerHeight() - $("footer").outerHeight() - 10;
-    $("#content").css("min-height", base+"px");
+    $("#content").css("height", base+"px");
   })
 })
 

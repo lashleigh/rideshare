@@ -1,0 +1,38 @@
+<%= javascript_include_tag 'map_home_show' %>
+<script type="text/javascript">
+  var center = <%= @center.to_json.html_safe %>;
+  var trips = <%= @trips.to_json.html_safe %>;
+
+  var cities = <%= (Trip.all.map{|t| t.origin} + Trip.all.map{|t| t.destination}).uniq.to_json.html_safe%>; 
+
+  $(function() {
+    $("#city").autocomplete({
+      source: cities
+    });
+  })
+
+</script>
+<%= form_tag(:action => 'explore') do %>
+  <% if flash[:error] %>
+    <p class="error"><%= flash[:error] %></p>
+  <% end %>
+
+  Choose a city to explore
+  <%= text_field_tag 'city', @city, :placeholder => 'Seattle, WA' %>
+  <%= submit_tag 'Explore' %>
+  <%= link_to 'Show options', '#' %>
+<% end %>
+
+<% if @matches_x %>
+Your search for trips between <%=@origin%> and <%=@destination%> returned these results. </br>
+  <% @matches.each do |match_type, matches| %>
+    <div id="<%=match_type%>">
+      <%= match_type %></br>
+      <% matches.each do |trip| %>
+        <%= Trip.find(trip["trip"]).origin+"=>"+Trip.find(trip["trip"]).destination %></br> 
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+<div id="map_canvas" style="width:500px; height: 500px;"> </div>
+
