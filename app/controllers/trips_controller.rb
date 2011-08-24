@@ -1,13 +1,21 @@
 class TripsController < ApplicationController
   # GET /trips
   # GET /trips.xml
-  def update_location
-    trip = Trip.find(params[:id])
-    oldroute = trip.route
-    trip.route = ActiveSupport::JSON.decode(params[:route])
-    trip.save
+  def jeditable
+    @trip = Trip.find(params[:id])
+    if params[:nested] == "trip_options"
+      @trip.trip_options.assign({params[:type] => params[:value]})
+    else
+      @trip.assign({params[:type] => params[:value]})
+    end
 
-    render :text => trip.to_json
+    respond_to do |format|
+      if @trip.save
+        format.json { render :json => params[:value] }
+      else
+        format.json { render :json => @trip.errors.full_messages, :status => :unprocessable_entity }
+      end
+    end
   end
 
   def settings
@@ -75,10 +83,10 @@ class TripsController < ApplicationController
   # PUT /trips/1.xml
   def update
     @trip = Trip.find(params[:id])
-    if params[:trip][:route]
+    if params[:trip] and params[:trip][:route]
       params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route])
     end
-    if params[:trip][:google_options]
+    if params[:trip] and params[:trip][:google_options]
       params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options])
     end
     @trip.assign(params[:trip])
@@ -88,9 +96,11 @@ class TripsController < ApplicationController
         @trip.reload
         format.html { render :action => "edit" } #redirect_to(@trip, :notice => 'Trip was successfully updated.') }
         format.xml  { head :ok }
+        format.json { head :ok }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @trip.errors, :status => :unprocessable_entity }
+        format.json { render :json => @trip.errors.full_messages, :status => :unprocessable_entity }
       end
     end
   end

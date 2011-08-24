@@ -9,7 +9,8 @@ class Trip
   key :destination, String, :required => true
   key :distance, Float #in meters
   key :duration, Float #in hours
-  
+ 
+  key :summary, String 
   key :tags, Array
 
   key :route, Array, :typecast => 'Array'

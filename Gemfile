@@ -5,6 +5,7 @@ gem 'bson_ext'
 gem "mongo_mapper"
 gem 'geocoder'
 gem 'json'
+gem 'best_in_place'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

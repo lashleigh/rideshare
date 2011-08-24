@@ -1,4 +1,8 @@
-<%= javascript_include_tag 'trip_show_map' %>
+<%= javascript_include_tag 'trip_show' %>
+<script type="text/javascript">
+  var trip = <%= @trip.to_json.html_safe%>;
+  var ops = <%= @trip.trip_options.choose_from.to_json.html_safe%>;
+</script>
 <div id="trip_show">
   <aside class="trip_details">
     <div id="trip_origin">
@@ -7,32 +11,18 @@
     <div id="trip_destination">
       <%= @trip.destination %>
     </div>
-    <div id="trip_duration">
-      <%= trip_duration_in_words(@trip.duration) %> of nonstop driving 
-      <% if @trip.duration > 72000 %>
-        or <%= trip_duration_in_words(@trip.with_sleep(10)) %> with 10 hours off per day.
-      <% end %>
-    </div>
+    <div class="edit" id="destination"><%= @trip.destination %></div>
+    <div class="edit_area" id="div_2">Lorem ipsum dolor sit amet, consectetuer 
+      adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore 
+      magna aliquam erat volutpat.</div>
     <ul id="trip_options">
-      <li><%= shared_driving_ops.select{|a,b| b==@trip.trip_options.shared_driving}[0][0] unless @trip.trip_options.shared_driving.nil? %></li>
-      <li><%= max_passengers_ops.select{  |b| b==@trip.trip_options.max_passengers}[0]    unless @trip.trip_options.max_passengers.nil? %></li>
-      <li><%=    max_luggage_ops.select{|a,b| b==@trip.trip_options.max_luggage}[0][0]    unless @trip.trip_options.max_luggage.nil? %></li>
-      <li><%=       car_type_ops.select{|a,b| b==@trip.trip_options.car_type}[0][0]       unless @trip.trip_options.car_type.nil?  %></li>
+      <li class="head">Trip options</li>
+      <% @trip.trip_options.options_vals.each do |opt, val| %>
+        <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span> 
+        <span class="edit_trip_options prop_val" id="<%=opt%>"><%= select_val(opt, val) %></span></li>
+      <% end %>
+      <li><span class="property">Duration</span><span class="prop_val"><%= trip_duration_in_words(@trip.duration)%></span></li>
     </ul>
-    <div id="has_car">
-      <% if @trip.trip_options.shared_driving %>
-        Has car <%= image_tag 'check.png' %>
-      <% else %>
-        has car <%= image_tag 'redx.png' %>
-      <% end %>
-    </div>
-    <div id="will_drive">
-      <% if @trip.trip_options.max_passengers %>
-        Will drive <%= image_tag 'check.png' %>
-      <% else %>
-        Will drive <%= image_tag 'redx.png' %>
-      <% end %>
-    </div>
   </aside>
 
   <%= image_tag static_map(@trip), :id => "static_map" %>

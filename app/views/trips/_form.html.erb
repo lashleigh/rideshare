@@ -57,9 +57,10 @@
     <%= label_tag :avoid_tolls %>
   </div>
   <div class="field trip_options">
-    <%= select_tag 'trip[trip_options][shared_driving]', option_for_shared_driving(@trip.trip_options.shared_driving) %>
-    <%= select_tag 'trip[trip_options][max_passengers]', option_for_max_passengers(@trip.trip_options.max_passengers) %>
-    <%= select_tag 'trip[trip_options][max_luggage]',    option_for_max_luggage(@trip.trip_options.max_luggage) %>
+    <%= select_tag 'trip[trip_options][shared_driving]', mash_up("shared_driving", @trip.trip_options.shared_driving) %>
+    <%= select_tag 'trip[trip_options][max_passengers]', mash_up("max_passengers", @trip.trip_options.max_passengers) %>
+    <%= select_tag 'trip[trip_options][max_luggage]',    mash_up("max_luggage",    @trip.trip_options.max_luggage) %>
+    <%= text_field_tag 'trip[trip_options][cost]', @trip.trip_options.cost %> 
   </div>
   <div class="field hidden_fields">
     <%= f.hidden_field :distance %>

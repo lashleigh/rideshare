@@ -23,34 +23,24 @@ module TripsHelper
       end
     end
   end
-  def option_for_shared_driving(val) 
-    shared_driving_ops
+  def mash_up(opt, val)
+    opt_hash[opt]
       .map{|a,b| [a,b,b==val ? "selected='selected'" : ""]}
       .map{|a,b,c| "<option value=#{b} #{c}>#{a}</option>"}.join.html_safe
   end
-  
-  def option_for_max_passengers(val)
-    max_passengers_ops
-      .map{|v| [v, v==val ? "selected='selected'" : ""]}
-      .map{|a,b| "<option value=#{a} #{b}>#{a}</option>"}.join.html_safe
+  def select_val(opt, val)
+    if opt_hash[opt]
+      opt_hash[opt].select{|a,b| b==val}[0][0]
+    elsif opt === "cost"
+      "$"+val.to_s
+    end
+  end
+  def opt_hash
+    {"shared_driving" => [["",nil],["Meh", 0], ["Yes, a must", 1], ["No, I will do all driving", 2]], 
+     "max_passengers" => [["",nil]]+(0..8).zip(0..8), 
+     "max_luggage"    => [["",nil],["None", 0], ["Small backpack", 1], ["Several bags", 2], ["As much as you want", 3]],
+     "car_types"      => [["",nil],["Compact", 0], ["Full size", 1], ["SUV", 2], ["Truck", 3]]
+    }
   end
 
-  def option_for_max_luggage(val)
-    max_luggage_ops
-      .map{|a,b| [a,b,b==val ? "selected='selected'" : ""]}
-      .map{|a,b,c| "<option value=#{b} #{c}>#{a}</option>"}.join.html_safe
-  end
-
-  def shared_driving_ops
-    [["Meh", 0], ["Yes, a must", 1], ["No, I will do all driving", 2]]
-  end
-  def max_passengers_ops
-    (0..8)
-  end
-  def max_luggage_ops
-    [["None", 0], ["Small backpack", 1], ["Several bags", 2], ["As much as you want", 3]]
-  end
-  def car_type_ops
-    [["Compact", 0], ["Full size", 1], ["SUV", 2], ["Truck", 3]]
-  end
 end

@@ -1,3 +1,8 @@
+.rounded_corners (@radius: 5px) {
+  border-radius: @radius;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+}
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -219,5 +224,34 @@ span.hint {
     padding: 0 32px;
     line-height: 20px;
   }
-
+  ul#trip_options {
+    width: 220px;
+    float: left;
+    margin-left: 10px;
+    border: 1px solid #D9D9D6;
+    padding: 8px 4px;
+    .rounded_corners;
+    li {
+    width: 220px;
+    float: left;
+    display: block;
+    }
+    li span.property, li.head {
+    width: 110px;
+    float: left;
+    text-align: left;
+    padding: 4px 0 4px 10px;
+    text-transform: capitalize;
+    }
+    li span.prop_val {
+    width: 80px;
+    float: right;
+    text-align: right;
+    padding: 4px 4px 4px 0;
+    word-wrap: break-word;
+    }
+    li:nth-child(even) {
+      background: #B4DDB4;
+    }
+  }
 }

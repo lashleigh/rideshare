@@ -5,6 +5,7 @@ Rideshare::Application.routes.draw do
   match '/explore' => 'home#explore', :as => :explore
   match 'home/explore' => 'home#explore', :as => :explore
   match 'trips/update_location' => 'trips#update_location'
+  match 'trips/jeditable' => 'trips#jeditable'
   match 'trips/:id/settings' => 'trips#settings', :as => :settings
 
   root :to => "home#index"
