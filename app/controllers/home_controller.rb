@@ -37,26 +37,14 @@ class HomeController < ApplicationController
   end
 
   def show_helper(params, start, finish)
-    if params[:origin] and params[:destination]
-      if start and finish
-        return Trip.find_all_exact_match(start, finish).all, Geocoder::Calculations::geographic_center([start, finish]) 
-      else 
-        flash[:error] = "There was a problem geocoding the provided strings"
-      end
-    elsif params[:origin]
-      if start
-        return Trip.find_all_starting_in(start).all, start
-      else
-        flash[:error] = "There was a problem geocoding the starting location"
-      end
-    elsif params[:destination]
-      if finish
-        return Trip.find_all_finishing_in(finish).all, finish
-      else
-        flash[:error] = "There was a problem geocoding the ending location"
-      end
+    if start and finish
+      return Trip.find_all_exact_match(start, finish).all, Geocoder::Calculations::geographic_center([start, finish]) 
+    elsif start
+      return Trip.find_all_starting_in(start).all, start
+    elsif finish
+      return Trip.find_all_finishing_in(finish).all, finish
     else
-      flash[:error] = "Please provide a starting and/or an ending point"
+      flash[:error] = "There was a problem geocoding the location"
     end
   end
  

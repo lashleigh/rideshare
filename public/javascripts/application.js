@@ -40,6 +40,7 @@ function deleteOverlays() {
 }
 function set_heights() {
   var base = window.innerHeight - $("header").outerHeight() - $("footer").outerHeight() - 10;
+  base = Math.max(base, parseInt($("#content").css("min-height")));
   $("#content").css("height", base+"px");
   $("#map_canvas").css("height", base-10+"px");
   $("#detail_panel").css("height", base-10+"px")

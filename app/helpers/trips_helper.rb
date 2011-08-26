@@ -31,7 +31,7 @@ module TripsHelper
   def select_val(opt, val)
     if opt_hash[opt]
       opt_hash[opt].select{|a,b| b==val}[0][0]
-    elsif opt === "cost"
+    elsif opt === "cost" and val != nil
       "$"+val.to_s
     end
   end
@@ -39,7 +39,7 @@ module TripsHelper
     {"shared_driving" => [["",nil],["Meh", 0], ["Yes, a must", 1], ["No, I will do all driving", 2]], 
      "max_passengers" => [["",nil]]+(0..8).zip(0..8), 
      "max_luggage"    => [["",nil],["None", 0], ["Small backpack", 1], ["Several bags", 2], ["As much as you want", 3]],
-     "car_types"      => [["",nil],["Compact", 0], ["Full size", 1], ["SUV", 2], ["Truck", 3]]
+     "car_type"       => [["",nil],["Compact", 0], ["Full size", 1], ["SUV", 2], ["Truck", 3]]
     }
   end
 
