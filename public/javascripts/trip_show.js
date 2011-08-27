@@ -1,7 +1,6 @@
 $(function() {
 
   $(".edit_trip_options").each(function() {
-    console.log($(this).attr("id"))
     var data = ops[$(this).attr("id")];
     if( data === undefined) {
       $(this).editable(mysubmitmethod, {
@@ -30,24 +29,24 @@ $(function() {
     var that = $(this);
     var type = that.attr("id");
     var returned = $.ajax({
-      url: "jeditable", 
+      url: "update_trip_options", 
       type: "POST",
       data: {'id' : trip.id, 'nested' : 'trip_options', 'type' : type, 'value' : value},
       dataType : "json",
       success : function(data, xhr, textStatus) {
-        if(data["value"] != "nil") {
-          that.removeClass("unused_val")
-        } else {
-        }
+      that.removeClass("unused_val")
+      console.log("success");
       },
-      complete : function (xhr, textStatus) {
-        if(textStatus === "success") {
-        }      
+      error : function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR, textStatus, errorThrown)
       }
     });
     if( ops[type] ) {
       to_return = ops[type][value];
+    } else if(type === "cost") {
+      to_return = "$"+parseFloat(value.replace(/\$/g, ""));
     }
+
     //console.log(value);
     //console.log(settings);
     console.log(returned);

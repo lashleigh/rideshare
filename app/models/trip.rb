@@ -12,7 +12,7 @@ class Trip
   key :summary, String 
   key :tags, Array
   key :start_date, Date, :required => true
-  key :start_time, String #, :in => (1..23).to_a.push("a", "r", "m", "n", "e", "l")
+  key :start_time, String, :in => ["e", "m", "a", "l"]
   key :start_flexibility, Array
 
   one :google_options
@@ -69,7 +69,6 @@ class Trip
 
   def self.near(coords, options = {})
     options[:radius] ||= 60
-    options[:trips] ||=Trip.all
 
     case coords
       when Array; coords
@@ -77,15 +76,45 @@ class Trip
     end
 
     trips = {}
-    options[:trips].each do |trip|
+    Trip.all.each do |trip|
       dist = trip.route.map{|point| Geocoder::Calculations::distance_between(point, coords)}.min
       trips[trip.id] = dist
     end
     return trips.select {|k, v| v < options[:radius]}.keys
   end
 
-  def date_format
-  
+  def self.include_ordered(coords_array, options={})
+    res = Trip.near_with_index(coords_array[0], options)
+
+    if coords_array[1]
+      (1..coords_array.length-1).each do |i|
+        f = Trip.near_with_index(coords_array[i], options)
+        res.keep_if {|sk, sv| f.include? sk and sv["index"] < f[sk]["index"] }
+        res.each{|sk, sv| sv["index"] = f[sk]["index"] }
+      end
+    end
+    return res.keys
+  end
+  def self.includes_start_finish(start, finish, options={})
+    s = Trip.near_with_index(start, options)
+    f = Trip.near_with_index(finish, options)
+    s.keep_if {|sk, sv| f.include? sk and sv["index"] < f[sk]["index"] }.keys
+  end
+
+  def self.near_with_index(coords, options = {})
+    options[:radius] ||= 60
+
+    case coords
+      when Array; coords
+      when String; coords = Geocoder.coordinates(coords)
+    end
+
+    trips = {}
+    Trip.all.each do |trip|
+      dist_with_point = trip.route.map{|point| [Geocoder::Calculations::distance_between(point, coords), point]}.min
+      trips[trip.id] = {"dist" => dist_with_point[0], "index" => trip.route.index(dist_with_point[1])}
+    end
+    return trips.select {|k, v| v["dist"] < options[:radius]} #.keys
   end
 
   def distance_between_points
@@ -95,10 +124,6 @@ class Trip
     max = distances.max
     min = distances.min
     return {"avg" => avg, "max" => max, "min" => min}
-  end
-
-  def with_sleep(n)
-    duration + (duration/86400)*n*3600
   end
 
   private

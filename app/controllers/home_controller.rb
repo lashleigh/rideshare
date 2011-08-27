@@ -3,32 +3,29 @@ class HomeController < ApplicationController
   end
 
   def explore
-    @city = params[:city]
-    city = Geocoder.coordinates(params[:city])
+    city = Geocoder.search(params[:city]).first unless params[:city].blank?
+    @city = city.address if city
     respond_to do |format|
-      unless params[:city].blank?
-        if city.nil?
-          flash[:error] = "There was a problem geocoding"
-          format.html {render :action => "explore" }
-          format.xml {head :ok}
-        else
-          @trips = Trip.find_all_near(city).all 
-          @center = city
-          format.html {render :action => "explore" }
-          format.xml {head :ok}
-        end
-      else
-        flash[:error] = "Please provide a city to explore"
+      if city
+        city = city.coordinates
+        @trips = Trip.find_all_near(city).all 
+        @center = city
         format.html {render :action => "explore" }
+        format.xml {head :ok}
+      else
+        flash[:error] = "There was a problem geocoding"
+        format.html {render :action => "explore" }
+        format.xml {head :ok}
       end
     end
   end
 
   def show
-    @origin = params[:origin] unless params[:origin].blank? 
-    @destination = params[:destination] unless params[:destination].blank? 
-    start = Geocoder.coordinates(params[:origin])
-    finish = Geocoder.coordinates(params[:destination])
+    start = Geocoder.search(params[:origin]).first unless params[:origin].blank?
+    finish = Geocoder.search(params[:destination]).first unless params[:destination].blank?
+    @origin = start.address if start
+    @destination = finish.address if finish
+
     respond_to do |format|
       @trips, @center = show_helper(params, start, finish) 
       format.html { render :action => "show" }
@@ -38,10 +35,18 @@ class HomeController < ApplicationController
 
   def show_helper(params, start, finish)
     if start and finish
-      return Trip.find_all_exact_match(start, finish).all, Geocoder::Calculations::geographic_center([start, finish]) 
+      start = start.coordinates
+      finish = finish.coordinates
+      if params[:exact]
+        return Trip.find_all_exact_match(start, finish).all, Geocoder::Calculations::geographic_center([start, finish]) 
+      else
+        return Trip.find_all_near([start, finish]).all, Geocoder::Calculations::geographic_center([start, finish]) 
+      end
     elsif start
+      start = start.coordinates
       return Trip.find_all_starting_in(start).all, start
     elsif finish
+      finish = finish.coordinates
       return Trip.find_all_finishing_in(finish).all, finish
     else
       flash[:error] = "There was a problem geocoding the location"

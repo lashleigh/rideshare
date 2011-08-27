@@ -1,7 +1,7 @@
 <%= javascript_include_tag 'trip_show' %>
 <script type="text/javascript">
   var trip = <%= @trip.to_json.html_safe%>;
-  var ops = <%= @trip.trip_options.choose_from.to_json.html_safe %>;
+  var ops = <%= @select_hash.to_json.html_safe %>;
 </script>
 <div id="trip_show">
   <aside class="trip_details">
@@ -15,12 +15,12 @@
       <li class="head">Details</li>
       <% @trip.trip_options.all_used_attributes.each do |opt, val| %>
         <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span> 
-        <span class="edit_trip_options prop_val" id="<%=opt%>"><%= select_val(opt, val) %></span></li>
+        <span class="edit_trip_options prop_val" id="<%=opt%>"><%=@trip.trip_options.view_for(opt)%></span></li>
       <% end %>
       <li><span class="property">Duration</span><span class="prop_val"><%= trip_duration_in_words(@trip.duration)%></span></li>
       <% @trip.trip_options.all_unused_attributes.each do |opt, val| %>
         <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span> 
-        <span class="edit_trip_options prop_val unused_val" id="<%=opt%>"><%= select_val(opt, val) %></span></li>
+        <span class="edit_trip_options prop_val unused_val" id="<%=opt%>"></span></li>
       <% end %>
     </ul>
   </aside>

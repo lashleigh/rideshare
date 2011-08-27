@@ -1,22 +1,22 @@
 class TripsController < ApplicationController
   # GET /trips
   # GET /trips.xml
-  def jeditable
+  def update_trip_options
     @trip = Trip.find(params[:id])
-    if params[:nested] == "trip_options"
-      if params[:type] == "cost"
-        params[:value].gsub!("$","")
-      end
+    if params[:type] == "cost"
+      params[:value].gsub!("$","")
+    end
+    t = TripOptions.new(params[:type] => params[:value])
+    if t.valid?
       @trip.trip_options.assign({params[:type] => params[:value]})
-    else
-      @trip.assign({params[:type] => params[:value]})
     end
 
     respond_to do |format|
-      if @trip.save
+      if t.valid?
+        @trip.save
         format.json { render :json => @trip.trip_options[params[:type]] }
       else
-        format.json { render :json => @trip.errors.full_messages, :status => :unprocessable_entity }
+        format.json { render :json => t.errors.full_messages, :status => :unprocessable_entity }
       end
     end
   end
@@ -54,6 +54,7 @@ class TripsController < ApplicationController
   # GET /trips/1.xml
   def show
     @trip = Trip.find(params[:id])
+    @select_hash = @trip.trip_options.choose_from
 
     respond_to do |format|
       format.html # show.html.erb

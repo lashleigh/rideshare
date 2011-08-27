@@ -1,8 +1,9 @@
 <script type="text/javascript">
   var trips = <%= @trips.to_json.html_safe %>;
 </script>
-
-<% @trips.each do |t| %>
-  <%= link_to t.origin+" => "+t.destination, t %></br>
-<% end %>
-<%= link_to 'New Trip', new_trip_path %>
+<div style="overflow-y:auto;">
+  <% @trips.each do |t| %>
+    <%= link_to t.origin+" => "+t.destination, t %></br>
+  <% end %>
+  <%= link_to 'New Trip', new_trip_path %>
+</div>
