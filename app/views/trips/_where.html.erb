@@ -1,0 +1,52 @@
+<%= javascript_include_tag 'new_trip_map' %>
+<%= javascript_include_tag 'autocomplete' %>
+<script type="text/javascript">
+  var trip = <%= @trip.to_json.html_safe%>;
+</script>
+<div id="where_form" style="float:left; width:350px;">
+  <%= form_for(trip) do |f| %>
+    <% if trip.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(trip.errors.count, "error") %> prohibited this trip from being saved:</h2>
+
+        <ul>
+          <% trip.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= f.text_field :origin, :size => 30 %>
+    <%= f.text_field :destination, :size => 30 %></br>
+    <%= link_to 'driving options', '#', :id => "driving_options_link" %></br>
+    <div id="driving_options" style="display:none;">
+      <%= check_box_tag :avoid_highways %>
+      <%= label_tag :avoid_highways %></br>
+      <%= check_box_tag :avoid_tolls %>
+      <%= label_tag :avoid_tolls %>
+    </div>
+ 
+    <%= text_field_tag 'trip[start_date]', trip.start_date ? trip.start_date.to_formatted_s(:jqueryui) : "" %></br>
+    <%= link_to 'My dates are flexible', '#', :id => "start_date_options" %>
+    <%= f.select :start_flexibility, [["Use exact date above", [0, 0]], 
+                                    ["1 day before",         [1, 0]], 
+                                    ["1 day after",          [0, 1]], 
+                                    ["1 day before and after", [1, 1]], 
+                                    ["2 days before and after", [2, 2]], 
+                                    ["3 days before and after", [3, 3]]] %></br>
+    <div class="hidden_fields">
+      <%= f.hidden_field :distance %>
+      <%= f.hidden_field :duration %>
+      <%= f.hidden_field :google_options %>
+      <%= f.hidden_field :encoded_poly %>
+      <%= f.hidden_field :route %>
+    </div>
+
+    <div id="trip_submit_wrap">
+      <%= f.submit 'Save', :disabled => true %>
+    </div>
+  <% end %>
+  <div id="directionsPanel" style="display:none;"></div>
+</div>
+<div id="map_canvas"> </div>

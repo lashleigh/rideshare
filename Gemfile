@@ -5,7 +5,7 @@ gem 'bson_ext'
 gem "mongo_mapper"
 gem 'geocoder'
 gem 'json'
-gem "omniauth", ">=0.2.6"
+gem "omniauth", '0.2.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

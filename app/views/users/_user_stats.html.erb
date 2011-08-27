@@ -1,0 +1,85 @@
+<% user = user_stats -%>
+<div class="pagehead">
+  <h1> <%= user.name %> </h1>
+</div>
+<div class="rule"></div>
+<div class="columns profilecols">
+  <div class="first vcard">
+    <dl>
+      <dt>name</dt>
+      <dd class="fn"><%= user.name %></dd>
+    </dl>
+
+    <dl>
+      <dt>website/blog</dt>
+      <dd class="url"><a rel="nofollow me" href=<%=user.website%> class="url"><%= user.website %></a></dd>
+    </dl>
+
+    <dl>
+      <dt>location</dt>
+      <dd class="adr locality"><%= user.location %></dd>
+    </dl>
+
+    <dl>
+      <dt>member since</dt>
+      <dd class=""><%= user.created_at %></dd>
+    </dl>
+  </div>
+  <div class="last">
+    <ul class="stats">
+      <li>
+      <a href="/lashleigh/repositories">
+        <strong><%= user.completed(false)%></strong>
+        <span>planned trips</span>
+      </a>
+      </li>
+
+      <li>
+      <a href="/account/repositories">
+        <strong><%= user.completed(true) %></strong>
+        <span>completed trips</span>
+      </a>
+      </li>
+
+      <li>
+      <a href="/lashleigh/followers">
+        <strong>4</strong>
+        <span>followers</span>
+      </a>
+      </li>
+    </ul>
+
+    <div class="following">
+      <h3>Following 1 traveler and watching 32 trips <a href="/lashleigh/following">view all →</a></h3>
+      <ul class="avatars">
+
+        <li>
+        <a href="/bensonk" rel="contact" title="bensonk"><img src="https://secure.gravatar.com/avatar/453ee9213b4ca3c2b0d848aeebeaee04?s=140&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png" alt="" width="24" height="24"></a>
+        </li>
+
+      </ul>
+    </div>
+
+  </div>
+</div>
+<div class="rule"></div>
+<div class="columns profilecols">
+  <div class="first">
+    <h2>Your Trips (<%= user.trips.length%>)</h2>
+    <ul class="repositories">
+      <% user.trips.each do |trip| %>
+        <li class="public"><%= link_to trip.title, trip %><br/>
+        <%= trip.summary %>
+        <div class="modify">
+          <%= link_to 'Show', trip_path(trip) %>
+          <%= link_to 'Edit', edit_trip_path(trip) %>
+          <%= link_to 'Destroy', trip_path(trip), :confirm => 'Are you sure?', :method => :delete %>
+        </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="last">
+    <h2>Recent Activity(<%= user.trips.length%>)</h2>
+  </div>
+</div>

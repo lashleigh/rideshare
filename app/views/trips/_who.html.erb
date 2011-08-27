@@ -1,0 +1,10 @@
+<%= form_for(trip) do |f| %>
+  <div class="field trip_options">
+    <span class="summary">Shared driving </span><%= select_tag 'trip[trip_options][shared_driving]', mash_up("shared_driving", @trip.trip_options.shared_driving) %></br>
+    <span class="summary">Passengers </span><%= select_tag 'trip[trip_options][max_passengers]', mash_up("max_passengers", @trip.trip_options.max_passengers) %></br>
+    <span class="summary">Passenger luggage </span><%= select_tag 'trip[trip_options][max_luggage]',    mash_up("max_luggage",    @trip.trip_options.max_luggage) %></br>
+    <span class="summary">Financial contribution </span><%= text_field_tag 'trip[trip_options][cost]', @trip.trip_options.cost, :placeholder => "$50" %> </br>
+  </div>
+
+  <%= f.submit 'Save' %>
+<% end %>

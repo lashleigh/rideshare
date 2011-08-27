@@ -44,7 +44,12 @@ $(function() {
     if( ops[type] ) {
       to_return = ops[type][value];
     } else if(type === "cost") {
-      to_return = "$"+parseFloat(value.replace(/\$/g, ""));
+      value = value.replace(/\$/g, "");
+      if(value == value*1) {
+        to_return = "$"+value; //parseFloat(value.replace(/\$/g, ""));
+      } else {
+        to_return = this.revert; //false;
+      }
     }
 
     //console.log(value);

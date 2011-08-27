@@ -1,0 +1,14 @@
+<% user = user_nav -%>
+
+<aside>
+  <ul id="nav-secondary">
+    <li>Your Trips (<%= user.trips.length%>)    
+    <ul>
+      <% user.trips.each do |trip| %>
+        <li><%= link_to trip.id, trip %></li>
+      <% end %>
+    </ul>
+    </li>
+  </ul>
+</aside>
+
