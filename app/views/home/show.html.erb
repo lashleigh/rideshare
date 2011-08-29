@@ -2,11 +2,9 @@
 <script type="text/javascript">
   var center = <%= @center.to_json.html_safe %>;
   var trips = <%= @trips.to_json.html_safe %>;
-
-  $(function() {
-  })
-
+  var flexibility = <%= Trip.first.flexibilty_hash.to_json.html_safe %>;
 </script>
+
 <%= form_tag(:action => 'show') do %>
   <% if flash[:error] %>
     <p class="error"><%= flash[:error] %></p>
@@ -17,8 +15,9 @@
   and ending in 
   <%= text_field_tag 'destination', @search["destination"], :placeholder => 'New York, NY' %>
 
-    <%= text_field_tag 'start_date', @search["start_date"] ? @search["start_date"].to_formatted_s(:jqueryui) : Date.tomorrow.to_formatted_s(:jqueryui) %></br>
-    <%= select_tag :start_flexibility, start_date_options(@search["start_flexibility"]) %></br>
+  <%= hidden_field_tag 'alternate' %>
+  <div id="start_date"></div>
+  <%= select_tag :start_flexibility, start_date_options(@search["start_flexibility"]) %></br>
   <%= submit_tag 'Search', :id => 'home_search' %>
 <% end %>
 
