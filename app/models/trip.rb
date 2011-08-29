@@ -12,11 +12,12 @@ class Trip
   key :summary, String 
   key :tags, Array
   key :start_date, Date, :required => true
-  key :start_time, String, :in => ["e", "m", "a", "l"]
-  key :start_flexibility, Array
+  key :start_time, String, :in => ["any", "e", "m", "a", "l"], :default => "any"
+  key :start_flexibility, String, :in => ["exact", "onebefore", "oneafter", "one", "two", "three"]
 
   one :google_options
   one :trip_options
+  belongs_to :user
   # many :routes
   # validates_presence_of :origin, :destination
   timestamps!
@@ -29,6 +30,7 @@ class Trip
   scope :find_all_finishing_in, lambda {|finish, options={}| where(:id => {'$in' => Trip.ends_at(finish, options)})}
   scope :find_all_exact_match,  lambda {|s,ends, options={}| where(:id => {'$in' => Trip.starts_at(s, options) & Trip.ends_at(ends, options) }) }
   scope :find_all_near,         lambda {|coords, options={}| where(:id => {'$in' => Trip.near_wrapper(coords)}) } 
+  scope :find_all_by_date_and_coords, lambda{|date, coords, options={}| where(:id=> {'$in' => Trip.find_all_in_date_range(date.to_date, options) & Trip.include_ordered(coords, options)})}
 
   def self.starts_at(coords, options = {}) 
     options[:radius] ||= 60
@@ -115,6 +117,17 @@ class Trip
       trips[trip.id] = {"dist" => dist_with_point[0], "index" => trip.route.index(dist_with_point[1])}
     end
     return trips.select {|k, v| v["dist"] < options[:radius]} #.keys
+  end
+  def self.find_all_in_date_range(date, options={})
+    options[:range] ||= "one"
+    Trip.all.map {|trip| trip.id if !!trip.in_range(date, options[:range])}.reject{|t| t==nil}
+  end
+  def in_range(date, range)
+    start_date.array_from_range(self.flexibilty_hash[start_flexibility]) & date.array_from_range(self.flexibilty_hash[range])
+  end
+
+  def flexibilty_hash
+    {"exact" => [0,0], "onebefore" => [1,0], "oneafter" => [1,0], "one" => [1,1], "two" => [2,2], "three" => [3,3]}
   end
 
   def distance_between_points

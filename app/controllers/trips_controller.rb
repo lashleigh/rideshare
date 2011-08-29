@@ -90,10 +90,11 @@ class TripsController < ApplicationController
       params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options])
     end
     @trip.assign(params[:trip])
+    @trip.user = current_user
 
     respond_to do |format|
       if @trip.save
-        format.html { redirect_to settings_path(@trip) } #(@trip, :notice => 'Trip was successfully created.') }
+        format.html { redirect_to @trip } #(@trip, :notice => 'Trip was successfully created.') }
         format.xml  { render :xml => @trip, :status => :created, :location => @trip }
         format.json { render :json => @trip }
       else

@@ -3,16 +3,7 @@
   var center = <%= @center.to_json.html_safe %>;
   var trips = <%= @trips.to_json.html_safe %>;
 
-  var origin_auto = <%=Trip.all.map{|t| t.origin}.uniq.to_json.html_safe%>; 
-  var finish_auto = <%=Trip.all.map{|t| t.destination}.uniq.to_json.html_safe%>; 
-
   $(function() {
-    $("#origin").autocomplete({
-      source: origin_auto
-    });
-    $("#destination").autocomplete({
-      source: finish_auto
-    });
   })
 
 </script>
@@ -22,11 +13,13 @@
   <% end %>
 
   Search for trips starting near
-  <%= text_field_tag 'origin', @origin, :placeholder => 'Seattle, WA' %>
+  <%= text_field_tag 'origin', @search["origin"], :placeholder => 'Seattle, WA' %>
   and ending in 
-  <%= text_field_tag 'destination', @destination, :placeholder => 'New York, NY' %>
+  <%= text_field_tag 'destination', @search["destination"], :placeholder => 'New York, NY' %>
+
+    <%= text_field_tag 'start_date', @search["start_date"] ? @search["start_date"].to_formatted_s(:jqueryui) : Date.tomorrow.to_formatted_s(:jqueryui) %></br>
+    <%= select_tag :start_flexibility, start_date_options(@search["start_flexibility"]) %></br>
   <%= submit_tag 'Search', :id => 'home_search' %>
-  <%= link_to 'Show options', '#' %>
 <% end %>
 
 <% if @matches_x %>

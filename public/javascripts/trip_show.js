@@ -46,7 +46,7 @@ $(function() {
     } else if(type === "cost") {
       value = value.replace(/\$/g, "");
       if(value == value*1) {
-        to_return = "$"+value; //parseFloat(value.replace(/\$/g, ""));
+        to_return = "$"+parseFloat(value).toFixed(2); //parseFloat(value.replace(/\$/g, ""));
       } else {
         to_return = this.revert; //false;
       }

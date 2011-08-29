@@ -5,25 +5,12 @@
 <div class="rule"></div>
 <div class="columns profilecols">
   <div class="first vcard">
-    <dl>
-      <dt>name</dt>
-      <dd class="fn"><%= user.name %></dd>
-    </dl>
-
-    <dl>
-      <dt>website/blog</dt>
-      <dd class="url"><a rel="nofollow me" href=<%=user.website%> class="url"><%= user.website %></a></dd>
-    </dl>
-
-    <dl>
-      <dt>location</dt>
-      <dd class="adr locality"><%= user.location %></dd>
-    </dl>
-
-    <dl>
-      <dt>member since</dt>
-      <dd class=""><%= user.created_at %></dd>
-    </dl>
+    <% user.vcard_attributes.each do |att, val| %>
+      <dl>
+        <dt>att</dt>
+        <dd class="fn"><%= val%></dd>
+      </dl>
+    <% end %>
   </div>
   <div class="last">
     <ul class="stats">
@@ -33,22 +20,7 @@
         <span>planned trips</span>
       </a>
       </li>
-
-      <li>
-      <a href="/account/repositories">
-        <strong><%= user.completed(true) %></strong>
-        <span>completed trips</span>
-      </a>
-      </li>
-
-      <li>
-      <a href="/lashleigh/followers">
-        <strong>4</strong>
-        <span>followers</span>
-      </a>
-      </li>
     </ul>
-
     <div class="following">
       <h3>Following 1 traveler and watching 32 trips <a href="/lashleigh/following">view all →</a></h3>
       <ul class="avatars">

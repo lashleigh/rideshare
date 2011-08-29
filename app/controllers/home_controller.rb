@@ -23,8 +23,10 @@ class HomeController < ApplicationController
   def show
     start = Geocoder.search(params[:origin]).first unless params[:origin].blank?
     finish = Geocoder.search(params[:destination]).first unless params[:destination].blank?
-    @origin = start.address if start
-    @destination = finish.address if finish
+    @search = {}
+    @search["origin"] = start.address if start
+    @search["destination"] = finish.address if finish
+    @search["start_date"] = params[:start_date]
 
     respond_to do |format|
       @trips, @center = show_helper(params, start, finish) 

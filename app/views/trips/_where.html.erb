@@ -29,12 +29,12 @@
  
     <%= text_field_tag 'trip[start_date]', trip.start_date ? trip.start_date.to_formatted_s(:jqueryui) : "" %></br>
     <%= link_to 'My dates are flexible', '#', :id => "start_date_options" %>
-    <%= f.select :start_flexibility, [["Use exact date above", [0, 0]], 
-                                    ["1 day before",         [1, 0]], 
-                                    ["1 day after",          [0, 1]], 
-                                    ["1 day before and after", [1, 1]], 
-                                    ["2 days before and after", [2, 2]], 
-                                    ["3 days before and after", [3, 3]]] %></br>
+    <%= f.select :start_flexibility, [["Use exact date above", "exact"], 
+                                    ["1 day before",           "onebefore"], 
+                                    ["1 day after",            "oneafter"], 
+                                    ["1 day before and after", "one"], 
+                                    ["2 days before and after","two"], 
+                                    ["3 days before and after","three"]], {:selected => @trip.start_flexibility || "three"} %></br>
     <div class="hidden_fields">
       <%= f.hidden_field :distance %>
       <%= f.hidden_field :duration %>

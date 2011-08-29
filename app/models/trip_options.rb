@@ -35,7 +35,7 @@ class TripOptions
     if choose_from[opt]
       choose_from[opt][self.attributes[opt]]
     elsif opt === "cost"
-      "$"+self.cost.to_s unless self.cost.nil?
+      "$%0.2f" % self.cost if self.cost
     else
       self.attributes[opt]
     end
