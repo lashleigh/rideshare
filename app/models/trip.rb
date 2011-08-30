@@ -1,6 +1,7 @@
 class Trip
   include MongoMapper::Document
   before_create :create_google_and_trip_options
+  before_save :set_start_date_to_midnight
 
   key :origin,       String, :required => true
   key :destination,  String, :required => true
@@ -11,7 +12,7 @@ class Trip
  
   key :summary, String 
   key :tags, Array
-  key :start_date, Date, :required => true
+  key :start_date, Time, :required => true
   key :start_time, String, :in => ["any", "e", "m", "a", "l"], :default => "any"
   key :start_flexibility, String, :in => ["exact", "onebefore", "oneafter", "one", "two", "three"]
 
@@ -30,7 +31,9 @@ class Trip
   scope :find_all_finishing_in, lambda {|finish, options={}| where(:id => {'$in' => Trip.ends_at(finish, options)})}
   scope :find_all_exact_match,  lambda {|s,ends, options={}| where(:id => {'$in' => Trip.starts_at(s, options) & Trip.ends_at(ends, options) }) }
   scope :find_all_near,         lambda {|coords, options={}| where(:id => {'$in' => Trip.near_wrapper(coords)}) } 
-  scope :find_all_by_date_and_coords, lambda{|date, coords, options={}| where(:id=> {'$in' => Trip.find_all_in_date_range(date.to_date, options) & Trip.include_ordered(coords, options)})}
+  scope :find_all_by_waypoints, lambda {|coords, options={}| where(:id => {'$in' => Trip.include_ordered(coords, options)} )}
+  scope :find_all_in_date_range, lambda {|date, range| where(:start_date => {'$gte' => range[0].days.ago(date), '$lte' => range[1].days.since(date)})}
+  scope :find_by_start_finish,  lambda {|start, finish, options={}| where(:id=>{'$in' => Trip.includes_start_finish(start, finish, options)} )}
 
   def self.starts_at(coords, options = {}) 
     options[:radius] ||= 60
@@ -87,6 +90,7 @@ class Trip
 
   def self.include_ordered(coords_array, options={})
     res = Trip.near_with_index(coords_array[0], options)
+    options[:trips] ||= Trip.all
 
     if coords_array[1]
       (1..coords_array.length-1).each do |i|
@@ -99,6 +103,7 @@ class Trip
   end
   def self.includes_start_finish(start, finish, options={})
     s = Trip.near_with_index(start, options)
+    #options[:trips] = s.keys
     f = Trip.near_with_index(finish, options)
     s.keep_if {|sk, sv| f.include? sk and sv["index"] < f[sk]["index"] }.keys
   end
@@ -118,16 +123,12 @@ class Trip
     end
     return trips.select {|k, v| v["dist"] < options[:radius]} #.keys
   end
-  def self.find_all_in_date_range(date, options={})
-    options[:range] ||= "one"
-    Trip.all.map {|trip| trip.id if !!trip.in_range(date, options[:range])}.reject{|t| t==nil}
-  end
   def in_range(date, range)
     start_date.array_from_range(self.flexibilty_hash[start_flexibility]) & date.array_from_range(self.flexibilty_hash[range])
   end
 
   def flexibilty_hash
-    {"exact" => [0,0], "onebefore" => [1,0], "oneafter" => [1,0], "one" => [1,1], "two" => [2,2], "three" => [3,3]}
+    {"exact" => [0,0], "onebefore" => [1,0], "oneafter" => [0,1], "one" => [1,1], "two" => [2,2], "three" => [3,3]}
   end
 
   def distance_between_points
@@ -143,5 +144,8 @@ class Trip
   def create_google_and_trip_options
     self.google_options = GoogleOptions.new
     self.trip_options = TripOptions.new
+  end
+  def set_start_date_to_midnight
+    self.start_date = self.start_date.utc.midnight
   end
 end

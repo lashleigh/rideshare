@@ -3,8 +3,8 @@ var infoWindow = new google.maps.InfoWindow();
 var bounds = new google.maps.LatLngBounds();
 
 $(function() {
-  set_heights()
-  $(window).resize(set_heights);
+  //set_heights()
+  //$(window).resize(set_heights);
   handle_datepicker();
   if(center != undefined && trips.length > 0) {
     map = new google.maps.Map(document.getElementById("map_canvas"), {
@@ -56,8 +56,16 @@ function unavailable(_date) {
     return [false,"","Unavailable"];
   }
 }
-
+function highlight_dates() {
+    $(".ui-state-default").parent().removeClass("highlighted-week")
+    var current = $(".ui-state-default").index($(".ui-state-active"))
+    var tolerance = flexibility[$("#start_flexibility :selected").val()];
+    for (i = -tolerance[0]; i <= tolerance[1]; i++) {
+      $($(".ui-state-default")[current+i]).parent().addClass("highlighted-week")
+    }
+}
 function handle_datepicker() {
+  $("#start_flexibility").change(highlight_dates)
   var _dates = [];
   $("#start_date").datepicker({
     altField: "#alternate",
@@ -80,4 +88,5 @@ function handle_datepicker() {
       }
     }
   })
+  highlight_dates();
 }

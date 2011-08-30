@@ -1,7 +1,7 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
-$(function() {
+/*$(function() {
   var base = window.innerHeight - $("header").outerHeight() - $("footer").outerHeight() - 10;
   base = Math.max(base, parseInt($("#content").css("min-height")))
   $("#content").css("height", base+"px");
@@ -9,7 +9,7 @@ $(function() {
     var base = window.innerHeight - $("header").outerHeight() - $("footer").outerHeight() - 10;
     $("#content").css("height", base+"px");
   })
-})
+})*/
 
 // Removes the overlays from the map, but keeps them in the array
 function clearOverlays() {

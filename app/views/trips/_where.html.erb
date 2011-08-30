@@ -27,7 +27,7 @@
       <%= label_tag :avoid_tolls %>
     </div>
  
-    <%= text_field_tag 'trip[start_date]', trip.start_date ? trip.start_date.to_formatted_s(:jqueryui) : "" %></br>
+    <%= text_field_tag 'trip[start_date]', trip.start_date ? trip.start_date.to_formatted_s(:jqueryui) : "", {:placeholder => 3.days.since.midnight.utc.to_formatted_s(:jqueryui)} %></br>
     <%= link_to 'My dates are flexible', '#', :id => "start_date_options" %>
     <%= f.select :start_flexibility, [["Use exact date above", "exact"], 
                                     ["1 day before",           "onebefore"], 

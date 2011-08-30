@@ -1,5 +1,6 @@
 @import 'trip/show';
 @import 'trip/new_edit';
+@import 'home/show';
 .rounded_corners (@radius: 5px) {
   border-radius: @radius;
   -webkit-border-radius: @radius;
@@ -16,10 +17,10 @@ fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td {margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;}
 
 html { 
-  background-color: #F3F3F3;
+  background-color: white;
 }
 body { 
-  background-color: #F3F3F3;
+  background-color: white;
   font-size: 13px;
   color: black;
   text-align: left;
@@ -46,6 +47,9 @@ p {
   float: left;
   clear: both;
 }
+.clear {
+  clear:both;
+}
 .rule {
   clear: both;
   margin: 15px 0;
@@ -62,9 +66,12 @@ p {
   padding-right: 20px;
 }
 #content {
-  background-color: #F9F9F9;
-  min-height: 400px;
-  min-width: 600px;
+clear: both;
+float: left;
+padding: 15px;
+width: 945px;
+position: relative;
+margin-bottom: 30px;
 }
 header {
   border-bottom: 1px solid #ddd;
@@ -93,21 +100,10 @@ header {
   }
 }
 footer {
-  position: relative;
-  bottom: 0;
-  clear: both;
-  text-align: left;
-  padding: 20px 0 10px 0;
-  font-size: 12px;
-  border-top: 2px solid #333;
-  display: inline-block;
-  width: 100%;
-  color: #BBB;
-}
-.madeby {
-  float: right;
-  margin-top: -2px;
-  text-align: right;
+position: relative;
+margin-top: -127px;
+height: 90px;
+clear: both;
 }
 
 /* Landing Page */

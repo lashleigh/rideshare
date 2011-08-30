@@ -30,6 +30,7 @@ class HomeController < ApplicationController
 
     respond_to do |format|
       @trips, @center = show_helper(params, start, finish) 
+      @trips ||= Trip.sort(:created_at.desc).limit(20).all
       format.html { render :action => "show" }
       format.xml  { head :ok }
     end
@@ -39,11 +40,7 @@ class HomeController < ApplicationController
     if start and finish
       start = start.coordinates
       finish = finish.coordinates
-      if params[:exact]
-        return Trip.find_all_exact_match(start, finish).all, Geocoder::Calculations::geographic_center([start, finish]) 
-      else
-        return Trip.find_all_near([start, finish]).all, Geocoder::Calculations::geographic_center([start, finish]) 
-      end
+      return Trip.find_by_start_finish(start, finish).all, Geocoder::Calculations::geographic_center([start, finish]) 
     elsif start
       start = start.coordinates
       return Trip.find_all_starting_in(start).all, start
@@ -52,6 +49,7 @@ class HomeController < ApplicationController
       return Trip.find_all_finishing_in(finish).all, finish
     else
       flash[:error] = "There was a problem geocoding the location"
+      return nil
     end
   end
  
