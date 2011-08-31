@@ -23,12 +23,13 @@ class HomeController < ApplicationController
   def show
     start = Geocoder.search(params[:origin]).first unless params[:origin].blank?
     finish = Geocoder.search(params[:destination]).first unless params[:destination].blank?
-    @search = {}
+    @search = params
     @search["origin"] = start.address if start
     @search["destination"] = finish.address if finish
-    @search["r_origin"] = params[:origin_radius]
-    @search["r_destination"] = params[:destination_radius]
-    @search["start_date"] = params[:start_date]
+    @search["origin_radius"] = nil unless start
+    @search["destination_radius"] = nil unless finish
+    @search["origin_coords"] = start.coordinates if start
+    @search["destination_coords"] = finish.coordinates if finish
 
     respond_to do |format|
       @trips, @center = show_helper(params, start, finish) 
