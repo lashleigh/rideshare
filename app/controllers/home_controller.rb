@@ -26,8 +26,6 @@ class HomeController < ApplicationController
     @search = params
     @search["origin"] = start.address if start
     @search["destination"] = finish.address if finish
-    @search["origin_radius"] = nil unless start
-    @search["destination_radius"] = nil unless finish
     @search["origin_coords"] = start.coordinates if start
     @search["destination_coords"] = finish.coordinates if finish
 

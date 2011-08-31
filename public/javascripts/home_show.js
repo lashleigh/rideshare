@@ -175,7 +175,7 @@ function map_for(map_canvas, info_id) {
     disableDefaultUI: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
-  var radius = search["r_"+info[info_id].split("#")[1]]
+  var radius = search[info[info_id].split("#")[1]+"_radius"]
   var distanceWidget = new DistanceWidget(map, {"radius":radius});
 
   google.maps.event.addListener(distanceWidget.sizer, 'drag', function() {
