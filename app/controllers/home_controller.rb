@@ -43,13 +43,15 @@ class HomeController < ApplicationController
     if start and finish
       start = start.coordinates
       finish = finish.coordinates
-      return Trip.find_by_start_finish(start, finish).all, Geocoder::Calculations::geographic_center([start, finish]) 
+      return Trip.find_by_start_finish(start, finish, params).all, Geocoder::Calculations::geographic_center([start, finish]) 
     elsif start
       start = start.coordinates
-      return Trip.find_all_starting_in(start).all, start
+      params[:radius] = params[:origin_radius].to_f
+      return Trip.find_all_starting_in(start, params).all, start
     elsif finish
       finish = finish.coordinates
-      return Trip.find_all_finishing_in(finish).all, finish
+      params[:radius] = params[:destination_radius].to_f
+      return Trip.find_all_finishing_in(finish, params).all, finish
     else
       flash[:error] = "There was a problem geocoding the location"
       return nil

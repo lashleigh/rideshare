@@ -102,8 +102,10 @@ class Trip
     return res.keys
   end
   def self.includes_start_finish(start, finish, options={})
+    options[:radius] = options[:origin_radius].to_f
     s = Trip.near_with_index(start, options)
-    #options[:trips] = s.keys
+
+    options[:radius] = options[:destination_radius].to_f
     f = Trip.near_with_index(finish, options)
     s.keep_if {|sk, sv| f.include? sk and sv["index"] < f[sk]["index"] }.keys
   end

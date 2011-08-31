@@ -194,37 +194,35 @@ function map_for(map_canvas, info_id) {
 function KM_2_MI(num) {return num*0.621371192 }
 function continuous_radius_info(widget, id) {
   var radius_km = widget.get('distance');
-  $(id+"_info .radius").html('Radius: ' + KM_2_MI(radius_km).toFixed(2)+"mi ("+radius_km.toFixed(2)+"km)" );
+  $(id+"_info .radius").html(KM_2_MI(radius_km).toFixed(2)+"mi ("+radius_km.toFixed(2)+"km)" );
 }
 function radius_info(widget, id) {
   var radius_km = widget.get('distance');
   $(id+"_radius").val(radius_km);
-  $(id+"_info .radius").html('Radius: ' + KM_2_MI(radius_km).toFixed(2)+"mi ("+radius_km.toFixed(2)+"km)" );
+  $(id+"_info .radius").html(KM_2_MI(radius_km).toFixed(2)+"mi ("+radius_km.toFixed(2)+"km)" );
 }
 
 var widgets = [];
 var geo_results;
 var info = ["#origin",  "#destination"]
+
 $(function() {
   map_for("map_for_origin", 0);
   map_for("map_for_destination", 1);
 
-  $(".show_map").toggle(function() {
-    $(this).next().show();
-    $(this).text("Hide map");  
-    google.maps.event.trigger(widgets[0].map, 'resize')
-    widgets[0].map.setCenter(widgets[0].get('position'))
-    google.maps.event.trigger(widgets[1].map, 'resize')
-    widgets[1].map.setCenter(widgets[1].get('position'))
-  }, function() {
-    $(this).next().hide();
-    $(this).text("Show map");  
+  $(".hide_map").click(function() {
+    $(this).parent().hide();
   });
 })
 function initialize(i) {
   var str = info[i].split("#")[1];
   $("#geocode_"+str).click(function() {
-    codeAddress($(this).prev().val(), widgets[i], info[i]);  
+    var address = $(this).prev().val().replace(/^ +/g, "").replace(/ +$/g, "");
+    if(address.length > 0) {
+      codeAddress(address, widgets[i], info[i]);  
+    }
+    $("#"+str+"_info").show()
+    show_map()
   })
   if(search[str]) {
     codeAddress(search[str], widgets[i], info[i]);
@@ -237,6 +235,7 @@ function initialize(i) {
 function codeAddress(address, widget, which_input) {
   var geocoder = new google.maps.Geocoder();
   geocoder.geocode({'address': address}, function(results, status) {
+      geo_results = results;
     if (status == google.maps.GeocoderStatus.OK) {
       if(results[0]) {
         var point = results[0].geometry.location;  
@@ -245,7 +244,7 @@ function codeAddress(address, widget, which_input) {
         $(which_input).val(results[0].formatted_address);
       }
     } else {
-      alert("Geocoder failed due to: " + status);
+      console.log("Geocoder failed due to: " + status);
     }
   });
 }
@@ -281,4 +280,14 @@ function switching() {
         case '["neighborhood","political"]': best = i; break;
         case '["postal_code"]': best = i; break;
       }
+}
+
+function show_map() {
+  google.maps.event.trigger(widgets[0].map, 'resize')
+  widgets[0].map.setCenter(widgets[0].get('position'))
+  google.maps.event.trigger(widgets[1].map, 'resize')
+  widgets[1].map.setCenter(widgets[1].get('position'))
+  widgets[0].map.fitBounds(widgets[0].radiusWidget.get('bounds'))
+  widgets[1].map.fitBounds(widgets[1].radiusWidget.get('bounds'))
+
 }
