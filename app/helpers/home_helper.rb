@@ -19,4 +19,11 @@ module HomeHelper
       ["< 35 mi", "35"],
       ["< 50 mi", "50"]]
   end
+  def small_static_map(trip)
+    basic = 'http://maps.googleapis.com/maps/api/staticmap?size=150x120&path=weight:5|color:0x00000099|enc:'
+    a = "&markers=size:mid%7Ccolor:green%7Clabel:A%7C#{trip.route[0].join(",")}"
+    b = "&markers=size:mid%7Ccolor:green%7Clabel:B%7C#{trip.route.last.join(",")}"
+    basic+trip.encoded_poly+a+b+"&sensor=false"
+  end
+
 end

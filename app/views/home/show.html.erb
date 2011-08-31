@@ -1,4 +1,8 @@
 <%= javascript_include_tag 'home_show' %>
+<script type="text/javascript">
+  var center = <%= @center.to_json.html_safe%>;
+  var trips = <%= @trips.to_json.html_safe%>;
+</script>
 <aside class="trip_search">
   <h3 class="tripsheader">
     <a href="/jobs/feed?" class="rss"><img alt="rss" id="rss" src="http://sstatic.net/careers/Img/icon-rss.png?32e66e"></a>
@@ -11,8 +15,20 @@
 
     <%= label_tag 'origin', "From" %>
     <%= text_field_tag 'origin', @search["origin"], :placeholder => 'Seattle, WA' %>
+    <%= hidden_field_tag 'origin_radius', @search['r_origin'] %>
+    <div id="map_for_origin" class="map_canvas"></div>
+    <div id="origin_info">
+      <span class="position"></span>
+      <span class="radius"></span>
+    </div>
     <%= label_tag 'destination', "To" %>
     <%= text_field_tag 'destination', @search["destination"], :placeholder => 'New York, NY' %>
+    <%= hidden_field_tag 'destination_radius', @search['r_destination'] %>
+    <div id="map_for_destination" class="map_canvas"></div>
+    <div id="destination_info">
+      <span class="position"></span>
+      <span class="radius"></span>
+    </div>
 
     <%= submit_tag 'Search', :id => 'home_search' %>
   <% end %>
@@ -24,7 +40,7 @@
   </div>
   <% @trips.each do |trip| %>
     <div class="listitem">
-      <div class="right"><p class="posted"><%= time_ago_in_words(trip.created_at) %> ago</p></div>
+      <div class="right"><%= image_tag small_static_map(trip) %> </div>
       <a class="fav-toggle" href="/jobs/togglefavorite/13369" title="Click to add to your favorites"></a>
       <div class="one-line">
         <%= link_to trip.origin+" to "+trip.destination, trip %>

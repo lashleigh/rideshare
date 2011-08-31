@@ -5,11 +5,12 @@ var bounds = new google.maps.LatLngBounds();
 $(function() {
   //set_heights()
   //$(window).resize(set_heights);
-  handle_datepicker();
+  //handle_datepicker();
   if(center != undefined && trips.length > 0) {
     map = new google.maps.Map(document.getElementById("map_canvas"), {
       center: new google.maps.LatLng(center[0], center[1]),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true
     });
  
     for(var i = 0; i<trips.length; i++) { drawRoute(trips[i]) }
