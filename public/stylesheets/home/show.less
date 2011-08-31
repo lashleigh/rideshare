@@ -72,7 +72,7 @@
 }
 .trip_search {
   float: right;
-  width: 225px;
+  width: 255px;
   margin-bottom: 30px;
   background-color: white;
   h3, .sidebar h3, h3.solid {
@@ -86,8 +86,8 @@
     label {
       font-weight: bold;
       display: inline-block;
-      width: 45px;
-      padding-left: 5px;
+      width: 40px;
+      padding-left: 0px;
     }
     input[type="text"] {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -96,8 +96,22 @@
       width: 150px;
     }
     .map_canvas {
-      width: 220px;
+      width: 250px;
       height: 200px;
+      margin-bottom: 10px;
+     }
+    .undo {
+      position: relative;
+      right: 0;
+      width: 32px;
+      height: 24px;
+    background:url(/images/undo.png) no-repeat;
+    cursor:pointer;
+    border: none;
+    }
+    .undo:hover {
+      background-color: blue;
+      border-radius: 3px;
     }
   }
 }

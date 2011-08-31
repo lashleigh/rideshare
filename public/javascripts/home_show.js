@@ -6,7 +6,7 @@
  *
  * @constructor
  */
-function DistanceWidget(map) {
+function DistanceWidget(map, args) {
   this.set('map', map);
   this.set('position', map.getCenter());
 
@@ -24,8 +24,8 @@ function DistanceWidget(map) {
   marker.bindTo('position', this);
 
   // Create a new radius widget
-  var radiusWidget = new RadiusWidget();
-
+  var radiusWidget = new RadiusWidget(args);
+  this.set('radiusWidget', radiusWidget);
   // Bind the radiusWidget map to the DistanceWidget map
   radiusWidget.bindTo('map', this);
 
@@ -49,13 +49,14 @@ DistanceWidget.prototype = new google.maps.MVCObject();
  *
  * @constructor
  */
-function RadiusWidget() {
+function RadiusWidget(args) {
   var circle = new google.maps.Circle({
     strokeWeight: 2
   });
 
-  // Set the distance property value, default to 50km.
-  this.set('distance', 50);
+  // Set the distance property value, default to 25mi (40.2336km).
+  args["radius"] = args["radius"] || 40.2336;
+  this.set('distance', parseFloat(args["radius"]));
 
   // Bind the RadiusWidget bounds property to the circle bounds property.
   this.bindTo('bounds', circle);
@@ -174,32 +175,80 @@ function map_for(map_canvas, info_id) {
     disableDefaultUI: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
-  var distanceWidget = new DistanceWidget(map);
+  var radius = search["r_"+info[info_id].split("#")[1]]
+  var distanceWidget = new DistanceWidget(map, {"radius":radius});
 
+  google.maps.event.addListener(distanceWidget.sizer, 'drag', function() {
+    continuous_radius_info(distanceWidget, info[info_id]);
+  });
   google.maps.event.addListener(distanceWidget.sizer, 'dragend', function() {
-    radius_info(distanceWidget, info_id);
+    radius_info(distanceWidget, info[info_id]);
   });
 
   google.maps.event.addListener(distanceWidget.marker, 'dragend', function() {
-    codeLatLng(distanceWidget.marker, info_id)
+    codeLatLng(distanceWidget.marker, info[info_id])
   });
   widgets.push(distanceWidget);
+  initialize(info_id);
 }
-
+function KM_2_MI(num) {return num*0.621371192 }
+function continuous_radius_info(widget, id) {
+  var radius_km = widget.get('distance');
+  $(id+"_info .radius").html('Radius: ' + KM_2_MI(radius_km).toFixed(2)+"mi ("+radius_km.toFixed(2)+"km)" );
+}
 function radius_info(widget, id) {
-  $(id+"_radius").val(widget.get('distance'));
-  $(id+"_info .radius").html('distance: ' + widget.get('distance'));
+  var radius_km = widget.get('distance');
+  $(id+"_radius").val(radius_km);
+  $(id+"_info .radius").html('Radius: ' + KM_2_MI(radius_km).toFixed(2)+"mi ("+radius_km.toFixed(2)+"km)" );
 }
 
 var widgets = [];
 var geo_results;
 var info = ["#origin",  "#destination"]
-
 $(function() {
-  map_for("map_for_origin", info[0]);
-  map_for("map_for_destination", info[1]);
-})
+  map_for("map_for_origin", 0);
+  map_for("map_for_destination", 1);
 
+  $(".show_map").toggle(function() {
+    $(this).next().show();
+    $(this).text("Hide map");  
+    google.maps.event.trigger(widgets[0].map, 'resize')
+    widgets[0].map.setCenter(widgets[0].get('position'))
+    google.maps.event.trigger(widgets[1].map, 'resize')
+    widgets[1].map.setCenter(widgets[1].get('position'))
+  }, function() {
+    $(this).next().hide();
+    $(this).text("Show map");  
+  });
+})
+function initialize(i) {
+  var str = info[i].split("#")[1];
+  $("#geocode_"+str).click(function() {
+    codeAddress($(this).prev().val(), widgets[i], info[i]);  
+  })
+  if(search[str]) {
+    codeAddress(search[str], widgets[i], info[i]);
+  }
+  /*if(search["r_"+str]) {
+    widgets[i].set('distance', search['r_'+str]);
+  }*/
+  radius_info(widgets[i], info[i]);
+}
+function codeAddress(address, widget, which_input) {
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if(results[0]) {
+        var point = results[0].geometry.location;  
+        widget.set('position', point);
+        widget.map.setCenter(point);
+        $(which_input).val(results[0].formatted_address);
+      }
+    } else {
+      alert("Geocoder failed due to: " + status);
+    }
+  });
+}
 function codeLatLng(marker, id) {
   var geocoder = new google.maps.Geocoder();
   geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
@@ -220,7 +269,6 @@ function codeLatLng(marker, id) {
       })
       var res = results[best].formatted_address;
       $(id).val(res);
-      $(id+"_info .position").html('Position: ' + res);
       //marker.setPosition(results[best].geometry.location);
     } else {
       alert("Geocoder failed due to: " + status);

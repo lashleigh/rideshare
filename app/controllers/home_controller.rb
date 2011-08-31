@@ -26,6 +26,8 @@ class HomeController < ApplicationController
     @search = {}
     @search["origin"] = start.address if start
     @search["destination"] = finish.address if finish
+    @search["r_origin"] = params[:origin_radius]
+    @search["r_destination"] = params[:destination_radius]
     @search["start_date"] = params[:start_date]
 
     respond_to do |format|
