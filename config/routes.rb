@@ -5,6 +5,7 @@ Rideshare::Application.routes.draw do
   match 'home/show' => 'home#show'
   match '/explore' => 'home#explore', :as => :explore
   match 'trips/update_trip_options' => 'trips#update_trip_options'
+  match 'trips/update_summary' => 'trips#update_summary'
   match 'trips/:id/map' => 'trips#map', :as => :map
 
   match "/auth/:provider/callback" => "sessions#create"  

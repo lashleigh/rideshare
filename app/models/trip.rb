@@ -10,11 +10,12 @@ class Trip
   key :route,        Array,  :required => true, :typecast => 'Array'
   key :encoded_poly, String, :required => true
  
-  key :summary, String 
-  key :tags, Array
   key :start_date, Time, :required => true
   key :start_time, String, :in => ["any", "e", "m", "a", "l"], :default => "any"
   key :start_flexibility, String, :in => ["exact", "onebefore", "oneafter", "one", "two", "three"]
+  key :summary, String 
+  key :tags, Array
+  key :views, Integer, :default => 0
 
   one :google_options
   one :trip_options
@@ -26,12 +27,8 @@ class Trip
   scope :by_duration_in_hours, lambda {|low, high| where(:duration.gte => low*3600,  :duration.lte => high*3600) }
   scope :by_distance_in_miles, lambda {|low, high| where(:distance.gte => low*1609.344, :distance.lte => high*1609.344) }
 
-  #scope :find_all_starting_in, lambda {|start| where(:origin => start) }
   scope :find_all_starting_in,  lambda {|start,  options={}| where(:id => {'$in' => Trip.starts_at(start, options)})}
   scope :find_all_finishing_in, lambda {|finish, options={}| where(:id => {'$in' => Trip.ends_at(finish, options)})}
-  scope :find_all_exact_match,  lambda {|s,ends, options={}| where(:id => {'$in' => Trip.starts_at(s, options) & Trip.ends_at(ends, options) }) }
-  scope :find_all_near,         lambda {|coords, options={}| where(:id => {'$in' => Trip.near_wrapper(coords)}) } 
-  scope :find_all_by_waypoints, lambda {|coords, options={}| where(:id => {'$in' => Trip.include_ordered(coords, options)} )}
   scope :find_all_in_date_range, lambda {|date, range| where(:start_date => {'$gte' => range[0].days.ago(date), '$lte' => range[1].days.since(date)})}
   scope :find_by_start_finish,  lambda {|start, finish, options={}| where(:id=>{'$in' => Trip.includes_start_finish(start, finish, options)} )}
 
@@ -151,6 +148,12 @@ class Trip
     max = distances.max
     min = distances.min
     return {"avg" => avg, "max" => max, "min" => min}
+  end
+  def title
+    origin+" to "+destination
+  end
+  def title_minus_country
+    origin[0..origin.rindex(",")-1]+" to "+destination[0..destination.rindex(",")-1]
   end
 
   private

@@ -31,6 +31,8 @@ class HomeController < ApplicationController
 
     respond_to do |format|
       @trips, @center = show_helper(params, start, finish) 
+      session[:search] = @trips.map{|t| t.id.as_json} if @trips
+      logger.info(session[:search])
       @trips ||= Trip.sort(:created_at.desc).limit(5).all
       @center ||= [47.6062095, -122.3320708]
       format.html { render :action => "show" }

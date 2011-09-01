@@ -1,4 +1,68 @@
 #trip_show {
+  #share {
+  clear: both;
+  border-top: 1px solid #E9E9E9;
+  margin-bottom: 30px;
+  float: right;
+  width: 225px;
+  margin-bottom: 30px;
+  background-color: white;
+  > a, > div.flag {
+  display: block;
+  padding: 8px 8px 8px 40px;
+  border-bottom: 1px solid #E9E9E9;
+  background-repeat: no-repeat;
+  background-position: 15px center;
+  overflow: hidden;
+  }
+  a.mail {
+  background-image: url(/images/icon-envelope.png);
+  }
+  a#fav-share {
+  background-image: url(/images/fav-star-off.png);
+  }
+  a.twitter {
+  background-image: url(/images/icon-twitter.png) ;
+  }
+  a.facebook {
+  background-image: url(/images/icon-fb.gif);
+  }
+  div.flag {
+  background-image: url(/images/flag.png);
+  background-position: 15px 8px;
+  }
+  form.flag {
+  margin: 8px 0;
+  display: none;
+  }
+  }
+
+  #jobdetail-nav {
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #E9E9E9;
+    float: left;
+    width: 100%;
+    a.returntolist {
+      float: left;
+    }
+    #prev-job {
+      padding-left: 25px;
+      background: url(/images/arrow-left.png) no-repeat 10px 3px;
+      float: left;
+    }
+    #next-job {
+      padding-right: 16px;
+      background: url(/images/arrow-right.png) no-repeat right 3px;
+      float: right;
+    }
+    a.returntolist, a.double-arrow-left {
+      background: url(/images/dbl-arrow-left.png) no-repeat 0px 3px;
+      display: inline-block;
+      padding: 0 0 4px 26px;
+    }
+  }
+
   .trip_details {
     float: left;
     max-width: 500px;
@@ -15,6 +79,8 @@
     background: url(/images/b.png) 10px 2px no-repeat;
     padding: 0 32px;
     line-height: 20px;
+  }
+  #trip_summary {
   }
   ul#trip_options {
     width: 220px;

@@ -34,4 +34,17 @@ module TripsHelper
     end
   end
 
+  def tweet_text(trip)
+  url = "http://rideshare.com/trips/#{trip.id}"
+  text = trip.title_minus_country
+  if trip.trip_options.cost
+    text = text+" for $#{trip.trip_options.cost}"
+  end
+  "http://twitter.com/intent/tweet?url=#{url}&via=RideShare&text=#{text}"
+  end
+  def facebook_text(trip)
+  url = "http://rideshare.com/trips/#{trip.id}"
+  text = trip.title_minus_country
+  "http://www.facebook.com/sharer.php?u=#{url}&t=#{text}"
+  end
 end

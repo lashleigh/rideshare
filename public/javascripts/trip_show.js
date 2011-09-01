@@ -1,4 +1,14 @@
 $(function() {
+  var csrf = $("head meta")[1].content;
+
+  $(".edit_summary").editable('update_summary', {
+     id : 'type', 
+     name : 'value',
+     type : 'textarea',
+     submit : 'OK',
+     indicator : "Saving...",
+     submitdata : {'id' : trip.id, "authenticity_token" : csrf}
+  });
 
   $(".edit_trip_options").each(function() {
     var data = ops[$(this).attr("id")];
@@ -31,7 +41,7 @@ $(function() {
     var returned = $.ajax({
       url: "update_trip_options", 
       type: "POST",
-      data: {'id' : trip.id, 'nested' : 'trip_options', 'type' : type, 'value' : value},
+      data: {'id' : trip.id, 'nested' : 'trip_options', 'type' : type, 'value' : value, "authenticity_token" : csrf} ,
       dataType : "json",
       success : function(data, xhr, textStatus) {
       that.removeClass("unused_val")

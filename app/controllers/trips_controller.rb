@@ -1,6 +1,18 @@
 class TripsController < ApplicationController
   # GET /trips
   # GET /trips.xml
+  def update_summary
+    @trip = Trip.find(params[:id])
+    @trip.assign({params[:type] => params[:value]})
+    respond_to do |format|
+      if @trip.save
+        format.json { render :json => @trip.summary }
+      else
+        format.json { render :json => t.errors.full_messages, :status => :unprocessable_entity }
+      end
+    end
+  end
+
   def update_trip_options
     @trip = Trip.find(params[:id])
     if params[:type] == "cost"
@@ -55,6 +67,14 @@ class TripsController < ApplicationController
   def show
     @trip = Trip.find(params[:id])
     @select_hash = @trip.trip_options.choose_from
+    if session[:search]
+      unless session[:search].index(params[:id]) == 0 || -1
+        @prev = Trip.find(session[:search][session[:search].index(params[:id]) - 1]) 
+      end
+      unless session[:search].index(params[:id]) == session[:search].length-1 ||-1
+        @next = Trip.find(session[:search][session[:search].index(params[:id]) + 1]) 
+      end
+    end
 
     respond_to do |format|
       format.html # show.html.erb
