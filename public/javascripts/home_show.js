@@ -213,6 +213,7 @@ $(function() {
   $(".hide_map").click(function() {
     $(this).parent().hide();
   });
+  handle_datepicker();
 })
 function initialize(i) {
   var str = info[i].split("#")[1];

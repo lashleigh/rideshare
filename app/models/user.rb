@@ -37,7 +37,7 @@ class User
     self.authorizations.push(Authorization.new(:provider => provider, :uid => uid))
   end
   def vcard_attributes(options={})
-    options[:include] ||= ["name", "location", "website"]
+    options[:include] ||= ["name", "location"]
     vcard_attr = self.attributes.select {|k, v|  options[:include].include? k and v !=nil}
     vcard_attr["member_since"] = self.created_at.to_date.to_formatted_s(:long_ordinal)
     return vcard_attr
@@ -46,4 +46,7 @@ class User
   
   end
 
+  def pretty_website
+    self.website.gsub("http://", "")
+  end
 end

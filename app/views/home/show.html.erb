@@ -1,8 +1,11 @@
 <%= javascript_include_tag 'home_show' %>
+<%= javascript_include_tag 'home_datepicker' %>
 <script type="text/javascript">
   var center = <%= @center.to_json.html_safe%>;
   var trips = <%= @trips.to_json.html_safe%>;
   var search = <%= @search.to_json.html_safe%>;
+  var flexibility = <%= Trip.first.flexibilty_hash.to_json.html_safe %>;
+  var availableDates = <%= Trip.avail_dates({:trips => @trips}).to_json.html_safe %>;
 </script>
 <aside class="trip_search">
   <h3 class="tripsheader">
@@ -34,6 +37,9 @@
     </div>
 
     <%= submit_tag 'Search', :id => 'home_search' %>
+    <%= hidden_field_tag 'alternate' %>
+    <div id="start_date"></div>
+    <%= select_tag :start_flexibility, create_options(@search["start_flexibility"]) %></br>
   <% end %>
 </aside>
 
@@ -41,19 +47,6 @@
   <div class="tripsheader">
     <h3><%= @trips.length%></h3>
   </div>
-  <% @trips.each do |trip| %>
-    <div class="listitem">
-      <div class="right"><%= image_tag small_static_map(trip, @search["origin_coords"], @search["destination_coords"]) %> </div>
-      <a class="fav-toggle" href="/jobs/togglefavorite/13369" title="Click to add to your favorites"></a>
-      <div class="one-line">
-        <%= link_to trip.origin+" to "+trip.destination, trip %>
-        <span class="owner" title="<%=trip.user.name%>">
-          <%= link_to trip.user.name, trip.user %>
-        </span>
-        <p class="date"><%=trip.start_date.to_formatted_s(:custom_short)%> </p>
-        <p class="description"><%=trip.description if trip.description%></p>
-        <p class="tags"><a class="post-tag" href="/jobs/tag/mysql">mysql</a> <a class="post-tag" href="/jobs/tag/lamp">lamp</a> <a class="post-tag" href="/jobs/tag/cloud">cloud</a> <a class="post-tag" href="/jobs/tag/java">java</a> <a class="post-tag" href="/jobs/tag/php">php</a></p>
-      </div>
-    </div>
-  <% end %>
+  <%= render :partial => 'trips/trip', :collection => @trips %>
+
 </div>

@@ -12,10 +12,12 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
-  <%= render 'home/header' %>
-  <section id="content">
-    <%= yield %>
-  </section>
+  <div class="wrapper">
+    <%= render 'home/header' %>
+    <section id="content">
+      <%= yield %>
+    </section>
+  </div>
   <%= render 'home/footer' %>
 </body>
 </html>

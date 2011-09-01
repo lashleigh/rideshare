@@ -125,6 +125,17 @@ class Trip
     end
     return trips.select {|k, v| v["dist"] < options[:radius]} #.keys
   end
+  def self.avail_dates(options={})
+    dates = []
+    options[:trips] ||= Trip.all
+    options[:trips].each do |trip|
+      dates += trip.date_range
+    end
+    return dates.reject {|d| d.past? }.uniq.sort.map{|d| d.to_formatted_s(:day_month_year).gsub(/^0/, "").gsub(/-0/,"-")}
+  end
+  def date_range
+    start_date.array_from_range(self.flexibilty_hash[start_flexibility])
+  end
   def in_range(date, range)
     start_date.array_from_range(self.flexibilty_hash[start_flexibility]) & date.array_from_range(self.flexibilty_hash[range])
   end
