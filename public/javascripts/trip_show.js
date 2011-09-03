@@ -1,7 +1,7 @@
 $(function() {
   var csrf = $("head meta")[1].content;
 
-  $(".edit_summary").editable('update_summary', {
+  $(".edit_summary").editable('/trips/update_summary', {
      id : 'type', 
      name : 'value',
      cssclass : 'edit_summary',

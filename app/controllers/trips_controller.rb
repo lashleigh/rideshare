@@ -100,6 +100,7 @@ class TripsController < ApplicationController
   # GET /trips/1/edit
   def edit
     @trip = Trip.find(params[:id])
+    @select_hash = @trip.trip_options.choose_from
   end
 
   # POST /trips

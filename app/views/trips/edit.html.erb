@@ -3,17 +3,19 @@
   var trip = <%= @trip.to_json.html_safe%>;
   var ops = <%= @select_hash.to_json.html_safe %>;
 </script>
-<div id="trip_show">
+<div id="trip_show" >
   <%= render :partial => 'nav' %>
+    <div id="trip_title" style="clear:both;">
+      <span><%= link_to @trip.origin, home_show_path({:origin => @trip.origin}) %></span>
+      to
+      <span><%= link_to @trip.destination, home_show_path({:destination => @trip.destination}) %></span>
+    </div>
   <%= render :partial => 'share' %>
-  <aside class="trip_details">
-    <div id="trip_origin">
-      <%= @trip.origin %>
-    </div>
-    <div id="trip_destination">
-      <%= @trip.destination %>
-    </div>
-    <div id="summary" class="edit_summary"><%= @trip.summary %></div>
+  <div class="trip_details">
+
+    <div id="summary" class="edit_summary"><%= simple_format(@trip.summary) %></div>
+    <p>This trip will require about <span> <%= trip_duration_in_words(@trip.duration)%></span> of non stop driving 
+    and cost approximately $<%=cost_of_gas(@trip)%> is gas. </p>
     <ul id="trip_options">
       <li class="head">Details</li>
       <% @trip.trip_options.all_used_attributes.each do |opt, val| %>
@@ -26,8 +28,7 @@
         <span class="edit_trip_options prop_val unused_val" id="<%=opt%>"></span></li>
       <% end %>
     </ul>
-  </aside>
+  </div>
 
-  <%= link_to (image_tag static_map(@trip), :id => "static_map"), map_path %>
 </div>
-~         
+         

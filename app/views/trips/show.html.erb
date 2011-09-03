@@ -2,12 +2,12 @@
   <%= render :partial => 'nav' %>
   <%= render :partial => 'share' %>
   <div class="trip_details">
+
     <div id="trip_title">
       <span><%= link_to @trip.origin, home_show_path({:origin => @trip.origin}) %></span>
       to
       <span><%= link_to @trip.destination, home_show_path({:destination => @trip.destination}) %></span>
     </div>
-
     <div id="summary" class="edit_summary"><%= simple_format(@trip.summary) %></div>
     <p>This trip will require about <span> <%= trip_duration_in_words(@trip.duration)%></span> of non stop driving 
     and cost approximately $<%=cost_of_gas(@trip)%> is gas. </p>
