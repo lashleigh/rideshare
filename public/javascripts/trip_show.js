@@ -4,6 +4,7 @@ $(function() {
   $(".edit_summary").editable('update_summary', {
      id : 'type', 
      name : 'value',
+     cssclass : 'edit_summary',
      type : 'textarea',
      submit : 'OK',
      indicator : "Saving...",
@@ -39,7 +40,7 @@ $(function() {
     var that = $(this);
     var type = that.attr("id");
     var returned = $.ajax({
-      url: "update_trip_options", 
+      url: "/trips/update_trip_options", 
       type: "POST",
       data: {'id' : trip.id, 'nested' : 'trip_options', 'type' : type, 'value' : value, "authenticity_token" : csrf} ,
       dataType : "json",

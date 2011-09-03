@@ -1,4 +1,5 @@
 class TripsController < ApplicationController
+  before_filter :require_user, :except => [:index, :show, :craigslist]
   # GET /trips
   # GET /trips.xml
   def update_summary
@@ -33,15 +34,6 @@ class TripsController < ApplicationController
     end
   end
 
-  def settings
-    @trip = Trip.find(params[:id])
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @trips }
-    end
-  end
-
   def index
     @trips = Trip.all
 
@@ -50,6 +42,7 @@ class TripsController < ApplicationController
       format.xml  { render :xml => @trips }
     end
   end
+
   # GET /trips/1
   # GET /trips/1.xml
   def map
@@ -61,12 +54,23 @@ class TripsController < ApplicationController
     end
   end
 
+  def craigslist
+    @trip = Trip.find(params[:id])
+    @cities = Craigslist.find_all_near_route(@trip)
+
+    respond_to do |format|
+      format.html #craigslist.html.erb
+      format.xml  { render :xml => @trip }
+    end
+  end
 
   # GET /trips/1
   # GET /trips/1.xml
   def show
     @trip = Trip.find(params[:id])
     @select_hash = @trip.trip_options.choose_from
+    @owner = current_user and @current_user == @trip.user
+
     if session[:search]
       unless session[:search].index(params[:id]) == 0 || -1
         @prev = Trip.find(session[:search][session[:search].index(params[:id]) - 1]) 

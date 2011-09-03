@@ -4,6 +4,10 @@ module TripsHelper
     a = "&markers=color:green%7Clabel:A%7C#{trip.route[0].join(",")}"
     b = "&markers=color:green%7Clabel:B%7C#{trip.route.last.join(",")}"
     w = trip.google_options.waypoints.map{|w| "&markers=size:mid%7Ccolor:blue%7C#{w.join(",")}"}.join
+    # There is a very good chance this will make the request string too large
+    #craigs = Craigslist.find_all_near_route(trip)
+    #craigs_string = ""
+    #craigs.each {|c| craigs_string+="&markers=size:mid%7Ccolor:blue%7C#{c.coords.join(",")}"}
     basic+trip.encoded_poly+a+b+w+"&sensor=false"
   end
 
@@ -35,16 +39,19 @@ module TripsHelper
   end
 
   def tweet_text(trip)
-  url = "http://rideshare.com/trips/#{trip.id}"
-  text = trip.title_minus_country
-  if trip.trip_options.cost
-    text = text+" for $#{trip.trip_options.cost}"
-  end
-  "http://twitter.com/intent/tweet?url=#{url}&via=RideShare&text=#{text}"
+    url = "http://rideshare.com/trips/#{trip.id}"
+    text = trip.title_minus_country
+    if trip.trip_options.cost
+      text = text+" for $#{trip.trip_options.cost}"
+    end
+    "http://twitter.com/intent/tweet?url=#{url}&via=RideShare&text=#{text}"
   end
   def facebook_text(trip)
-  url = "http://rideshare.com/trips/#{trip.id}"
-  text = trip.title_minus_country
-  "http://www.facebook.com/sharer.php?u=#{url}&t=#{text}"
+    url = "http://rideshare.com/trips/#{trip.id}"
+    text = trip.title_minus_country
+    "http://www.facebook.com/sharer.php?u=#{url}&t=#{text}"
+  end
+  def email_text(trip)
+    "mailto:?subject=#{trip.title_minus_country}&body=I found this trip on AWESOME RIDESHARING SITE DOT COM:%0d%0a%0d%0a%0d%0a%0d%0a#{trip.title_minus_country}%0d%0a%0d%0ahttp://rideshare.com/trips/#{trip.id}\n"
   end
 end

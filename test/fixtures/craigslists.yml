@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  city: MyString
+  href: MyString
+  coords: 
+
+two:
+  city: MyString
+  href: MyString
+  coords: 

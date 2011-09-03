@@ -3,7 +3,7 @@
     <%= image_tag @user.image %>
     <% @user.vcard_attributes.each do |att, val| %>
       <dl>
-        <dt><%=att%></dt>
+        <dt><%=att.gsub("_", " ")%></dt>
         <dd class="fn"><%= val%></dd>
       </dl>
     <% end %>

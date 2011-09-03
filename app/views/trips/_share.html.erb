@@ -1,0 +1,23 @@
+<div id="share">
+
+  <%= link_to 'mail to a friend', email_text(@trip), :class=>'mail'%>
+  <%= link_to 'add to favorites', favorites_path(@trip), :id=> 'fav-share', :class=> 'fav-toggle' %>
+  <% if @owner %>
+    <%= link_to 'share on craigslist', craigslist_path(@trip), :class=>'craigslist' %>
+  <% end %>
+  <%= link_to 'tweet this trip', tweet_text(@trip), :class => 'twitter' %>
+  <%= link_to 'share this trip on facebook', facebook_text(@trip), :class => 'facebook' %>
+
+  <div class="flag">
+    <%= link_to 'flag a problem', flag_path(@trip), :class=> 'flag' %>
+
+    <form action="/jobs/flag/11316" class="flag" method="post">        
+      <label for="Notes">Is there a problem with this trip listing? Please describe.</label><br>
+      <textarea cols="20" id="Notes" name="Notes" rows="2"></textarea>        <br>
+      <input class="orange-submit" type="submit" value=" submit ">
+      <a class="cancel" href="/jobs/11316">cancel</a>
+      <input name="__RequestVerificationToken" type="hidden" value="">
+    </form>            
+  </div>
+
+</div>

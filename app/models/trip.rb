@@ -141,6 +141,18 @@ class Trip
     {"exact" => [0,0], "onebefore" => [1,0], "oneafter" => [0,1], "one" => [1,1], "two" => [2,2], "three" => [3,3]}
   end
 
+  def get_bounds
+    bound = Geocoder::Calculations::bounding_box(self.route[0], 60)
+    self.route[1..-1].each do |point|
+      new_bound = Geocoder::Calculations::bounding_box(point, 60)
+      bound[0] = new_bound[0] if new_bound[0] > bound[0]
+      bound[1] = new_bound[1] if new_bound[1] > bound[1]
+      bound[2] = new_bound[2] if new_bound[2] > bound[2]
+      bound[3] = new_bound[3] if new_bound[3] > bound[3]
+    end
+    return bound
+  end
+
   def distance_between_points
     zipped = route.slice(1..-1).zip(route)
     distances = zipped.map {|point1, point2| Geocoder::Calculations::distance_between(point1, point2) }

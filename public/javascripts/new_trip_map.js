@@ -7,6 +7,8 @@ var directionsService = new google.maps.DirectionsService();
 var map;
 var geocoder;
 var waypoint_markers = [];
+var infoWindow = new google.maps.InfoWindow();
+
 var temp = new google.maps.Marker();
 
 // TODO let users set this
@@ -36,6 +38,8 @@ $(function() {
   });
 
   //calcRoute(JSON.parse(trip.google_options["waypoints"]))
+  //$(cities).each(drawCity);
+  for(var i in cities) { drawCity(i, cities[i]) }
 });
 function on_load() {
   set_heights();
@@ -90,7 +94,7 @@ function origin_destination_not_blank() {
   }
 }
 function put_marker(where, which) {
-  geocoder.geocode({'address': where}, function(results, status) {
+  geocoder.geocode({'city': where}, function(results, status) {
   if(results.length !== 0) {
     var latlng = results[0].geometry.location;
     temp.setMap(map);
@@ -182,3 +186,17 @@ function clear_markers(ma) {
   }
 }
 
+function drawCity(i, placeObj) {
+   var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(placeObj.coords[0], placeObj.coords[1]),
+    map: map,
+    title: placeObj.city,
+    //draggable: true,
+  });
+  google.maps.event.addListener(marker, 'click', function() {
+    infoWindow.setContent('<div class="place_form">'
+                         +'<h2><a href="'+placeObj.href+'">'+ placeObj.city+", "+placeObj.state +'</a></h2>'
+                         +'</div>');
+    infoWindow.open(map, marker);
+  });
+}

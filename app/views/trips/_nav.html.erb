@@ -1,0 +1,9 @@
+<div id="jobdetail-nav">
+  <a class="returntolist job" href="/trips">view all</a>
+  <% if @prev %>
+    <a class="job" href="/trips/<%=@prev.id%>" id="prev-job" title="<%= @prev.title %>"><%=@prev.title%></a>        
+  <% end%>
+  <% if @next %>
+    <a class="job" href="/trips/<%=@next.id%>" id="next-job" title="<%= @next.title %>"><%=@next.title%></a>        
+  <% end%>
+</div>
