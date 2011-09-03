@@ -18,7 +18,9 @@
   <div id="wrapper">
     <%= render 'shared/header' %>
     <section id="content">
-      <%= yield %>
+      <div class="centered_shadowed_container">
+        <%= yield %>
+      </div>
     </section>
   </div>
   <%= render 'shared/footer' %>

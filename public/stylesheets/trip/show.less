@@ -1,6 +1,7 @@
 @grayish: #DFEDFE;
+
 #trip_show {
-  padding: 10px;
+  /*padding: 10px;
   margin: 10px;
   background: white;
   border-radius: 7px;
@@ -10,22 +11,7 @@
   -o-box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
   -moz-box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
   -webkit-box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
-  overflow: hidden;
-  #share_buttons a {
-    width: 56px;
-    height: 40px;
-    padding: 5px;
-    background: black;
-    margin-bottom: 5px;
-    filter: alpha(opacity=70);
-    opacity: .7;
-    color: white;
-    cursor: pointer;
-    text-align: center;
-    font-size: 10px;
-    font-weight: bold;
-    text-transform: uppercase;
-    }
+  overflow: hidden;*/
   #share {
     border-top: 1px solid #E9E9E9;
     margin-bottom: 30px;
@@ -103,7 +89,8 @@
   }
 
   .trip_details {
-   width: 750px;
+  width: 500px;
+  float:left;
   }
   #trip_title {
     padding: 0;
@@ -112,8 +99,8 @@
     }
   }
   ul#trip_options {
-    width: 320px;
-    float: left;
+    width: 389px;
+    float: right;
     border: 1px solid #D9D9D6;
     padding: 8px 4px;
     .rounded_corners;
@@ -130,7 +117,7 @@
       text-transform: capitalize;
     }
     li span.prop_val {
-      width: 110px;
+      width: 170px;
       float: right;
       text-align: right;
       padding: 4px 4px 4px 0;
@@ -162,5 +149,9 @@
     -o-box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
     -moz-box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
     -webkit-box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
+    }
+  #right_wrap {
+    float:right;
+    width:400px;
   }
 } 

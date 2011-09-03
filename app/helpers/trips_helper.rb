@@ -1,6 +1,6 @@
 module TripsHelper
   def static_map(trip)
-    basic = 'http://maps.googleapis.com/maps/api/staticmap?size=350x350&path=weight:5|color:0x00000099|enc:'
+    basic = 'http://maps.googleapis.com/maps/api/staticmap?size=400x350&path=weight:5|color:0x00000099|enc:'
     a = "&markers=color:green%7Clabel:A%7C#{trip.route[0].join(",")}"
     b = "&markers=color:green%7Clabel:B%7C#{trip.route.last.join(",")}"
     w = trip.google_options.waypoints.map{|w| "&markers=size:mid%7Ccolor:blue%7C#{w.join(",")}"}.join

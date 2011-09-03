@@ -1,23 +1,15 @@
 <div id="trip_show" >
   <%= render :partial => 'nav' %>
-  <%= render :partial => 'share' %>
+  <%= render :partial => 'trip_options' %>
   <div class="trip_details">
-
     <div id="trip_title">
-      <span><%= link_to @trip.origin, home_show_path({:origin => @trip.origin}) %></span>
+      <span><%= link_to @trip.origin[0..@trip.origin.rindex(",")-1], home_show_path({:origin => @trip.origin}) %></span>
       to
-      <span><%= link_to @trip.destination, home_show_path({:destination => @trip.destination}) %></span>
+      <span><%= link_to @trip.destination[0..@trip.destination.rindex(",")-1], home_show_path({:destination => @trip.destination}) %></span>
     </div>
-    <div id="summary" class="edit_summary"><%= simple_format(@trip.summary) %></div>
-    <p>This trip will require about <span> <%= trip_duration_in_words(@trip.duration)%></span> of non stop driving 
-    and cost approximately $<%=cost_of_gas(@trip)%> is gas. </p>
-    <ul id="trip_options">
-      <li class="head">Details</li>
-      <% @trip.trip_options.all_used_attributes.each do |opt, val| %>
-        <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span> 
-        <span class="edit_trip_options prop_val" id="<%=opt%>"><%=@trip.trip_options.view_for(opt)%></span></li>
-      <% end %>
-    </ul>
+    <% if @trip.summary %>
+      <div id="summary" class="edit_summary"><%= @trip.summary %></div>
+    <% end %>
   </div>
 
 </div>
