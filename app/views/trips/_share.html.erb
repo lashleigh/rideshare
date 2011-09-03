@@ -1,4 +1,4 @@
-<div id="share">
+<div id="share" style="background-image:url(<%=static_map(@trip)%>);" >
 
   <%= link_to 'mail to a friend', email_text(@trip), :class=>'mail'%>
   <%= link_to 'add to favorites', favorites_path(@trip), :id=> 'fav-share', :class=> 'fav-toggle' %>

@@ -47,10 +47,12 @@ class HomeController < ApplicationController
       return Trip.find_by_start_finish(start, finish, params).all, Geocoder::Calculations::geographic_center([start, finish]) 
     elsif start
       start = start.coordinates
+      params[:origin_radius] ||= 50
       params[:radius] = params[:origin_radius].to_f
       return Trip.find_all_starting_in(start, params).all, start
     elsif finish
       finish = finish.coordinates
+      params[:destination_radius] ||= 50
       params[:radius] = params[:destination_radius].to_f
       return Trip.find_all_finishing_in(finish, params).all, finish
     else
