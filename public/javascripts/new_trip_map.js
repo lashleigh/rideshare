@@ -38,8 +38,7 @@ $(function() {
   });
 
   //calcRoute(JSON.parse(trip.google_options["waypoints"]))
-  //$(cities).each(drawCity);
-  for(var i in cities) { drawCity(i, cities[i]) }
+  //for(var i in cities) { drawCity(i, cities[i]) }
 });
 function on_load() {
   set_heights();

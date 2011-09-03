@@ -4,6 +4,39 @@
 @import 'user/show';
 
 @footer_height: 76px;
+html, body {height: 100%;}
+#wrapper {min-height: 100%;}
+#content {
+  overflow:auto;
+  padding-bottom: @footer_height;
+  width:1000px;
+  margin: 0 auto;
+  }  /* must be same height as the footer */
+
+footer {
+  position: relative;
+  margin-top: -@footer_height; /* negative value of footer height */
+  height: @footer_height;
+  clear:both;
+  background:black;
+  color:white;
+  copyright {
+    clear: both;
+  }
+} 
+
+/*Opera Fix*/
+body:before {
+  content:"";
+  height:100%;
+  float:left;
+  width:0;
+  margin-top:-32767px;
+}
+
+body {
+  font-family: "Lucida Grande","Lucida Sans",Arial,sans-serif;
+}
 .rounded_corners (@radius: 5px) {
   border-radius: @radius;
   -webkit-border-radius: @radius;
@@ -38,15 +71,6 @@
   /* add padding to account for vertical scrollbar */
   padding-right: 20px;
 }
-#content {
-clear: both;
-float: left;
-padding: 15px;
-width: 1000px;
-position: relative;
-margin-bottom: 30px;
-    font-size: small;
-}
 header {
   border-bottom: 1px solid #ddd;
   overflow: hidden;
@@ -72,19 +96,7 @@ header {
       }
     }
   }
-}
-footer {
-  position: relative;
-  height: @footer_height; 
-  z-index: -1;
-  font-size:x-small;
-  //background: #f0f0f0;
-  #inner {
-padding: 12px;
-width: 700px;
-margin: 0 auto;
   }
-}
 
 /* Landing Page */
 #find_a_ride {

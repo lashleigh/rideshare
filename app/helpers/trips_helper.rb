@@ -38,6 +38,9 @@ module TripsHelper
     end
   end
 
+  def cost_of_gas(trip)
+    return "%1.0f" % (3.60*trip.distance/(1609.344*20.0))
+  end
   def tweet_text(trip)
     url = "http://rideshare.com/trips/#{trip.id}"
     text = trip.title_minus_country

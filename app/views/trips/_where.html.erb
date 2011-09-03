@@ -2,7 +2,6 @@
 <%= javascript_include_tag 'autocomplete' %>
 <script type="text/javascript">
   var trip = <%= @trip.to_json.html_safe%>;
-  var cities = <%= @cities.to_json.html_safe if @cities%>;
 </script>
 <div id="where_form" style="float:left; width:350px;">
   <%= form_for(trip) do |f| %>

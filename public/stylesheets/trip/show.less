@@ -1,43 +1,64 @@
 #trip_show {
+padding: 10px;
+margin: 10px;
+background: white;
+border-radius: 7px;
+-moz-border-radius: 7px;
+-webkit-border-radius: 7px;
+box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
+-o-box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
+-moz-box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
+-webkit-box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2);
+overflow: hidden;
   #share {
-  clear: both;
-  border-top: 1px solid #E9E9E9;
-  margin-bottom: 30px;
-  float: right;
-  width: 225px;
-  margin-bottom: 30px;
-  background-color: white;
-  > a, > div.flag {
-  display: block;
-  padding: 8px 8px 8px 40px;
-  border-bottom: 1px solid #E9E9E9;
-  background-repeat: no-repeat;
-  background-position: 15px center;
-  overflow: hidden;
-  }
-  a.mail {
-  background-image: url(/images/icon-envelope.png);
-  }
-  a#fav-share {
-  background-image: url(/images/fav-star-off.png);
-  }
-  a.twitter {
-  background-image: url(/images/icon-twitter.png) ;
-  }
-  a.facebook {
-  background-image: url(/images/icon-fb.gif);
-  }
-  a.craigslist {
-  background-image: url(/images/craigslist.png);
-  }
-  div.flag {
-  background-image: url(/images/flag.png);
-  background-position: 15px 8px;
-  }
-  form.flag {
-  margin: 8px 0;
-  display: none;
-  }
+    clear: both;
+    border-top: 1px solid #E9E9E9;
+    margin-bottom: 30px;
+    float: right;
+    width: 225px;
+    margin-bottom: 30px;
+    background-color: white;
+    > a, > div.flag {
+      display: block;
+      padding: 8px 8px 8px 40px;
+      border-bottom: 1px solid #E9E9E9;
+      background-repeat: no-repeat;
+      background-position: 15px center;
+      overflow: hidden;
+      //right: -200px;
+      position: relative;
+      -webkit-transition:all 1.0s ease-in-out;
+      -moz-transition:all 1.0s ease-in-out;
+      -o-transition:all 1.0s ease-in-out;
+      -ms-transition:all 1.0s ease-in-out;
+      -transition:all 1.0s ease-in-out;
+    }
+    >a:hover, > div.flag:hover {
+      right:0px;
+    }
+    a.mail {
+      background-image: url(/images/icon-envelope.png);
+    }
+    a#fav-share {
+      background-image: url(/images/fav-star-off.png);
+    }
+    a.twitter {
+      background-image: url(/images/icon-twitter.png) ;
+    }
+    a.facebook {
+      background-image: url(/images/icon-fb.gif);
+    }
+    a.craigslist {
+      background-image: url(/images/craigslist.png);
+    }
+    div.flag {
+      background-image: url(/images/flag.png);
+      background-position: 15px 8px;
+    }
+    form.flag {
+      margin: 8px 0;
+      display: none;
+    }
   }
 
   #jobdetail-nav {
@@ -67,49 +88,36 @@
   }
 
   .trip_details {
-    float: left;
-    width: 250px;
+   width: 450px;
   }
-  #static_map {
-  float: right;
-  }
-  #trip_origin {
-    background: url(/images/a.png) 10px 2px no-repeat;
+  #trip_title {
     padding: 0 32px;
-    line-height: 20px;
-  }
-  #trip_destination {
-    background: url(/images/b.png) 10px 2px no-repeat;
-    padding: 0 32px;
-    line-height: 20px;
-  }
-  #trip_summary {
+    font-size:x-large;
   }
   ul#trip_options {
-    width: 220px;
+    width: 320px;
     float: left;
-    margin-left: 10px;
     border: 1px solid #D9D9D6;
     padding: 8px 4px;
     .rounded_corners;
     li {
-    width: 220px;
-    float: left;
-    display: block;
+      width: inherit;
+      float: left;
+      display: block;
     }
     li span.property, li.head {
-    width: 110px;
-    float: left;
-    text-align: left;
-    padding: 4px 0 4px 10px;
-    text-transform: capitalize;
+      width: 180px;
+      float: left;
+      text-align: left;
+      padding: 4px 0 4px 10px;
+      text-transform: capitalize;
     }
     li span.prop_val {
-    width: 80px;
-    float: right;
-    text-align: right;
-    padding: 4px 4px 4px 0;
-    word-wrap: break-word;
+      width: 110px;
+      float: right;
+      text-align: right;
+      padding: 4px 4px 4px 0;
+      word-wrap: break-word;
     }
     li span.unused_val {
       color:gray;
@@ -119,8 +127,22 @@
       background: #B4DDB4;
     }
   }
-  .edit_summary {
-    height: 5em;
-    width: 200px;
+  .edit_summary, #summary {
+    background-color: #F2FFFF;
+  }
+  #summary {
+    padding: 1px 10px 1px 35px;
+    background: #F1F8FF url(/images/quotes.png) no-repeat 10px 13px;
+    min-height: 5em;
+    width: 400px;
+    margin: 0 0 0 0px;
+    font-family: Georgia, Times New Roman, Serif;
+  }
+  #static_map {
+    float: left; 
+    position:relative;
+    clear:both;
+    width:480px;
+    height:480px;
   }
 } 
