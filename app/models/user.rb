@@ -8,6 +8,7 @@ class User
   key :website, String
   key :description, String
   key :image, String
+  key :favorites, Array
   timestamps!
   
   many :authorizations
@@ -46,6 +47,13 @@ class User
   
   end
 
+  def togglefavorite(id)
+    if favorites.include? id
+      favorites.delete id
+    else
+      favorites.push(id)
+    end
+  end
   def pretty_website
     self.website.gsub("http://", "")
   end

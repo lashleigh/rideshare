@@ -54,6 +54,18 @@ class TripsController < ApplicationController
     end
   end
 
+  def favorite
+    respond_to do |format|
+      if @current_user
+        @current_user.toggle_favorite(params[:id])
+        format.html #craigslist.html.erb
+        format.xml  { render :xml => @trip }
+      else
+        format.html #craigslist.html.erb
+        format.json { render :json => @trip.errors.full_messages, :status => :unprocessable_entity }
+      end
+    end
+  end
   def craigslist
     @trip = Trip.find(params[:id])
     @cities = Craigslist.find_all_near_route(@trip)

@@ -3,7 +3,7 @@
 <script type="text/javascript">
   var trip = <%= @trip.to_json.html_safe%>;
 </script>
-<div id="where_form" style="float:left; width:350px;">
+<div id="where_form">
   <%= form_for(trip) do |f| %>
     <% if trip.errors.any? %>
       <div id="error_explanation">
@@ -44,7 +44,7 @@
     </div>
 
     <div id="trip_submit_wrap">
-      <%= f.submit 'Save', :disabled => true %>
+      <button class="big disable button" id="trip_submit" disabled="disabled" type="submit">Save</button>
     </div>
   <% end %>
   <div id="directionsPanel" style="display:none;"></div>

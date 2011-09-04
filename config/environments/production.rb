@@ -9,13 +9,12 @@ Rideshare::Application.configure do
     #end
   #end
 
-MongoMapper.config = {
-  Rails.env => {
-  'uri' => (ENV['MONGOHQ_URL'] ? ENV['MONGOHQ_URL'] : 'mongodb://localhost/27017')
+  MongoMapper.config = {
+    Rails.env => {
+    'uri' => (ENV['MONGOHQ_URL'] ? ENV['MONGOHQ_URL'] : 'mongodb://localhost/27017')
   }
-}
-
-MongoMapper.connect(Rails.env)
+  }
+  MongoMapper.connect(Rails.env)
 
   # Settings specified here will take precedence over those in config/application.rb
 

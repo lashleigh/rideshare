@@ -82,3 +82,8 @@ function drawCity(i, placeObj) {
   );
   bounds.extend(cityLatLng);
 }
+
+function set_heights() {
+  var h = Math.max($("#craigslist_container").outerHeight(), 400);
+  $("#map_canvas").css("height", h+"px");
+}

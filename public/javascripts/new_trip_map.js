@@ -22,7 +22,7 @@ $(function() {
   var myOptions = {
     zoom: 4,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    center: new google.maps.LatLng(40, -100)
+    center: new google.maps.LatLng(39, -96.5)
   };
   map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
@@ -49,6 +49,7 @@ function on_load() {
   $("#trip_destination").bind("focusout", origin_destination_not_blank);
   $("#trip_start_date").datepicker({
      dateFormat: 'D, dd M yy', 
+     //defaultDate: +2,
      minDate: 0, 
      maxDate: "+1M +10D"
   });
@@ -80,33 +81,57 @@ function on_load() {
     }
   });
 }
+function start_date_not_blank() {
+  if("Invalid Date" !=new Date($("#trip_start_date").val())) {
+    if($("#trip_origin").val().length*$("#trip_destination").val().length != 0) {
+      enable_save(true);
+    } else { 
+      enable_save(false); 
+    }
+  }
+}
+function enable_save(bool) {
+  if(bool) {
+    $("#trip_submit").attr("disabled", false);
+    $("#trip_submit").removeClass("disable");
+  } else {
+    $("#trip_submit").attr("disabled", true);
+    $("#trip_submit").addClass("disable");
+  }
+}
 function origin_destination_not_blank() {
   start = $("#trip_origin").val();
   finish = $("#trip_destination").val();
   if(start.length*finish.length != 0) {
     calcRoute();
-    $("#trip_submit").attr("disabled", false);
+    if("Invalid Date" !=new Date($("#trip_start_date").val())) {
+      enable_save(true);
+    } else {
+      enable_save(false);
+    }
   } else if(start.length !== 0) {
     put_marker(start, $("#trip_origin"));
+    enable_save(false);
   } else if(finish.length !== 0) {
     put_marker(finish, $("#trip_destination"));
+    enable_save(false);
   }
 }
 function put_marker(where, which) {
-  geocoder.geocode({'city': where}, function(results, status) {
-  if(results.length !== 0) {
-    var latlng = results[0].geometry.location;
-    temp.setMap(map);
-    temp.setPosition(latlng);
-    if(which) {
-      which.val(results[0].formatted_address)
+  geocoder.geocode({'address': where}, function(results, status) {
+    if(results.length !== 0) {
+      var latlng = results[0].geometry.location;
+      temp.setMap(map);
+      temp.setPosition(latlng);
+      if(which) {
+        which.val(results[0].formatted_address)
+      }
+      if(!map.getBounds().contains(latlng)) {
+        map.setCenter(latlng)
+      }
+    } else {
+    temp.setMap(null)
     }
-    if(!map.getBounds().contains(latlng)) {
-      map.setCenter(latlng)
-    }
-  } else {
-  temp.setMap(null)
-  }
   });
 }
 function calcRoute(waypts) {
@@ -198,4 +223,8 @@ function drawCity(i, placeObj) {
                          +'</div>');
     infoWindow.open(map, marker);
   });
+}
+
+function set_heights() {
+  $("#map_canvas").css("height", $("#where_form").outerHeight()+150+"px");
 }

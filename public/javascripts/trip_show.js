@@ -2,7 +2,7 @@ $(function() {
   var csrf = $("head meta")[1].content;
 
   $(".edit_summary").editable('/trips/update_summary', {
-placeholder : 'Click here and tell people how they should get in touch with you.',
+     placeholder : 'Click here to write a summary of your trip',
      id : 'type', 
      name : 'value',
      cssclass : 'edit_summary',

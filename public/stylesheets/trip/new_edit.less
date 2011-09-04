@@ -16,13 +16,13 @@
     padding: 5px 5px 5px 34px;
     height: 30px;
     background: white;
-    border-bottom-left-radius: 0.25em 0.25em;
-    border-bottom-right-radius: 0.25em 0.25em;
-    border-top-left-radius: 0.25em 0.25em;
-    border-top-right-radius: 0.25em 0.25em;
+    border-radius: 4px;
     //font-size: 100%;
-    margin: .75em 0.25em .75em 0;
+    margin: 12px 6px 6px 0;
     width: 200px;
+  }
+  #trip_submit_wrap {
+    width: 242px;
   }
   #trip_start_flexibility {
     display: none;
@@ -33,44 +33,17 @@
     margin-top: 18px;
   }
   #trip_submit {
+    float:right;
     margin-top: 18px;
   }
 }
-#trip_settings {
-  .trip_details {
-    float: left;
-    max-width: 500px;
-  }
-  #static_map {
-  float: right;
-  }
-  #trip_origin {
-    background: url(/images/a.png) 10px 2px no-repeat;
-    padding: 0 32px;
-    line-height: 20px;
-  }
-  #trip_destination {
-    background: url(/images/b.png) 10px 2px no-repeat;
-    padding: 0 32px;
-    line-height: 20px;
-  }
-  .summary_forms {
-    clear: both;
-  }
-  .w_header {
-    font-size: x-large;
-    display:block;
-  }
-  .w_summary {
-    color: #A0A098;
-    }
-  #trip_start_date {
-    height: 1em;
-    background: url(/images/calendar.png) 10px 4px no-repeat;
-  }
-  .trip_options {
-    input {
-    }
-  }
-}
 
+#where_form {
+  width:250px;
+  float:left;
+}
+#map_canvas {
+  width: 700px;
+  height: 100%;
+  float: right;
+}
