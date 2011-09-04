@@ -1,0 +1,6 @@
+
+
+<div class="user-info">
+  posted by <%= link_to @trip.user.name, @trip.user %> 
+  on <%= @trip.created_at.to_formatted_s(:month_day_time)%>
+</div>
