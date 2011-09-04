@@ -26,8 +26,8 @@ class HomeController < ApplicationController
     @search = params
     @search["origin"] = start.address if start
     @search["destination"] = finish.address if finish
-    @search["origin_coords"] = ActiveSupport::JSON.decode(params[:origin_coordinates]) || (start.coordinates if start)
-    @search["destination_coords"] = ActiveSupport::JSON.decode(params[:destination_coordinates]) || (finish.coordinates if finish)
+    @search["origin_coords"] = (ActiveSupport::JSON.decode(params[:origin_coordinates]) if params[:origin_coordinates]) || (start.coordinates if start)
+    @search["destination_coords"] = (ActiveSupport::JSON.decode(params[:destination_coordinates]) if params[:destination_coordinates]) || (finish.coordinates if finish)
 
     respond_to do |format|
       @trips, @center = show_helper(params, start, finish) 
