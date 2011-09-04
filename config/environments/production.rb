@@ -1,6 +1,6 @@
 Rideshare::Application.configure do
 
-  MongoMapper.connection = Mongo::Connection.new(ENV['MONGOHQ_URL'], 27021, { :logger => Rails.logger })
+  MongoMapper.connection = Mongo::Connection.new(ENV['MONGOHQ_URL'])
   MongoMapper.database = "#myapp-#{Rails.env}"
 
   if defined?(PhusionPassenger)
