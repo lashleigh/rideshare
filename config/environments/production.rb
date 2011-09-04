@@ -1,14 +1,21 @@
 Rideshare::Application.configure do
 
-  MongoMapper.connection = Mongo::Connection.new(ENV['MONGOHQ_URL'])
-  MongoMapper.database = "#myapp-#{Rails.env}"
+  #MongoMapper.connection = Mongo::Connection.new(ENV['MONGOHQ_URL'])
+  #MongoMapper.database = "#myapp-#{Rails.env}"
 
-  if defined?(PhusionPassenger)
-    PhusionPassenger.on_event(:starting_worker_process) do |forked|
-      MongoMapper.connection.connect if forked
-    end
-  end
+  #if defined?(PhusionPassenger)
+    #PhusionPassenger.on_event(:starting_worker_process) do |forked|
+      #MongoMapper.connection.connect if forked
+    #end
+  #end
 
+MongoMapper.config = {
+  Rails.env => {
+  'uri' => (ENV['MONGOHQ_URL'] ? ENV['MONGOHQ_URL'] : 'mongodb://localhost/27017')
+  }
+}
+
+MongoMapper.connect(Rails.env)
 
   # Settings specified here will take precedence over those in config/application.rb
 
