@@ -7,6 +7,7 @@
       to
       <span><%= link_to @trip.destination[0..@trip.destination.rindex(",")-1], home_show_path({:destination => @trip.destination}) %></span>
     </div>
+    <%= render :partial => 'owner' %>
     <% if @trip.summary %>
       <div id="summary" class="edit_summary"><%= @trip.summary %></div>
     <% end %>

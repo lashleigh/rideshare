@@ -222,8 +222,7 @@ function initialize(i) {
     if(address.length > 0) {
       codeAddress(address, widgets[i], info[i]);  
     }
-    $("#"+str+"_info").show()
-    show_map()
+    show_map(i)
   })
   if(search[str]) {
     codeAddress(search[str], widgets[i], info[i]);
@@ -250,6 +249,7 @@ function codeAddress(address, widget, which_input) {
   });
 }
 function codeLatLng(marker, id) {
+  $(id+"_coordinates").val(JSON.stringify([marker.getPosition().lat(), marker.getPosition().lng()]));
   var geocoder = new google.maps.Geocoder();
   geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
     geo_results = results;
@@ -283,12 +283,19 @@ function switching() {
       }
 }
 
-function show_map() {
-  google.maps.event.trigger(widgets[0].map, 'resize')
-  widgets[0].map.setCenter(widgets[0].get('position'))
-  google.maps.event.trigger(widgets[1].map, 'resize')
-  widgets[1].map.setCenter(widgets[1].get('position'))
-  widgets[0].map.fitBounds(widgets[0].radiusWidget.get('bounds'))
-  widgets[1].map.fitBounds(widgets[1].radiusWidget.get('bounds'))
-
+function show_map(which) {
+  switch(which) {
+    case 0:
+      $("#origin_info").show();
+      google.maps.event.trigger(widgets[0].map, 'resize')
+      widgets[0].map.setCenter(widgets[0].get('position'))
+      widgets[0].map.fitBounds(widgets[0].radiusWidget.get('bounds'))
+    break;
+    case 1:
+      $("#destination_info").show();
+      google.maps.event.trigger(widgets[1].map, 'resize');
+      widgets[1].map.setCenter(widgets[1].get('position'));
+      widgets[1].map.fitBounds(widgets[1].radiusWidget.get('bounds'));
+    break;
+  }
 }

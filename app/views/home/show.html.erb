@@ -16,9 +16,10 @@
     <div>
       <%= label_tag 'origin', "From" %>
       <%= text_field_tag 'origin', @search["origin"], :placeholder => 'Seattle, WA' %>
-      <INPUT type="button" id="geocode_origin" class="undo" value="">
+      <INPUT type="button" id="geocode_origin" class="show_map" value="">
     </div>
     <%= hidden_field_tag 'origin_radius', @search['origin_radius'] %>
+    <%= hidden_field_tag 'origin_coordinates', @search["origin_coordinates"] %>
     <div class="map_container" id="origin_info" style="display:none;">
       <div id="map_for_origin" class="map_canvas"></div>
       <span class="hide_map">Hide map</span>
@@ -27,9 +28,10 @@
     <div>
       <%= label_tag 'destination', "To" %>
       <%= text_field_tag 'destination', @search["destination"], :placeholder => 'New York, NY' %>
-      <INPUT type="button" id="geocode_destination" class="undo" value="">
+      <INPUT type="button" id="geocode_destination" class="show_map" value="">
     </div>
     <%= hidden_field_tag 'destination_radius', @search['destination_radius'] %>
+    <%= hidden_field_tag 'destination_coordinates', @search["destination_coordinates"] %>
     <div class="map_container" id="destination_info" style="display:none;">
       <div id="map_for_destination" class="map_canvas"></div>
       <span class="hide_map">Hide map</span>

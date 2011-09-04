@@ -1,22 +1,18 @@
 #start_date {
-  font-size:xx-small;
+  font-size:x-small;
+  margin-top:20px;
 }
 #tripslist {
-  margin-bottom: 50px;
-  width: 660px;
+  width: 640px;
   float: left;
-  margin-right: 30px;
   margin-bottom: 30px;
   .listitem {
-  clear: both;
-  width: 639px;
-  height: 120px;
-  padding: 10px;
-  border-bottom: solid 1px #E9E9E9;
-  border-right: 1px solid transparent;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  //font-size: 12px;
-  position: relative;
+    clear: both;
+    height: 120px;
+    padding: 10px;
+    border-bottom: solid 1px #E9E9E9;
+    border-right: 1px solid transparent;
+    position: relative;
   }
   .listitem > a.fav-toggle {
   display: block;
@@ -31,7 +27,6 @@
     text-align: right;
     padding-left: 12px;
     > .posted {
-      //font-size: 11px;
       padding-top: 2px;
     }
     > p {
@@ -47,7 +42,6 @@
   }
   .listitem a.title {
   font-weight: bold;
-  //font-size: 14px;
   display: inline-block;
   margin-right: 5px;
   }
@@ -59,7 +53,6 @@
   margin-left: 6px;
   }
   .listitem > .date {
-  //font-size: 11px;
   font-style: italic;
   }
   .listitem > .description {
@@ -70,20 +63,15 @@
   text-overflow: ellipsis;
   }
   div.listitem > p.tags {
-  //font-size: .9em;
   }
 }
 .trip_search {
   float: right;
-  width: 255px;
+  width: 300px;
   margin-bottom: 30px;
+  font-size: x-small;
   background-color: white;
-  h3, .sidebar h3, h3.solid {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    //font-size: 18px;
-    line-height: 100%;
-    font-weight: bold;
-  }
+  
   form {
     padding-left: 2px;
     label {
@@ -93,14 +81,13 @@
       padding-left: 0px;
     }
     input[type="text"] {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       padding: 3px 6px;
       margin: 0 0 10px 0;
-      width: 150px;
+      width: 200px;
     }
     .map_canvas {
-      width: 250px;
-      height: 200px;
+      width: 290px;
+      height: 230px;
     }
     .map_container {
       margin-bottom: 8px;
@@ -108,7 +95,7 @@
         float: right;
       }
     }
-    .undo {
+    .show_map {
       position: relative;
       right: 0;
       width: 32px;
@@ -117,7 +104,7 @@
     cursor:pointer;
     border: none;
     }
-    .undo:hover {
+    .show_map:hover {
       background-color: blue;
       border-radius: 3px;
     }
@@ -129,4 +116,5 @@
   margin: 0;
   margin-bottom: 15px;
   clear: both;
+  font-size: medium;
 }
