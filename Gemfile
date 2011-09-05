@@ -7,6 +7,17 @@ gem 'geocoder'
 gem 'json'
 gem "omniauth", '0.2.0'
 
+group :development, :test do  
+  gem "factory_girl_rails"
+  gem 'rspec-rails'
+  gem 'simplecov'
+  gem 'turn'
+  #gem 'cucumber-rails'
+  #gem 'capybara'
+  #gem 'webrat'
+end  
+
+#
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 

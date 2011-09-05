@@ -57,12 +57,11 @@ class TripsController < ApplicationController
   def favorite
     respond_to do |format|
       if @current_user
-        @current_user.toggle_favorite(params[:id])
-        format.html #craigslist.html.erb
-        format.xml  { render :xml => @trip }
+        @current_user.togglefavorite(params[:id])
+        @current_user.save
+        format.json { render :json => params[:id]}
       else
-        format.html #craigslist.html.erb
-        format.json { render :json => @trip.errors.full_messages, :status => :unprocessable_entity }
+        format.json { render :json => {:error => "not logged it"}}
       end
     end
   end
@@ -81,7 +80,7 @@ class TripsController < ApplicationController
   def show
     @trip = Trip.find(params[:id])
     @select_hash = @trip.trip_options.choose_from
-    @owner = current_user and @current_user == @trip.user
+    @owner = @current_user == @trip.user
 
     if session[:search]
       unless session[:search].index(params[:id]) == 0 || -1
@@ -121,13 +120,13 @@ class TripsController < ApplicationController
     @trip = Trip.new
     params[:trip].delete_if {|k, v| v.blank?}
     if params[:trip] and params[:trip][:route]
-      params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route])
+      params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route]) if params[:trip][:route].is_a? String
     end
     if params[:trip] and params[:trip][:google_options]
       params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options])
     end
     @trip.assign(params[:trip])
-    @trip.user = current_user
+    @trip.user = @current_user
 
     respond_to do |format|
       if @trip.save
@@ -147,16 +146,15 @@ class TripsController < ApplicationController
   def update
     @trip = Trip.find(params[:id])
     if params[:trip] and params[:trip][:route]
-      params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route])
+      params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route]) if params[:trip][:route].is_a? String
     end
     if params[:trip] and params[:trip][:google_options]
-      params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options])
+      params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options]) if params[:trip][:route].is_a? String
     end
     @trip.assign(params[:trip])
 
     respond_to do |format|
       if @trip.save
-        @trip.reload
         format.html { redirect_to(@trip, :notice => 'Trip was successfully updated.') }
         format.xml  { head :ok }
         format.json { head :ok }

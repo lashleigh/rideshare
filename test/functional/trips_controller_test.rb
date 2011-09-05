@@ -2,7 +2,11 @@ require 'test_helper'
 
 class TripsControllerTest < ActionController::TestCase
   setup do
-    @trip = trips(:one)
+    @unsaved_trip = FactoryGirl.build(:trip)#trips(:one)
+    @trip = FactoryGirl.build(:trip)
+    @user = User.find("4e6452228c4f2587b6000005") #FactoryGirl.create(:user)
+    @trip.user = @user
+    @trip.save
   end
 
   test "should get index" do
@@ -12,16 +16,28 @@ class TripsControllerTest < ActionController::TestCase
   end
 
   test "should get new" do
-    get :new
+    get(:new, nil, {:user_id => @user.id})
     assert_response :success
+  end
+  test "should not get new" do
+    get :new
+    assert_redirected_to root_path
   end
 
   test "should create trip" do
     assert_difference('Trip.count') do
-      post :create, :trip => @trip.attributes
+      post(:create, {:trip => @unsaved_trip.attributes}, {:user_id => @user.id})
     end
 
     assert_redirected_to trip_path(assigns(:trip))
+  end
+
+  test "should not create trip" do
+    assert_no_difference('Trip.count') do
+      post :create, :trip => @trip.attributes
+    end
+
+    assert_redirected_to root_path 
   end
 
   test "should show trip" do
@@ -30,20 +46,35 @@ class TripsControllerTest < ActionController::TestCase
   end
 
   test "should get edit" do
-    get :edit, :id => @trip.to_param
+    get(:edit, {:id => @trip.to_param}, {:user_id => @user.id})
     assert_response :success
+  end
+  test "should not get edit" do
+    get :edit, :id => @trip.to_param
+    assert_redirected_to root_path 
   end
 
   test "should update trip" do
-    put :update, :id => @trip.to_param, :trip => @trip.attributes
+    put(:update, {:id => @trip.to_param, :trip => @trip.attributes}, {:user_id => @trip.user.id})
     assert_redirected_to trip_path(assigns(:trip))
+  end
+  test "should not update trip" do
+    put :update, :id => @trip.to_param, :trip => @trip.attributes
+    assert_redirected_to root_path 
   end
 
   test "should destroy trip" do
     assert_difference('Trip.count', -1) do
-      delete :destroy, :id => @trip.to_param
+      delete(:destroy, {:id => @trip.to_param}, {:user_id => @user.id})
     end
 
     assert_redirected_to trips_path
+  end
+  test "should not destroy trip" do
+    assert_no_difference('Trip.count') do
+      delete :destroy, :id => @trip.to_param
+    end
+
+    assert_redirected_to root_path 
   end
 end

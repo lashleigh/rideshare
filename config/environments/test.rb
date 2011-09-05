@@ -1,4 +1,11 @@
 Rideshare::Application.configure do
+  MongoMapper.connection = Mongo::Connection.new('localhost', 27017)
+  MongoMapper.database = "#myapp-#{Rails.env}"
+  OmniAuth.config.test_mode = true
+  OmniAuth.config.mock_auth[:twitter] = {
+    'provider' => 'twitter',
+    'uid' => '16555958'
+  }
   # Settings specified here will take precedence over those in config/application.rb
 
   # The test environment is used exclusively to run your application's

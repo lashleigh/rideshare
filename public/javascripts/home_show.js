@@ -214,6 +214,7 @@ $(function() {
     $(this).parent().hide();
   });
   handle_datepicker();
+  toggle_favorite();
 })
 function initialize(i) {
   var str = info[i].split("#")[1];
@@ -297,5 +298,18 @@ function show_map(which) {
       widgets[1].map.setCenter(widgets[1].get('position'));
       widgets[1].map.fitBounds(widgets[1].radiusWidget.get('bounds'));
     break;
+  }
+}
+function toggle_favorite() {
+  if(current_user !== null) {
+    $(".fav-toggle img").click(function(){
+    if($(this).hasClass("on")) {
+      $(this).removeClass("on").addClass("off");
+      $(this).attr("src", "/images/fav-star-off.png")
+    } else {
+      $(this).removeClass("off").addClass("on");
+      $(this).attr("src", "/images/fav-star-on.png")}
+    
+    })
   }
 }

@@ -39,8 +39,9 @@ module Rideshare
     # config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
     config.generators do |g|
       g.orm             :mongo_mapper
+      g.test_framework  :test_unit #, :fixture => true
+      #g.test_framework  :rspec
       #g.template_engine :erb
-      #g.test_framework  :test_unit, :fixture => true
     end
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"

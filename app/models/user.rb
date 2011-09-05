@@ -47,6 +47,9 @@ class User
   
   end
 
+  def has_fav(id)
+    favorites.include? id.as_json
+  end
   def togglefavorite(id)
     if favorites.include? id
       favorites.delete id
