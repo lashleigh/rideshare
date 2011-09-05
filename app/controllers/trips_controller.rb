@@ -98,18 +98,6 @@ class TripsController < ApplicationController
   # GET /trips/1/edit
   def edit
     @trip = Trip.find(params[:id])
-
-    respond_to do |format|
-      if privledged(@trip) and @trip.save
-        format.html { redirect_to @trip } #edit.html.erb
-        format.xml  { render :xml => @trip, :status => :created, :location => @trip }
-        format.json { render :json => @trip }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @trip.errors, :status => :unprocessable_entity }
-        format.json { render :json => @trip.errors.full_messages, :status => :unprocessable_entity }
-      end
-    end
   end
 
   # POST /trips
@@ -121,7 +109,7 @@ class TripsController < ApplicationController
       params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route]) if params[:trip][:route].is_a? String
     end
     if params[:trip] and params[:trip][:google_options]
-      params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options])
+      params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options]) if params[:trip][:google_options].is_a? String
     end
     @trip.assign(params[:trip])
     @trip.user = @current_user
@@ -147,7 +135,7 @@ class TripsController < ApplicationController
       params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route]) if params[:trip][:route].is_a? String
     end
     if params[:trip] and params[:trip][:google_options]
-      params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options]) if params[:trip][:route].is_a? String
+      params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options]) if params[:trip][:google_options].is_a? String
     end
     @trip.assign(params[:trip])
 
@@ -183,7 +171,7 @@ class TripsController < ApplicationController
 
   private 
   def privledged(trip)
-    trip.user == @current_user || @current_user.admin?
+    trip.user == @current_user || (@current_user and @current_user.admin?)
   end
 
 end

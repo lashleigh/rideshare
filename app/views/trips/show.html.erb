@@ -1,6 +1,13 @@
+<%= javascript_include_tag 'trip_show' %>
+<script type="text/javascript">
+  var trip = <%= @trip.to_json.html_safe%>;
+  var ops = <%= @trip.trip_options.choose_from.to_json.html_safe %>;
+</script>
 <div id="trip_show" >
   <%= render :partial => 'nav' %>
-  <%= render :partial => 'trip_options' %>
+  <div id="right_wrap">
+    <%= link_to (image_tag static_map(@trip), :id => "static_map"), edit_trip_path(@trip) %>
+  </div>
   <div class="trip_details">
     <div id="trip_title">
       <span><%= link_to @trip.origin.split(",")[0..1].join(","), home_show_path({:origin => @trip.origin}) %></span>
@@ -11,6 +18,17 @@
     <% if @owner || @trip.summary%>
       <div id="summary" class="edit_summary"><%= @trip.summary %></div>
     <% end %>
+    <ul id="trip_options">
+      <% @trip.trip_options.all_used_attributes.each do |opt, val| %>
+        <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span>
+        <span class="edit_trip_options prop_val" id="<%=opt%>"><%=@trip.trip_options.view_for(opt)%></span></li>
+      <% end %>
+      <% if @owner %>
+        <% @trip.trip_options.all_unused_attributes.each do |opt, val| %>
+          <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span>
+          <span class="edit_trip_options prop_val unused_val" id="<%=opt%>"></span></li>
+        <% end %>
+      <% end %>
+    </ul>
   </div>
-
 </div>

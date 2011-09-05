@@ -5,7 +5,7 @@
       var trip = <%= @trip.to_json.html_safe%>;
       var ops = <%= @trip.trip_options.choose_from.to_json.html_safe %>;
     </script>
-    <%= link_to (image_tag static_map(@trip), :id => "static_map"), map_path %>
+    <%= link_to (image_tag static_map(@trip), :id => "static_map"), edit_trip_path(@trip) %>
     <ul id="trip_options">
       <li class="head">Details</li>
       <% @trip.trip_options.all_used_attributes.each do |opt, val| %>
