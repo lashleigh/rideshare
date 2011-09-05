@@ -1,12 +1,18 @@
-<%= javascript_include_tag 'trip_show' %>
-<script type="text/javascript">
-  var trip = <%= @trip.to_json.html_safe%>;
-  var ops = <%= @trip.trip_options.choose_from.to_json.html_safe %>;
-</script>
+<% if @owner %>
+  <%= javascript_include_tag 'trip_show' %>
+  <script type="text/javascript">
+    var trip = <%= @trip.to_json.html_safe%>;
+    var ops = <%= @trip.trip_options.choose_from.to_json.html_safe %>;
+  </script>
+<% end %>
 <div id="trip_show" >
   <%= render :partial => 'nav' %>
   <div id="right_wrap">
-    <%= link_to (image_tag static_map(@trip), :id => "static_map"), edit_trip_path(@trip) %>
+    <%= image_tag static_map(@trip), :id => "static_map" %>
+    <% if @owner %>
+      <%= link_to 'Edit Route', edit_trip_path(@trip), :class => 'big button', :style=>'float:left;' %>
+      <%= link_to 'Delete Trip', @trip, :confirm => 'Are you sure? This will delete your entire trip.', :method => :delete, :class=> 'big button danger', :style=>"float:right;" %>
+    <% end %> 
   </div>
   <div class="trip_details">
     <div id="trip_title">
