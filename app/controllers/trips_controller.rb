@@ -67,8 +67,7 @@ class TripsController < ApplicationController
   # GET /trips/1.xml
   def show
     @trip = Trip.find(params[:id])
-    @select_hash = @trip.trip_options.choose_from
-    @owner = @current_user == @trip.user
+    @owner = privledged(@trip) 
 
     if session[:search]
       unless session[:search].index(params[:id]) == 0 || -1
