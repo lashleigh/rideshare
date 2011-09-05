@@ -1,34 +1,3 @@
-<%= javascript_include_tag 'trip_show' %>
-<script type="text/javascript">
-  var trip = <%= @trip.to_json.html_safe%>;
-  var ops = <%= @select_hash.to_json.html_safe %>;
-</script>
-<div id="trip_show" >
-  <%= render :partial => 'nav' %>
-    <div id="trip_title" style="clear:both;">
-      <span><%= link_to @trip.origin, home_show_path({:origin => @trip.origin}) %></span>
-      to
-      <span><%= link_to @trip.destination, home_show_path({:destination => @trip.destination}) %></span>
-    </div>
-  <%= render :partial => 'share' %>
-  <div class="trip_details">
+<%= render :partial => 'where', :locals => { :trip => @trip } %>
 
-    <div id="summary" class="edit_summary"><%= simple_format(@trip.summary) %></div>
-    <p>This trip will require about <span> <%= trip_duration_in_words(@trip.duration)%></span> of non stop driving 
-    and cost approximately $<%=cost_of_gas(@trip)%> is gas. </p>
-    <ul id="trip_options">
-      <li class="head">Details</li>
-      <% @trip.trip_options.all_used_attributes.each do |opt, val| %>
-        <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span> 
-        <span class="edit_trip_options prop_val" id="<%=opt%>"><%=@trip.trip_options.view_for(opt)%></span></li>
-      <% end %>
-      <li><span class="property">Duration</span><span class="prop_val"><%= trip_duration_in_words(@trip.duration)%></span></li>
-      <% @trip.trip_options.all_unused_attributes.each do |opt, val| %>
-        <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span> 
-        <span class="edit_trip_options prop_val unused_val" id="<%=opt%>"></span></li>
-      <% end %>
-    </ul>
-  </div>
-
-</div>
-         
+<%= link_to 'Back', @trip %>

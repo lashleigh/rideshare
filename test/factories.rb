@@ -17,13 +17,12 @@ FactoryGirl.define do
     route        [[0,0],[1,1],[2,2]]
     encoded_poly "poly"
     start_flexibility "exact"
-    start_date Time.new
 
-    trait :expired do
+    factory :past_trip do
       start_date 7.days.ago
     end
 
-    trait :unexpired do
+    factory :future_trip do
       start_date 7.days.since
     end
   end

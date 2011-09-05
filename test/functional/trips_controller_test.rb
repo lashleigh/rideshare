@@ -2,8 +2,9 @@ require 'test_helper'
 
 class TripsControllerTest < ActionController::TestCase
   setup do
-    @unsaved_trip = FactoryGirl.build(:trip)#trips(:one)
-    @trip = FactoryGirl.build(:trip)
+    Trip.destroy_all
+    @unsaved_trip = FactoryGirl.build(:future_trip)#trips(:one)
+    @trip = FactoryGirl.build(:future_trip)
     @user = User.find("4e6452228c4f2587b6000005") #FactoryGirl.create(:user)
     @trip.user = @user
     @trip.save

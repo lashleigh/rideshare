@@ -5,8 +5,9 @@ class TripsController < ApplicationController
   def update_summary
     @trip = Trip.find(params[:id])
     @trip.assign({params[:type] => params[:value]})
+
     respond_to do |format|
-      if @trip.save
+      if privledged(@trip) and @trip.save
         format.json { render :json => @trip.summary }
       else
         format.json { render :json => t.errors.full_messages, :status => :unprocessable_entity }
@@ -25,8 +26,7 @@ class TripsController < ApplicationController
     end
 
     respond_to do |format|
-      if t.valid?
-        @trip.save
+      if privledged(@trip) and t.valid? and @trip.save
         format.json { render :json => @trip.trip_options[params[:type]] }
       else
         format.json { render :json => t.errors.full_messages, :status => :unprocessable_entity }
@@ -43,24 +43,12 @@ class TripsController < ApplicationController
     end
   end
 
-  # GET /trips/1
-  # GET /trips/1.xml
-  def map
-    @trip = Trip.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @trip }
-    end
-  end
-
   def favorite
     respond_to do |format|
-      if @current_user
-        @current_user.togglefavorite(params[:id])
-        @current_user.save
+      if @current_user.togglefavorite(params[:id]) and @current_user.save
         format.json { render :json => params[:id]}
       else
+        format.html { render :text => "You are not logged it"}
         format.json { render :json => {:error => "not logged it"}}
       end
     end
@@ -111,7 +99,18 @@ class TripsController < ApplicationController
   # GET /trips/1/edit
   def edit
     @trip = Trip.find(params[:id])
-    @select_hash = @trip.trip_options.choose_from
+
+    respond_to do |format|
+      if privledged(@trip) and @trip.save
+        format.html { redirect_to @trip } #edit.html.erb
+        format.xml  { render :xml => @trip, :status => :created, :location => @trip }
+        format.json { render :json => @trip }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @trip.errors, :status => :unprocessable_entity }
+        format.json { render :json => @trip.errors.full_messages, :status => :unprocessable_entity }
+      end
+    end
   end
 
   # POST /trips
@@ -154,7 +153,7 @@ class TripsController < ApplicationController
     @trip.assign(params[:trip])
 
     respond_to do |format|
-      if @trip.save
+      if privledged(@trip) and @trip.save
         format.html { redirect_to(@trip, :notice => 'Trip was successfully updated.') }
         format.xml  { head :ok }
         format.json { head :ok }
@@ -170,12 +169,22 @@ class TripsController < ApplicationController
   # DELETE /trips/1.xml
   def destroy
     @trip = Trip.find(params[:id])
-    @trip.destroy
 
     respond_to do |format|
-      format.html { redirect_to(trips_url) }
-      format.xml  { head :ok }
+      if privledged(@trip) and @trip.destroy
+        format.html { redirect_to(trips_url) }
+        format.xml  { head :ok }
+      else
+        flash[:error] = "It appears you attempted to delete a suggestion that you did not create. Perhaps you need to log in?"
+        format.html { redirect_to root_path }
+        format.xml  { head :ok }
+      end
     end
+  end
+
+  private 
+  def privledged(trip)
+    trip.user == @current_user || @current_user.admin?
   end
 
 end

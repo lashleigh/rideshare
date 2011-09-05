@@ -1,5 +1,6 @@
 class User
   include MongoMapper::Document
+  attr_accessible :name, :location, :website, :image, :favorites
 
   key :name, String
   key :nickname, String
@@ -9,6 +10,7 @@ class User
   key :description, String
   key :image, String
   key :favorites, Array
+  key :admin, Boolean, :default => false
   timestamps!
   
   many :authorizations
