@@ -9,7 +9,7 @@
     <% end %>
   <% end %>
   <div class="one-line">
-    <%= link_to trip.origin+" to "+trip.destination, trip %>
+    <%= link_to trip.short_title, trip %>
     <span class="owner" title="<%=trip.user.name%>">
       <%= link_to trip.user.name, trip.user %>
     </span>

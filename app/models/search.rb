@@ -49,11 +49,17 @@ class Search
 
   def valid_radii
     if origin
+      if origin_radius.blank?
+        self.assign({:origin_radius => 25})
+      end
       unless (10..100).include? origin_radius
         errors.add(:origin_radius, "Must be between 10 and 100")
       end
     end
     if destination
+      if destination_radius.blank?
+        self.assign({:destination_radius => 25})
+      end
       unless (10..100).include? destination_radius
         errors.add(:destination_radius, "Must be between 10 and 100")
       end

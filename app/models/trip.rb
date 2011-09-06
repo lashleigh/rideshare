@@ -155,6 +155,15 @@ class Trip
   def flexibilty_hash
     {"exact" => [0,0], "onebefore" => [1,0], "oneafter" => [0,1], "one" => [1,1], "two" => [2,2], "three" => [3,3]}
   end
+  def short_title(options={})
+    if options[:origin]
+      return origin.split(",")[0..1].join(",")
+    elsif options[:destination]
+      return destination.split(",")[0..1].join(",")
+    else 
+      return self.short_title({:origin => true})+" to "+self.short_title({:destination=> true})
+    end
+  end
 
   def get_bounds
     bound = Geocoder::Calculations::bounding_box(self.route[0], 60)
