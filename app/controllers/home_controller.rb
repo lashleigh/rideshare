@@ -21,6 +21,8 @@ class HomeController < ApplicationController
   end
 
   def show
+    params[:origin_coords] ||= Geocoder.coordinates(params[:origin])
+    @custom_search = Search.new(params)
     start = Geocoder.search(params[:origin]).first unless params[:origin].blank?
     finish = Geocoder.search(params[:destination]).first unless params[:destination].blank?
     @search = params

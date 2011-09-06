@@ -1,7 +1,7 @@
 <%= javascript_include_tag 'home_show' %>
 <%= javascript_include_tag 'home_datepicker' %>
 <script type="text/javascript">
-  var current_user = <%=@current_user.to_json.html_safe%>;
+  var current_user = <%=!!@current_user%>;
   var center = <%= @center.to_json.html_safe%>;
   var trips = <%= @trips.to_json.html_safe%>;
   var search = <%= @search.to_json.html_safe%>;

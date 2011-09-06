@@ -300,16 +300,4 @@ function show_map(which) {
     break;
   }
 }
-function toggle_favorite() {
-  if(current_user !== null) {
-    $(".fav-toggle img").click(function(){
-    if($(this).hasClass("on")) {
-      $(this).removeClass("on").addClass("off");
-      $(this).attr("src", "/images/fav-star-off.png")
-    } else {
-      $(this).removeClass("off").addClass("on");
-      $(this).attr("src", "/images/fav-star-on.png")}
-    
-    })
-  }
-}
+

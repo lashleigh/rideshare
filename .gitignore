@@ -4,3 +4,4 @@ log/*.log
 tmp/
 text
 with_state*
+coverage/

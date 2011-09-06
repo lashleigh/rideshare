@@ -1,10 +1,12 @@
 <% @search ||= {} %>
 <div class="listitem">
   <div class="right"><%= image_tag small_static_map(trip, @search["origin_coords"], @search["destination_coords"]) %> </div>
-  <% if @current_user and @current_user.has_fav(trip.id) %>
-    <%= link_to (image_tag 'fav-star-on.png', :class=>"on"), favorite_path(trip), :remote => true, :class=>'fav-toggle' %>
-  <% else %>
-    <%= link_to (image_tag 'fav-star-off.png', :class=>"off"), favorite_path(trip), :remote => true, :class=>'fav-toggle' %>
+  <% if @current_user %>
+    <% if @current_user.has_fav(trip.id) %>
+      <%= link_to (image_tag 'fav-star-on.png', :class=>"on"), favorite_path(trip), :remote => true, :class=>'fav-toggle' %>
+    <% else %>
+      <%= link_to (image_tag 'fav-star-off.png', :class=>"off"), favorite_path(trip), :remote => true, :class=>'fav-toggle' %>
+    <% end %>
   <% end %>
   <div class="one-line">
     <%= link_to trip.origin+" to "+trip.destination, trip %>
