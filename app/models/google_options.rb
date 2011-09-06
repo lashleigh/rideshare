@@ -6,5 +6,11 @@ class GoogleOptions
   key :waypoints, Array
 
   belongs_to :trip
-
+  def waypoints=(x)
+    if String === x and !x.blank?
+      super(ActiveSupport::JSON.decode(x))
+    else
+      super(x)
+    end
+  end
 end

@@ -7,7 +7,7 @@ class TripsController < ApplicationController
     @trip.assign({params[:type] => params[:value]})
 
     respond_to do |format|
-      if privledged(@trip) and @trip.save
+      if user_can_modify(@trip) and @trip.save
         format.json { render :json => @trip.summary }
       else
         format.json { render :json => t.errors.full_messages, :status => :unprocessable_entity }
@@ -26,7 +26,7 @@ class TripsController < ApplicationController
     end
 
     respond_to do |format|
-      if privledged(@trip) and t.valid? and @trip.save
+      if user_can_modify(@trip) and t.valid? and @trip.save
         format.json { render :json => @trip.trip_options[params[:type]] }
       else
         format.json { render :json => t.errors.full_messages, :status => :unprocessable_entity }
@@ -35,7 +35,7 @@ class TripsController < ApplicationController
   end
 
   def index
-    @trips = Trip.all
+    @trips = Trip.future.sort(:start_date.asc).paginate(:page => params[:page], :per_page => 15)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -67,7 +67,7 @@ class TripsController < ApplicationController
   # GET /trips/1.xml
   def show
     @trip = Trip.find(params[:id])
-    @owner = privledged(@trip) 
+    @owner = user_can_modify(@trip) 
 
     if session[:search]
       unless session[:search].index(params[:id]) == 0 || -1
@@ -103,20 +103,12 @@ class TripsController < ApplicationController
   # POST /trips
   # POST /trips.xml
   def create
-    @trip = Trip.new
-    params[:trip].delete_if {|k, v| v.blank?}
-    if params[:trip] and params[:trip][:route]
-      params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route]) if params[:trip][:route].is_a? String
-    end
-    if params[:trip] and params[:trip][:google_options]
-      params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options]) if params[:trip][:google_options].is_a? String
-    end
-    @trip.assign(params[:trip])
+    @trip = Trip.new(params[:trip])
     @trip.user = @current_user
 
     respond_to do |format|
       if @trip.save
-        format.html { redirect_to @trip } #(@trip, :notice => 'Trip was successfully created.') }
+        format.html { redirect_to(@trip, :notice => 'Trip was successfully created.') }
         format.xml  { render :xml => @trip, :status => :created, :location => @trip }
         format.json { render :json => @trip }
       else
@@ -131,16 +123,10 @@ class TripsController < ApplicationController
   # PUT /trips/1.xml
   def update
     @trip = Trip.find(params[:id])
-    if params[:trip] and params[:trip][:route]
-      params[:trip][:route] = ActiveSupport::JSON.decode(params[:trip][:route]) if params[:trip][:route].is_a? String
-    end
-    if params[:trip] and params[:trip][:google_options]
-      params[:trip][:google_options] = ActiveSupport::JSON.decode(params[:trip][:google_options]) if params[:trip][:google_options].is_a? String
-    end
     @trip.assign(params[:trip])
 
     respond_to do |format|
-      if privledged(@trip) and @trip.save
+      if user_can_modify(@trip) and @trip.save
         format.html { redirect_to(@trip, :notice => 'Trip was successfully updated.') }
         format.xml  { head :ok }
         format.json { head :ok }
@@ -158,7 +144,7 @@ class TripsController < ApplicationController
     @trip = Trip.find(params[:id])
 
     respond_to do |format|
-      if privledged(@trip) and @trip.destroy
+      if user_can_modify(@trip) and @trip.destroy
         format.html { redirect_to(trips_url) }
         format.xml  { head :ok }
       else
@@ -170,7 +156,7 @@ class TripsController < ApplicationController
   end
 
   private 
-  def privledged(trip)
+  def user_can_modify(trip)
     trip.user == @current_user || (@current_user and @current_user.admin?)
   end
 

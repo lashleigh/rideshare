@@ -24,6 +24,7 @@ class Trip
   # validates_presence_of :origin, :destination
   timestamps!
 
+  scope :future, where(:start_date.gte => Time.now) 
   scope :by_duration_in_hours, lambda {|low, high| where(:duration.gte => low*3600,  :duration.lte => high*3600) }
   scope :by_distance_in_miles, lambda {|low, high| where(:distance.gte => low*1609.344, :distance.lte => high*1609.344) }
 
@@ -33,6 +34,13 @@ class Trip
   scope :find_by_start_finish,  lambda {|start, finish, options={}| where(:id=>{'$in' => Trip.includes_start_finish(start, finish, options)} )}
 
   def route=(x)
+    if String === x and !x.blank?
+      super(ActiveSupport::JSON.decode(x))
+    else
+      super(x)
+    end
+  end
+  def google_options=(x)
     if String === x and !x.blank?
       super(ActiveSupport::JSON.decode(x))
     else

@@ -1,6 +1,5 @@
 class User
   include MongoMapper::Document
-  attr_accessible :name, :location, :website, :image, :favorites
 
   key :name, String
   key :nickname, String
@@ -15,6 +14,7 @@ class User
   
   many :authorizations
   many :trips
+  attr_accessible :name, :location, :website, :image, :favorites
 
   #scope :find_by_authorization, lambda {|provider, uid| where('authorizations.provider' => provider, 'authorizations.uid' => uid)}
   def self.create_with_omniauth(auth)  

@@ -21,9 +21,9 @@
     <%= f.text_field :destination, :size => 30 %></br>
     <%= link_to 'driving options', '#', :id => "driving_options_link" %></br>
     <div id="driving_options" style="display:none;">
-      <%= check_box_tag :avoid_highways %>
+      <%= check_box_tag :avoid_highways, nil, trip.google_options.avoid_highways if trip.google_options %>
       <%= label_tag :avoid_highways %></br>
-      <%= check_box_tag :avoid_tolls %>
+      <%= check_box_tag :avoid_tolls, nil, trip.google_options.avoid_tolls if trip.google_options %>
       <%= label_tag :avoid_tolls %>
     </div>
  
@@ -43,8 +43,9 @@
       <%= f.hidden_field :route %>
     </div>
 
-    <div id="trip_submit_wrap">
+    <div id="trip_submit_wrap" class="button-group">
       <button class="big disable button" id="trip_submit" disabled="disabled" type="submit">Save</button>
+      <%= link_to 'Back', :back, :class=>"big button", :id=>"trip_back" %>
     </div>
   <% end %>
   <div id="directionsPanel" style="display:none;"></div>

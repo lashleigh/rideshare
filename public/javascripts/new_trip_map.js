@@ -77,7 +77,7 @@ function on_load() {
   $("#driving_options input").click(function() {
     if( directionsDisplay.directions !== undefined) {
       save_waypoints();
-      calcRoute();
+      calcRoute(waypoint_markers.map(function(a) { return a.position; }));
     }
   });
 }

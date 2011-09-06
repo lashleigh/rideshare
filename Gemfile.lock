@@ -159,6 +159,7 @@ GEM
     turn (0.8.2)
       ansi (>= 1.2.2)
     tzinfo (0.3.29)
+    will_paginate (3.0.0)
 
 PLATFORMS
   ruby
@@ -174,3 +175,4 @@ DEPENDENCIES
   rspec-rails
   simplecov
   turn
+  will_paginate (~> 3.0)
