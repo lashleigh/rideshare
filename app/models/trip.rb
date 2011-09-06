@@ -32,8 +32,15 @@ class Trip
   scope :find_all_in_date_range, lambda {|date, range| where(:start_date => {'$gte' => range[0].days.ago(date), '$lte' => range[1].days.since(date)})}
   scope :find_by_start_finish,  lambda {|start, finish, options={}| where(:id=>{'$in' => Trip.includes_start_finish(start, finish, options)} )}
 
+  def route=(x)
+    if String === x and !x.blank?
+      super(ActiveSupport::JSON.decode(x))
+    else
+      super(x)
+    end
+  end
   def self.starts_at(coords, options = {}) 
-    options[:radius] ||= 60
+    options[:radius] ||= (options[:origin_radius] || 60)
     case coords
       when Array; coords
       when String; coords = Geocoder.coordinates(coords)
@@ -42,7 +49,7 @@ class Trip
   end
 
   def self.ends_at(coords, options ={}) 
-    options[:radius] ||= 60
+    options[:radius] ||= (options[:destination_radius] || 60)
     case coords
       when Array; coords
       when String; coords = Geocoder.coordinates(coords)

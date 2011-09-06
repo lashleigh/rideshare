@@ -21,46 +21,24 @@ class HomeController < ApplicationController
   end
 
   def show
-    params[:origin_coords] ||= Geocoder.coordinates(params[:origin])
-    @custom_search = Search.new(params)
-    start = Geocoder.search(params[:origin]).first unless params[:origin].blank?
-    finish = Geocoder.search(params[:destination]).first unless params[:destination].blank?
-    @search = params
-    @search["origin"] = start.address if start
-    @search["destination"] = finish.address if finish
-    @search["origin_coords"] = (ActiveSupport::JSON.decode(params[:origin_coordinates]) if params[:origin_coordinates]) || (start.coordinates if start)
-    @search["destination_coords"] = (ActiveSupport::JSON.decode(params[:destination_coordinates]) if params[:destination_coordinates]) || (finish.coordinates if finish)
+    @search = Search.new(params)
 
     respond_to do |format|
-      @trips, @center = show_helper(params, start, finish) 
-      session[:search] = @trips.map{|t| t.id.as_json} if @trips
-      logger.info(session[:search])
-      @trips ||= Trip.sort(:created_at.desc).limit(5).all
-      @center ||= [47.6062095, -122.3320708]
-      format.html { render :action => "show" }
-      format.xml  { head :ok }
+      if @search.valid?
+        @trips, @center = @search.appropriate_response
+        session[:search] = @trips.map{|t| t.id.as_json} if @trips
+        format.html { render :action => "show" }
+        format.xml  { head :ok }
+        format.json { render :json => @trips }
+      else
+        @trips ||= Trip.sort(:created_at.desc).limit(5).all
+        @center ||= [47.6062095, -122.3320708]
+        session[:search] = nil
+        format.html { render :action => "show" }
+        format.xml  { render :xml => @trip.errors, :status => :unprocessable_entity }
+        format.json { render :json => @trip.errors.full_messages, :status => :unprocessable_entity }
+      end
     end
   end
 
-  def show_helper(params, start, finish)
-    if start and finish
-      start = start.coordinates
-      finish = finish.coordinates
-      return Trip.find_by_start_finish(start, finish, params).all, Geocoder::Calculations::geographic_center([start, finish]) 
-    elsif start
-      start = start.coordinates
-      params[:origin_radius] ||= 50
-      params[:radius] = params[:origin_radius].to_f
-      return Trip.find_all_starting_in(start, params).all, start
-    elsif finish
-      finish = finish.coordinates
-      params[:destination_radius] ||= 50
-      params[:radius] = params[:destination_radius].to_f
-      return Trip.find_all_finishing_in(finish, params).all, finish
-    else
-      flash[:error] = "There was a problem geocoding the location"
-      return nil
-    end
-  end
- 
 end

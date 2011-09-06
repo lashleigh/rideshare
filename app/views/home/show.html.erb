@@ -20,7 +20,7 @@
       <INPUT type="button" id="geocode_origin" class="show_map" value="">
     </div>
     <%= hidden_field_tag 'origin_radius', @search['origin_radius'] %>
-    <%= hidden_field_tag 'origin_coordinates', @search["origin_coordinates"] %>
+    <%= hidden_field_tag 'origin_coords', @search["origin_coords"] %>
     <div class="map_container" id="origin_info" style="display:none;">
       <div id="map_for_origin" class="map_canvas"></div>
       <span class="hide_map">Hide map</span>
@@ -32,7 +32,7 @@
       <INPUT type="button" id="geocode_destination" class="show_map" value="">
     </div>
     <%= hidden_field_tag 'destination_radius', @search['destination_radius'] %>
-    <%= hidden_field_tag 'destination_coordinates', @search["destination_coordinates"] %>
+    <%= hidden_field_tag 'destination_coords', @search["destination_coords"] %>
     <div class="map_container" id="destination_info" style="display:none;">
       <div id="map_for_destination" class="map_canvas"></div>
       <span class="hide_map">Hide map</span>

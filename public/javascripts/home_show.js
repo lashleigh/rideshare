@@ -55,7 +55,7 @@ function RadiusWidget(args) {
   });
 
   // Set the distance property value, default to 25mi (40.2336km).
-  args["radius"] = args["radius"] || 40.2336;
+  args["radius"] = 1/KM_2_MI(1)*args["radius"] || 40.2336;
   this.set('distance', parseFloat(args["radius"]));
 
   // Bind the RadiusWidget bounds property to the circle bounds property.
@@ -198,7 +198,7 @@ function continuous_radius_info(widget, id) {
 }
 function radius_info(widget, id) {
   var radius_km = widget.get('distance');
-  $(id+"_radius").val(radius_km);
+  $(id+"_radius").val(KM_2_MI(radius_km));
   $(id+"_info .radius").html(KM_2_MI(radius_km).toFixed(2)+"mi ("+radius_km.toFixed(2)+"km)" );
 }
 
@@ -243,6 +243,7 @@ function codeAddress(address, widget, which_input) {
         widget.set('position', point);
         widget.map.setCenter(point);
         $(which_input).val(results[0].formatted_address);
+        $(which_input+"_coords").val(JSON.stringify([widget.marker.getPosition().lat(), widget.marker.getPosition().lng()]));
       }
     } else {
       console.log("Geocoder failed due to: " + status);
@@ -250,7 +251,7 @@ function codeAddress(address, widget, which_input) {
   });
 }
 function codeLatLng(marker, id) {
-  $(id+"_coordinates").val(JSON.stringify([marker.getPosition().lat(), marker.getPosition().lng()]));
+  $(id+"_coords").val(JSON.stringify([marker.getPosition().lat(), marker.getPosition().lng()]));
   var geocoder = new google.maps.Geocoder();
   geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
     geo_results = results;
