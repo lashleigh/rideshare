@@ -24,16 +24,15 @@ class HomeController < ApplicationController
     @search = Search.new(params)
 
     respond_to do |format|
-      if @search.valid?
-        @trips, @center = @search.appropriate_response
-        session[:search] = @trips.map{|t| t.id.as_json} if @trips
+      if @search.valid? 
+        trips = @search.appropriate_response
+        @trips = trips.paginate(:page => params[:page], :per_page => 10)
         format.html { render :action => "show" }
         format.xml  { head :ok }
         format.json { render :json => @trips }
       else
-        @trips ||= Trip.sort(:created_at.desc).limit(5).all
-        @center ||= [47.6062095, -122.3320708]
-        session[:search] = nil
+        @search = Search.new
+        @trips = Trip.future.sort(:start_date.asc).paginate(:page => params[:page], :per_page => 10)
         format.html { render :action => "show" }
         format.xml  { render :xml => @trip.errors, :status => :unprocessable_entity }
         format.json { render :json => @trip.errors.full_messages, :status => :unprocessable_entity }

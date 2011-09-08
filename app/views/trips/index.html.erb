@@ -2,15 +2,14 @@
   var trips = <%= @trips.to_json.html_safe %>;
 </script>
 <div style="overflow-y:auto;">
-  <% @trips.each do |trip| %>
-    <%= link_to trip.origin+" => "+trip.destination, trip %>
-    <%= trip.start_date.to_formatted_s(:short) %></br>
-  <% end %>
-  <div class="digg_pagination">
-    <div clas="page_info">
-      <%= page_entries_info @posts %>
+  <div id="tripslist">
+    <div class="tripsheader">
+      <h3><%= page_entries_info @trips %></h3>
     </div>
-    <%= will_paginate @posts, :container => false %>
+    <%= render :partial => 'trips/trip', :collection => @trips %>
+  </div>
+  <div class="digg_pagination">
+    <%= will_paginate @trips, :container => false %>
   </div>
 
   <%= link_to 'New Trip', new_trip_path %>

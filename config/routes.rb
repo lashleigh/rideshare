@@ -3,7 +3,6 @@ Rideshare::Application.routes.draw do
   resources :users
 
   match 'home/show' => 'home#show'
-  match '/explore' => 'home#explore', :as => :explore
 
   match 'trips/update_trip_options' => 'trips#update_trip_options'
   match 'trips/update_summary' => 'trips#update_summary'

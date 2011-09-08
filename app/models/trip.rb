@@ -185,13 +185,6 @@ class Trip
     min = distances.min
     return {"avg" => avg, "max" => max, "min" => min}
   end
-  def title
-    origin+" to "+destination
-  end
-  def title_minus_country
-    origin[0..origin.rindex(",")-1]+" to "+destination[0..destination.rindex(",")-1]
-  end
-
   private
   def create_google_and_trip_options
     self.google_options = GoogleOptions.new

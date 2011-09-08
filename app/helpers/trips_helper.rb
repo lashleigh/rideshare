@@ -46,7 +46,7 @@ module TripsHelper
   end
   def tweet_text(trip)
     url = "http://rideshare.com/trips/#{trip.id}"
-    text = trip.title_minus_country
+    text = trip.short_title
     if trip.trip_options.cost
       text = text+" for $#{trip.trip_options.cost}"
     end
@@ -54,10 +54,10 @@ module TripsHelper
   end
   def facebook_text(trip)
     url = "http://rideshare.com/trips/#{trip.id}"
-    text = trip.title_minus_country
+    text = trip.short_title
     "http://www.facebook.com/sharer.php?u=#{url}&t=#{text}"
   end
   def email_text(trip)
-    "mailto:?subject=#{trip.title_minus_country}&body=I found this trip on AWESOME RIDESHARING SITE DOT COM:%0d%0a%0d%0a%0d%0a%0d%0a#{trip.title_minus_country}%0d%0a%0d%0ahttp://rideshare.com/trips/#{trip.id}\n"
+    "mailto:?subject=#{trip.short_title}&body=I found this trip on AWESOME RIDESHARING SITE DOT COM:%0d%0a%0d%0a%0d%0a%0d%0a#{trip.short_title}%0d%0a%0d%0ahttp://rideshare.com/trips/#{trip.id}\n"
   end
 end

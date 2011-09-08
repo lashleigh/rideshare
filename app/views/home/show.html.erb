@@ -2,7 +2,6 @@
 <%= javascript_include_tag 'home_datepicker' %>
 <script type="text/javascript">
   var current_user = <%=!!@current_user%>;
-  var center = <%= @center.to_json.html_safe%>;
   var trips = <%= @trips.to_json.html_safe%>;
   var search = <%= @search.to_json.html_safe%>;
   var flexibility = <%= Trip.first.flexibilty_hash.to_json.html_safe %>;
@@ -48,8 +47,12 @@
 
 <div id="tripslist">
   <div class="tripsheader">
-    <h3><%= @trips.length%></h3>
+    <h3><%= page_entries_info @trips %></h3>
   </div>
   <%= render :partial => 'trips/trip', :collection => @trips %>
+
+  <div class="digg_pagination">
+    <%= will_paginate @trips, :params => @search.custom_attributes, :container => false %>
+  </div>
 
 </div>

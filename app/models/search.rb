@@ -5,8 +5,8 @@ class Search
   key :destination,  String
   key :origin_coords, Array
   key :destination_coords, Array
-  key :origin_radius, Float
-  key :destination_radius, Float
+  key :origin_radius, Integer
+  key :destination_radius, Integer
 
   validate :origin_or_destination
   #validate :valid_radii
@@ -15,6 +15,8 @@ class Search
   def origin_coords=(x)
     if String === x and !x.blank?
       super(ActiveSupport::JSON.decode(x))
+    elsif Array === x
+      super(x.map{|i| i.to_f})
     else
       super(x)
     end
@@ -107,11 +109,19 @@ class Search
     start = self.origin_coords
     finish = self.destination_coords
     if origin and destination
-      return Trip.find_by_start_finish(start, finish, self).all, Geocoder::Calculations::geographic_center([start, finish])
+      return Trip.find_by_start_finish(start, finish, self)
     elsif origin
-      return Trip.find_all_starting_in(start, self).all, start
+      return Trip.find_all_starting_in(start, self)
     else
-      return Trip.find_all_finishing_in(finish, self).all, finish
+      return Trip.find_all_finishing_in(finish, self)
     end
+  end
+  def custom_attributes
+    allow = ["origin", "origin_coords", "origin_radius",
+             "destination", "destination_coords", "destination_radius"]
+    self.attributes.select{|k, v| allow.include? k }
+    #h["origin_coords"] = ActiveSupport::JSON.encode(origin_coords) if h["origin_coords"]
+    #h["destination_coords"] = ActiveSupport::JSON.encode(destination_coords) if h["destination_coords"]
+    #return h
   end
 end
