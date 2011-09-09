@@ -24,17 +24,6 @@
     <% if @owner || @trip.summary%>
       <div id="summary" class="edit_summary"><%= @trip.summary %></div>
     <% end %>
-    <ul id="trip_options">
-      <% @trip.trip_options.all_used_attributes.each do |opt, val| %>
-        <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span>
-        <span class="edit_trip_options prop_val" id="<%=opt%>"><%=@trip.trip_options.view_for(opt)%></span></li>
-      <% end %>
-      <% if @owner %>
-        <% @trip.trip_options.all_unused_attributes.each do |opt, val| %>
-          <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span>
-          <span class="edit_trip_options prop_val unused_val" id="<%=opt%>"></span></li>
-        <% end %>
-      <% end %>
-    </ul>
+    <%= render 'trip_options' %>
   </div>
 </div>

@@ -1,14 +1,5 @@
 # This will guess the User class
 FactoryGirl.define do
-  factory :authorization do
-    provider 'twitter'
-    uid '16555958'
-  end
-
-  factory :user do
-    name 'ashleigh'
-  end
-
   factory :trip do
     origin      'Seattle, WA'
     destination 'San Diego, CA'
@@ -33,5 +24,16 @@ FactoryGirl.define do
     max_luggage    nil
     car_type       nil
     smoke_breaks   nil
+  end
+  factory :search do
+    origin             'Seattle, WA'
+    destination        'San Diego, CA'
+    origin_radius       25
+    destination_radius  25
+
+    factory :search_with_coords do
+      origin_coords    [45,-75]
+      destination_coords  [44,-122]
+    end
   end
 end

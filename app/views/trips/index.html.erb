@@ -1,16 +1,7 @@
-<script type="text/javascript">
-  var trips = <%= @trips.to_json.html_safe %>;
-</script>
-<div style="overflow-y:auto;">
-  <div id="tripslist">
-    <div class="tripsheader">
-      <h3><%= page_entries_info @trips %></h3>
-    </div>
-    <%= render :partial => 'trips/trip', :collection => @trips %>
-  </div>
-  <div class="digg_pagination">
-    <%= will_paginate @trips, :container => false %>
-  </div>
-
-  <%= link_to 'New Trip', new_trip_path %>
+<div id="find_a_ride">
+  <%= link_to 'Search the rides', search_path, :class => 'gigantic button' %>
 </div>
+<div id="post_a_ride">
+  <%= link_to 'Offer a ride', new_trip_path, :class => 'gigantic button' %>
+</div>
+

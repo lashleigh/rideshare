@@ -47,6 +47,12 @@ class Search
     unless origin or destination
       errors.add(:origin_and_destination, "Can't both be blank")
     end
+    #unless destination
+    #  self.assign({:destination_radius => nil, :destination_coords => nil})
+    #end
+    #unless origin
+    #  self.assign({:origin_radius => nil, :origin_coords => nil})
+    #end
   end
 
   def valid_radii

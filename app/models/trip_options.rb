@@ -14,13 +14,13 @@ class TripOptions
 
   def all_used_attributes
     #self.keys.reject{|k, v| self[k].nil? or k == "_id"}.map{|k,v| [k, self[k]]}
-    self.attributes.reject{|k, v| k=="_id" or v==nil}.to_a
+    self.attributes.reject{|k, v| k=="_id" or v==nil}
   end
   def all_unused_attributes
-    self.attributes.select{|k, v| k!="_id" and v==nil}.to_a
+    self.attributes.select{|k, v| k!="_id" and v==nil}
   end
   def all_attributes
-    self.attributes.select{|k, v| k!="_id"}.to_a
+    self.attributes.select{|k, v| k!="_id"}
   end
 
   def choose_from

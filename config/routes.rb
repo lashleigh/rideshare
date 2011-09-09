@@ -4,6 +4,8 @@ Rideshare::Application.routes.draw do
 
   match 'home/show' => 'home#show'
 
+  match 'explore' => 'trips#explore', :as => :explore
+  match 'search' => 'trips#search', :as => :search
   match 'trips/update_trip_options' => 'trips#update_trip_options'
   match 'trips/update_summary' => 'trips#update_summary'
   match 'trips/:id/craigslist' => 'trips#craigslist', :as => :craigslist
@@ -15,6 +17,6 @@ Rideshare::Application.routes.draw do
   match "/auth/failure" => "sessions#failure"  
   match "/signout" => "sessions#destroy", :as => :signout
 
-  root :to => "home#index"
+  root :to => "trips#index"
 
 end

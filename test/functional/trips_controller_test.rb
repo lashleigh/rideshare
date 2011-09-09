@@ -3,7 +3,7 @@ require 'test_helper'
 class TripsControllerTest < ActionController::TestCase
   setup do
     Trip.destroy_all
-    @unsaved_trip = FactoryGirl.build(:future_trip)#trips(:one)
+    @unsaved_trip = FactoryGirl.build(:future_trip)
     @trip = FactoryGirl.build(:future_trip)
     @user = User.find("4e6452228c4f2587b6000005") #FactoryGirl.create(:user)
     @trip.user = @user

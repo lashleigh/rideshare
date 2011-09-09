@@ -298,6 +298,9 @@ http://github.com/necolas/css3-github-buttons
     font-size: 14px; 
 }
 
+.button.gigantic {
+    font-size: 24px; 
+}
 .button.big.icon:before { top: 0; }
 
 

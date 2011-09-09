@@ -12,11 +12,14 @@
     <a href="/jobs/feed?" class="rss"><img alt="rss" id="rss" src="http://sstatic.net/careers/Img/icon-rss.png?32e66e"></a>
     search rides
   </h3>
-  <%= form_tag(:action => 'show') do %>
+  <%= form_tag(:action => 'search') do %>
     <div>
       <%= label_tag 'origin', "From" %>
       <%= text_field_tag 'origin', @search["origin"], :placeholder => 'Seattle, WA' %>
       <INPUT type="button" id="geocode_origin" class="show_map" value="">
+      <span class="quiet">
+        within <%= @search['origin_radius'] || 25 %> miles
+      </span>
     </div>
     <%= hidden_field_tag 'origin_radius', @search['origin_radius'] %>
     <%= hidden_field_tag 'origin_coords', @search["origin_coords"] %>
@@ -29,6 +32,9 @@
       <%= label_tag 'destination', "To" %>
       <%= text_field_tag 'destination', @search["destination"], :placeholder => 'New York, NY' %>
       <INPUT type="button" id="geocode_destination" class="show_map" value="">
+      <span class="quiet">
+        within <%= @search['destination_radius'] || 25 %> miles
+      </span>
     </div>
     <%= hidden_field_tag 'destination_radius', @search['destination_radius'] %>
     <%= hidden_field_tag 'destination_coords', @search["destination_coords"] %>
@@ -54,5 +60,4 @@
   <div class="digg_pagination">
     <%= will_paginate @trips, :params => @search.custom_attributes, :container => false %>
   </div>
-
 </div>
