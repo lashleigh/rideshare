@@ -23,7 +23,7 @@ class Trip
   belongs_to :user
   # many :routes
   # validates_presence_of :origin, :destination
-  ensure_index [[:route, '2d']]
+  # ensure_index [[:route, '2d']]
   timestamps!
 
   scope :contains_longitude, lambda {|lng| where('bounds.lng_min' => {'$lte' => lng}, 'bounds.lng_max' => {'$gte' => lng} )}
