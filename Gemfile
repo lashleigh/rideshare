@@ -7,6 +7,7 @@ gem 'geocoder'
 gem 'json'
 gem "omniauth", '0.2.0'
 gem 'will_paginate', '~> 3.0'
+gem 'feedzirra'
 group :development, :test do  
   gem "factory_girl_rails"
   gem 'rspec-rails'

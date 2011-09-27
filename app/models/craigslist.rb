@@ -7,39 +7,20 @@ class Craigslist
   key :href, String
   key :approved, Boolean, :default => false
   key :coords, Array
-  ensure_index [[ :coords, '2d']], :min => -180, :max => 180 
+  ensure_index [[ :coords, '2d']]
 
   def self.find_all_near_route(trip, options={})
-    options[:radius] ||= 1500 #trip.distance_between_points["max"]*10
-    nearest = trip.route.map{|trip_coords| Craigslist.nearby(trip_coords, options).all} 
-    nearest.flatten.uniq
-  end
-
-  def self.nearby(coords, options = {})
-    options[:radius] ||= 50
-    Craigslist.where(:coords => {"$near" => coords, '$maxDistance' => options[:radius]/3959.0 })
-  end
-
-  def self.within(coords, radius, options={})
-    options[:units] ||= "mi"
-    Craigslist.where(:coords => {"$within" => {"$center" => [coords, radius/3959.0]}})
-  end
-
-  def nearby_trips
-    trips = []
-    Trip.all.each do |t|
-      min = t.route.map{|trip_coord| Geocoder::Calculations::distance_between(coords, trip_coord) }.min
-      if min < 50
-        trips.push(t.id)
+    options[:radius] ||= 25.0
+    in_bounds = where(:coords => {'$within' => {'$box' => trip.bounds_to_box(options[:radius])}}).all
+    close_enough = []
+    in_bounds.each do |c|
+      trip.route.each do |trip_coords| 
+        if Geocoder::Calculations::distance_between(c.coords, trip_coords) < options[:radius]
+          close_enough.push(c)
+          break
+        end
       end
     end
-    trips
+    return close_enough.sort{|a, b| a.coords <=> b.coords }
   end
-
-  def temp
-    #Craigslist.each do |l|; 
-    #parts = l.split(" tab: "); c = Craigslist.new(:city =>parts[0], :state =>parts[1], :coords => Geocoder.coordinates(parts[0]+","+parts[1]), :href=>parts[2]); c.save; end
-    #c = Craigslist.find_by_city(parts[0]); c.coords => Geocoder.coordinates(parts[0]+","+parts[1]); c.save
-  end
-
 end

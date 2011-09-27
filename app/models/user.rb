@@ -14,7 +14,7 @@ class User
   
   many :authorizations
   many :trips
-  attr_accessible :name, :location, :website, :image, :favorites
+  #attr_accessible :name, :location, :email, :website, :image, :favorites
 
   #scope :find_by_authorization, lambda {|provider, uid| where('authorizations.provider' => provider, 'authorizations.uid' => uid)}
   def self.create_with_omniauth(auth)  
@@ -22,7 +22,7 @@ class User
                     :nickname => auth["user_info"]["nickname"],
                     :location => auth["user_info"]["location"], 
                     :email => auth["user_info"]["email"],
-                    :website => auth["user_info"]["urls"].first.last,
+                    #:website => auth["user_info"]["urls"].first.last,
                     :description => auth["user_info"]["description"],
                     :image => auth["user_info"]["image"]
                    )

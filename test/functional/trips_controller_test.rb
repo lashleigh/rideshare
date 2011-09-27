@@ -10,6 +10,13 @@ class TripsControllerTest < ActionController::TestCase
     @trip.save
   end
 
+  test "should get search" do
+    get :search
+    assert_response :success
+    assert_not_nil assigns(:trips)
+    assert_not_nil assigns(:search)
+  end
+
   test "should get index" do
     get :index
     assert_response :success
@@ -32,7 +39,6 @@ class TripsControllerTest < ActionController::TestCase
 
     assert_redirected_to trip_path(assigns(:trip))
   end
-
   test "should not create trip" do
     assert_no_difference('Trip.count') do
       post :create, :trip => @trip.attributes

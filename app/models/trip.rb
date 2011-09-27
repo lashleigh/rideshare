@@ -9,6 +9,7 @@ class Trip
   key :duration,     Float,  :required => true #in hours
   key :route,        Array,  :required => true, :typecast => 'Array'
   key :encoded_poly, String, :required => true
+  key :bounds,       Hash
  
   key :start_date, Time, :required => true
   key :start_time, String, :in => ["any", "e", "m", "a", "l"], :default => "any"
@@ -22,8 +23,11 @@ class Trip
   belongs_to :user
   # many :routes
   # validates_presence_of :origin, :destination
+  ensure_index [[:route, '2d']]
   timestamps!
 
+  scope :contains_longitude, lambda {|lng| where('bounds.lng_min' => {'$lte' => lng}, 'bounds.lng_max' => {'$gte' => lng} )}
+  scope :contains_latitude,  lambda {|lat| where('bounds.lat_min' => {'$lte' => lat}, 'bounds.lat_max' => {'$gte' => lat} )}
   scope :future, where(:start_date.gte => Time.now) 
   scope :by_duration_in_hours, lambda {|low, high| where(:duration.gte => low*3600,  :duration.lte => high*3600) }
   scope :by_distance_in_miles, lambda {|low, high| where(:distance.gte => low*1609.344, :distance.lte => high*1609.344) }
@@ -145,6 +149,13 @@ class Trip
     end
     return dates.reject {|d| d.past? }.uniq.sort.map{|d| d.to_formatted_s(:day_month_year).gsub(/^0/, "").gsub(/-0/,"-")}
   end
+  def self.near_several(coords1 = [47.6062095,-122.3320708], coords2 = [37.7749295,-122.4194155])
+    box1 = Geocoder::Calculations::bounding_box(coords1, 5)
+    box2 = Geocoder::Calculations::bounding_box(coords2, 5)
+    box1 = [box1[0..1], box1[2..3]]
+    box2 = [box2[0..1], box2[2..3]]
+    where({'$and' => [:route => {'$within' => {'$box' => box1} }, :route => {'$within' => {'$box' => box2} } ]})
+  end
   def date_range
     start_date.array_from_range(self.flexibilty_hash[start_flexibility])
   end
@@ -166,15 +177,37 @@ class Trip
   end
 
   def get_bounds
-    bound = Geocoder::Calculations::bounding_box(self.route[0], 60)
-    self.route[1..-1].each do |point|
-      new_bound = Geocoder::Calculations::bounding_box(point, 60)
-      bound[0] = new_bound[0] if new_bound[0] > bound[0]
-      bound[1] = new_bound[1] if new_bound[1] > bound[1]
-      bound[2] = new_bound[2] if new_bound[2] > bound[2]
-      bound[3] = new_bound[3] if new_bound[3] > bound[3]
+    bound = {}
+    bound["lng_min"] = self.route[0][1]
+    bound["lng_max"] = self.route[0][1]
+    bound["lat_min"] = self.route[0][0]
+    bound["lat_max"] = self.route[0][0]
+    self.route[1..-1].each do |lat, lng|
+      if lng < bound["lng_min"]
+        bound["lng_min"] = lng 
+      elsif lng > bound["lng_max"]
+        bound["lng_max"] = lng 
+      end
+      if lat < bound["lat_min"]
+        bound["lat_min"] = lat 
+      elsif lat > bound["lat_max"]
+        bound["lat_max"] = lat
+      end
     end
     return bound
+  end
+  def bounds_to_box(radius = 0.0)
+    diff = radius/69.0;
+    [[bounds['lat_min']-diff, bounds['lng_min']-diff], [bounds['lat_max']+diff, bounds['lng_max']+diff]]
+  end
+  def point_in_bounds(point)
+    if bounds.size === 4
+      (bounds["lng_min"]..bounds["lng_max"]).include? point[1] and (bounds["lat_min"]..bounds["lat_max"]).include? point[0]
+    else
+      self.bounds = self.get_bounds
+      self.save
+      self.point_in_bounds(point)
+    end
   end
 
   def distance_between_points
