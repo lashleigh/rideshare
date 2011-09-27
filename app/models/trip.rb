@@ -197,8 +197,15 @@ class Trip
     return bound
   end
   def bounds_to_box(radius = 0.0)
-    diff = radius/69.0;
-    [[bounds['lat_min']-diff, bounds['lng_min']-diff], [bounds['lat_max']+diff, bounds['lng_max']+diff]]
+    if bounds.size ===4 
+      lat_diff = radius/69.0
+      lng_diff = radius/69.0
+      [[bounds['lat_min']-lat_diff, bounds['lng_min']-lng_diff], [bounds['lat_max']+lat_diff, bounds['lng_max']+lng_diff]]
+    else 
+      self.bounds = self.get_bounds
+      self.save
+      self.bounds_to_box(radius)
+    end
   end
   def point_in_bounds(point)
     if bounds.size === 4

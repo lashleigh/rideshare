@@ -14,13 +14,13 @@ class Craigslist
     in_bounds = where(:coords => {'$within' => {'$box' => trip.bounds_to_box(options[:radius])}}).all
     close_enough = []
     in_bounds.each do |c|
-      trip.route.each do |trip_coords| 
+      trip.route.each_with_index do |trip_coords, index| 
         if Geocoder::Calculations::distance_between(c.coords, trip_coords) < options[:radius]
-          close_enough.push(c)
+          close_enough.push([c, index])
           break
         end
       end
     end
-    return close_enough.sort{|a, b| a.coords <=> b.coords }
+    return close_enough.sort{|a, b| a[1] <=> b[1]}.map{|a, i| a}
   end
 end

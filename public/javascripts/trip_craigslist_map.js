@@ -1,6 +1,9 @@
 var map;
 var bounds = new google.maps.LatLngBounds();
 var infoWindow = new google.maps.InfoWindow();
+var markers_array = [];
+var current_marker = 0;
+var current_div;
 
 $(function() {
   on_load();
@@ -20,6 +23,7 @@ $(function() {
 function on_load() {
   set_heights();
   $(window).resize(set_heights);
+  current_div = "#"+$(".craigslist_item")[0].id;
 }
 function drawRoute() {
   var routeLatLng = [];
@@ -45,17 +49,22 @@ function drawRoute() {
 function drawCity(i, placeObj) {
   var cityLatLng = new google.maps.LatLng(placeObj.coords[0], placeObj.coords[1]);
   var craigs_id = "#craigs_"+placeObj.id;
+  i = parseInt(i);
   var marker = new google.maps.Marker({
     position: cityLatLng,
     map: map,
     title: placeObj.city,
     icon: "/images/red_marker.png"
   });  
+  markers_array.push(marker);
   new google.maps.event.addListener(marker, 'mouseover', function() {
-    $(craigs_id).css({backgroundColor: "#005555"}); 
-  });
-  new google.maps.event.addListener(marker, 'mouseout', function() {
-    $(craigs_id).css({backgroundColor: "#ffffff"}); 
+    $(current_div).removeClass("current_item"); 
+    $(craigs_id).addClass("current_item"); 
+    current_div = craigs_id;
+    $("#craigslist_container").stop().animate({scrollTop: (i+1)*$(craigs_id).height()-$("#craigslist_container").height()/2}, 400)
+    markers_array[current_marker].setIcon("/images/red_marker.png")
+    marker.setIcon("/images/yellow_marker.png");
+    current_marker = i;
   });
   google.maps.event.addListener(marker, 'click', function() {
     infoWindow.setContent('<div class="place_form">'
@@ -63,15 +72,14 @@ function drawCity(i, placeObj) {
                          +'</div>');
     infoWindow.open(map, marker);
   });
-  $(craigs_id).hover(
-    function() { 
-      marker.setIcon("/images/yellow_marker.png");
-      $(this).css({backgroundColor: "#005555"}); 
-    }, function() {
-      marker.setIcon("/images/red_marker.png");
-      $(this).css({backgroundColor: "#ffffff"}); 
-    }
-  ).click(function() {
+  $(craigs_id).mouseover( function() { 
+    $(current_div).removeClass("current_item"); 
+    $(this).addClass("current_item"); 
+    current_div = craigs_id;
+    markers_array[current_marker].setIcon("/images/red_marker.png")
+    marker.setIcon("/images/yellow_marker.png");
+    current_marker = i;
+  }).click(function() {
     //map.panTo(cityLatLng);
     //map.setZoom(14);
     infoWindow.setContent('<div class="place_form">'
