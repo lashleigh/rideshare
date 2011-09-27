@@ -1,97 +1,87 @@
 var map;
 var bounds = new google.maps.LatLngBounds();
 var infoWindow = new google.maps.InfoWindow();
-var markers_array = [];
-var current_marker = 0;
-var current_div;
+var current_city;
+var base_height;
 
 $(function() {
-  on_load();
+  set_heights();
+  $(window).resize(set_heights);
   var myOptions = {
     zoom: 4,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    center: new google.maps.LatLng(trip.route[0][0], trip.route[0][1])
+    center: coords_to_google_point(trip.route[0])
   };
   map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-  //$(cities).each(drawCity);
   drawRoute();
-  for(var i in cities) { drawCity(i, cities[i]) }
-  map.fitBounds(bounds);
-
-});
-function on_load() {
-  set_heights();
-  $(window).resize(set_heights);
-  current_div = "#"+$(".craigslist_item")[0].id;
-}
-function drawRoute() {
-  var routeLatLng = [];
-  for(var i=0; i<trip.route.length; i++) {
-    routeLatLng.push(new google.maps.LatLng(trip.route[i][0], trip.route[i][1]));
+  base_height = (-1)*$("#craigslist_container").height()/2;
+  for(var i = 0; i < cities.length; i++) {
+    new City(cities[i]);
   }
-  bounds.extend(routeLatLng[0]);
-  bounds.extend(routeLatLng[routeLatLng.length-1])
-
-  var mapLine = new google.maps.Polyline({
+});
+function drawRoute() {
+  bounds.extend(map.getCenter())
+  bounds.extend(coords_to_google_point(trip.route[trip.route.length-1]))
+  map.fitBounds(bounds);
+  new google.maps.Polyline({
       map           : map,
       strokeColor   : '#0000ff',
       strokeOpacity : 0.6,
       strokeWeight  : 4,
-      path: routeLatLng
-  });
-  new google.maps.event.addListener(mapLine, 'click', function(event) {
-    infoWindow.setContent('<div class="place_form"><h2><a href="/trips/'+trip.id+'">'+ trip.id +'</a></h2></div>');
-    infoWindow.position = event.latLng;
-    infoWindow.open(map);
+      path: google.maps.geometry.encoding.decodePath(trip.encoded_poly)
   });
 }
-function drawCity(i, placeObj) {
-  var cityLatLng = new google.maps.LatLng(placeObj.coords[0], placeObj.coords[1]);
-  var craigs_id = "#craigs_"+placeObj.id;
-  i = parseInt(i);
+function City(city, heights) {
+  this.raw = city;
+  this.craigs_id = "#craigs_"+city.id;
+  this.point = coords_to_google_point(city.coords);
+  base_height += $(this.craigs_id).height();
+  this.scroll_height = base_height;
+  this.info_text = '<div class="place_form">'
+                         +'<h2><a href="'+city.href+'rid">'+ city.city+", "+city.state +'</a></h2>'
+                         +'</div>';
   var marker = new google.maps.Marker({
-    position: cityLatLng,
+    position: this.point,
     map: map,
-    title: placeObj.city,
+    title: city.city,
     icon: "/images/red_marker.png"
   });  
-  markers_array.push(marker);
-  new google.maps.event.addListener(marker, 'mouseover', function() {
-    $(current_div).removeClass("current_item"); 
-    $(craigs_id).addClass("current_item"); 
-    current_div = craigs_id;
-    $("#craigslist_container").stop().animate({scrollTop: (i+1)*$(craigs_id).height()-$("#craigslist_container").height()/2}, 400)
-    markers_array[current_marker].setIcon("/images/red_marker.png")
-    marker.setIcon("/images/yellow_marker.png");
-    current_marker = i;
-  });
-  google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.setContent('<div class="place_form">'
-                         +'<h2><a href="'+placeObj.href+'rid">'+ placeObj.city+", "+placeObj.state +'</a></h2>'
-                         +'</div>');
-    infoWindow.open(map, marker);
-  });
-  $(craigs_id).mouseover( function() { 
-    $(current_div).removeClass("current_item"); 
-    $(this).addClass("current_item"); 
-    current_div = craigs_id;
-    markers_array[current_marker].setIcon("/images/red_marker.png")
-    marker.setIcon("/images/yellow_marker.png");
-    current_marker = i;
-  }).click(function() {
-    //map.panTo(cityLatLng);
-    //map.setZoom(14);
-    infoWindow.setContent('<div class="place_form">'
-                         +'<h2><a href="'+placeObj.href+'rid">'+ placeObj.city+", "+placeObj.state +'</a></h2>'
-                         +'</div>');
-    infoWindow.open(map, marker);
-    }
-  );
-  bounds.extend(cityLatLng);
+  this.marker = marker;
+  set_events(this);
 }
-
+City.prototype = {
+  mouseover_city: mouseover_city
+}
+function set_events(me) {
+  new google.maps.event.addListener(me.marker, 'mouseover', function() {
+    me.mouseover_city();
+    $("#craigslist_container").stop().animate({scrollTop: me.scroll_height}, 400)
+  });
+  new google.maps.event.addListener(me.marker, 'click', function() {
+    infoWindow.setContent(me.info_text);
+    infoWindow.open(map, me.marker);
+  });
+  $(me.craigs_id).mouseover(function() {
+    me.mouseover_city()
+  }).click(function(){
+    infoWindow.setContent(me.info_text);
+    infoWindow.open(map, me.marker);
+  });
+}
+function mouseover_city() {
+  if(current_city){
+    $(current_city.craigs_id).removeClass("current_item"); 
+    current_city.marker.setIcon("/images/red_marker.png");
+  }
+  $(this.craigs_id).addClass("current_item"); 
+  this.marker.setIcon("/images/yellow_marker.png");
+  current_city = this;
+}
 function set_heights() {
   var h = Math.max($("#craigslist_container").outerHeight(), 400);
   $("#map_canvas").css("height", h+"px");
+}
+function coords_to_google_point(coords) {
+  return new google.maps.LatLng(coords[0], coords[1]);
 }
