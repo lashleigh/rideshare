@@ -45,11 +45,11 @@ function mouseover_city() {
   if(current_city){
     $(current_city.craigs_id).removeClass("current_item"); 
     current_city.marker.setIcon("/images/red_marker.png");
-    current_city.marker.setZIndex(undefined);
+    //current_city.marker.setZIndex(undefined);
   }
   $(this.craigs_id).addClass("current_item"); 
   this.marker.setIcon("/images/yellow_marker.png");
-  this.marker.setZIndex(999);
+  //this.marker.setZIndex(999);
   current_city = this;
 }
 
