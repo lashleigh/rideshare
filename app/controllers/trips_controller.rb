@@ -144,6 +144,7 @@ class TripsController < ApplicationController
   def update
     @trip = Trip.find(params[:id])
     @trip.assign(params[:trip])
+    @trip.bounds = @trip.get_bounds
 
     respond_to do |format|
       if user_can_modify(@trip) and @trip.save

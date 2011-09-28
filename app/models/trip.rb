@@ -233,4 +233,7 @@ class Trip
   def set_start_date_to_midnight
     self.start_date = self.start_date.utc.midnight
   end
+  def reset_bounds
+    self.bounds = self.get_bounds
+  end
 end
