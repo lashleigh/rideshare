@@ -144,11 +144,23 @@ span.hint {
 }
 // end Home Show Page //
 
-.approved {
-  background: blue;
-}
-.current_item {
-  background: red;
+#craigslist_container {
+  float:left;
+  width:250px;
+  height:400px;
+  overflow-y:auto;
+  .craigslist_item {
+    background: #eee;
+    background-color: -webkit-gradient(linear, left top, left bottom, from(white), to(white), color-stop(0.5, #EEE))
+  }
+  .approved {
+    background: blue;
+    background-color: -webkit-gradient(linear, left top, left bottom, from(white), to(white), color-stop(0.5, #DD0));
+  }
+  .current_item {
+    background: yellow;
+    background-color: -webkit-gradient(linear, left top, left bottom, from(white), to(white), color-stop(0.5, #DD0));
+  }
 }
 #map_canvas {
   width: 700px;
