@@ -1,6 +1,5 @@
 var map;
 var bounds = new google.maps.LatLngBounds();
-var infoWindow = new google.maps.InfoWindow();
 var current_city;
 var base_height;
 

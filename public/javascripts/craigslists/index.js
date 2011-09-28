@@ -1,5 +1,4 @@
 var map;
-var infoWindow = new google.maps.InfoWindow();
 var current_city;
 var base_height;
 var cities = [];

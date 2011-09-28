@@ -2,9 +2,6 @@ function Craigslist(craigslist, heights) {
   this.raw = craigslist;
   this.craigs_id = "#craigs_"+craigslist.id;
   this.point = coords_to_google_point(craigslist.coords);
-  this.info_text = '<div class="place_form">'
-                         +'<h2><a href="'+craigslist.href+'rid">'+ craigslist.city+", "+craigslist.state +'</a></h2>'
-                         +'</div>';
   var marker = new google.maps.Marker({
     position: this.point,
     map: map,
@@ -27,19 +24,12 @@ function set_events(me) {
     me.mouseover_city();
     $("#craigslist_container").stop().animate({scrollTop: me.scroll_height}, 400)
   });
-  new google.maps.event.addListener(me.marker, 'click', function() {
-    infoWindow.setContent(me.info_text);
-    infoWindow.open(map, me.marker);
-  });
   $(me.craigs_id).mouseover(function() {
     me.mouseover_city();
     if(!(map.getBounds().contains(me.marker.getPosition()))) {
       map.panTo(me.marker.getPosition());
     }
-  }).click(function(){
-    infoWindow.setContent(me.info_text);
-    infoWindow.open(map, me.marker);
-  });
+  })
 }
 function mouseover_city() {
   if(current_city){

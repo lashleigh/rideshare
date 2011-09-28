@@ -13,7 +13,7 @@
 <div id="craigslist_container" style="float:left;width:250px;height:400px;overflow-y:auto;">
   <% @craigslists.each do |craigslist| %>
     <div id="craigs_<%=craigslist.id%>" class="craigslist_item" style="padding-left:12px;">
-      <%="#{craigslist.city}, #{craigslist.state}"%>
+      <%=link_to "#{craigslist.city}, #{craigslist.state}", craigslist.href+"rid"%>
     </div>
   <% end %>
 </div>
