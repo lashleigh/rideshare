@@ -5,5 +5,5 @@ tmp/
 text
 with_state*
 coverage/
-mongod_data/journal
+mongod_data/journal/*
 .sass-cache/  
