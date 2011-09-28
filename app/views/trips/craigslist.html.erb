@@ -1,17 +1,19 @@
+<%= javascript_include_tag 'google_helpers' %>
+<%= javascript_include_tag 'craigslists/shared' %>
 <%= javascript_include_tag 'trip_craigslist_map' %>
 <script type="text/javascript">
   var trip = <%= @trip.to_json.html_safe%>;
-  var cities = <%= @cities.to_json.html_safe if @cities%>;
+  var craigslists = <%= @craigslists.to_json.html_safe if @craigslists%>;
 </script>
 
 <div class="error" style="padding: 12px;">
-  <p style="background:#FFC;padding:10px;font-style:italic;">Please post to a single geographic area and category only -- cross-posting to multiple cities or categories is not allowed</p>
+  <p style="background:#FFC;padding:10px;font-style:italic;">Please post to a single geographic area and category only -- cross-posting to multiple craigslists or categories is not allowed</p>
   <p style="padding:2px;">   -- Error message from craigslist.org</p>
 </div>
 <div id="craigslist_container" style="float:left;width:250px;height:400px;overflow-y:auto;">
-  <% @cities.each do |city| %>
-    <div id="craigs_<%=city.id%>" class="craigslist_item" style="padding-left:12px;">
-      <%="#{city.city}, #{city.state}"%>
+  <% @craigslists.each do |craigslist| %>
+    <div id="craigs_<%=craigslist.id%>" class="craigslist_item" style="padding-left:12px;">
+      <%="#{craigslist.city}, #{craigslist.state}"%>
     </div>
   <% end %>
 </div>

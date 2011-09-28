@@ -75,7 +75,7 @@ class TripsController < ApplicationController
   end
   def craigslist
     @trip = Trip.find(params[:id])
-    @cities = Craigslist.find_all_near_route(@trip)
+    @craigslists = Craigslist.find_all_near_route(@trip)
 
     respond_to do |format|
       format.html #craigslist.html.erb

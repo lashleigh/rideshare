@@ -1,0 +1,30 @@
+<%= javascript_include_tag 'google_helpers' %>
+<%= javascript_include_tag 'craigslists/shared' %>
+<%= javascript_include_tag 'craigslists/show' %>
+<script type="text/javascript">
+  var craigslist = <%= @craigslist.to_json.html_safe%>;
+</script>
+<div id="craigslist_container" style="float:left;">
+  <%= form_for(@craigslist) do |f| %>
+    <% if @craigslist.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@craigslist.errors.count, "error") %> prohibited this trip from being saved:</h2>
+
+        <ul>
+          <% @craigslist.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= link_to @craigslist.city, @craigslist.href %></br>
+    <%= @craigslist.state %></br>
+    <%= f.text_field :href %></br>
+    <%= f.text_field :coords %></br>
+    <%= f.check_box :approved %></br>
+
+    <%= f.submit %>
+  <% end %>
+</div>
+<div id="map_canvas"></div>

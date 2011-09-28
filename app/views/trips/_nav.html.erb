@@ -2,7 +2,7 @@
   <a class="returntolist job" href="/trips">view all</a>
   <div id="share">
     <% if @owner %>
-      <%= link_to (image_tag 'craigslist.png'), craigslist_path(@trip) %>
+      <%= link_to (image_tag 'craigslist.png'), trip_craigslist_path(@trip) %>
     <% end %>
     <%= link_to (image_tag 'icon-envelope.png'), email_text(@trip) %>
     <%= link_to (image_tag 'icon-twitter.png'), tweet_text(@trip) %>

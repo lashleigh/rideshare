@@ -1,0 +1,15 @@
+<%= javascript_include_tag 'google_helpers' %>
+<%= javascript_include_tag 'craigslists/shared' %>
+<%= javascript_include_tag 'craigslists/index' %>
+<script type="text/javascript">
+  var craigslists = <%= @craigslists.to_json.html_safe if @craigslists%>;
+</script>
+
+<div id="craigslist_container" style="float:left;width:250px;height:400px;overflow-y:auto;">
+  <% @craigslists.each do |craigslist| %>
+    <div id="craigs_<%=craigslist.id%>" class="craigslist_item <%= craigslist.approved ? "approved" : '' %>" style="padding-left:12px;">
+      <%=link_to "#{craigslist.city}, #{craigslist.state}", craigslist%>
+    </div>
+  <% end %>
+</div>
+<div id="map_canvas"> </div>
