@@ -32,7 +32,10 @@ function set_events(me) {
     infoWindow.open(map, me.marker);
   });
   $(me.craigs_id).mouseover(function() {
-    me.mouseover_city()
+    me.mouseover_city();
+    if(!(map.getBounds().contains(me.marker.getPosition()))) {
+      map.panTo(me.marker.getPosition());
+    }
   }).click(function(){
     infoWindow.setContent(me.info_text);
     infoWindow.open(map, me.marker);
