@@ -1,0 +1,125 @@
+@grayish: #DFEDFE;
+
+#trip_show {
+  #share {
+    float:right;
+    > a, > div.flag {
+      padding: 8px 8px 8px 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    >a:hover, > div.flag:hover {
+      right:0px;
+    }
+    a.mail {
+      background-image: url(/images/icon-envelope.png);
+    }
+    a#fav-share {
+      background-image: url(/images/fav-star-off.png);
+    }
+    a.twitter {
+      background-image: url(/images/icon-twitter.png) ;
+    }
+    a.facebook {
+      background-image: url(/images/icon-fb.gif);
+    }
+    a.craigslist {
+      background-image: url(/images/craigslist.png);
+    }
+    div.flag {
+      background-image: url(/images/flag.png);
+      background-position: 15px 8px;
+    }
+    form.flag {
+      margin: 8px 0;
+      display: none;
+    }
+  }
+
+  #jobdetail-nav {
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #E9E9E9;
+    float: left;
+    width: 100%;
+    a.returntolist {
+      float: left;
+    }
+    #prev-job {
+      padding-left: 25px;
+      background: url(/images/arrow-left.png) no-repeat 10px 3px;
+      float: left;
+    }
+    #next-job {
+      padding-right: 16px;
+      background: url(/images/arrow-right.png) no-repeat right 3px;
+      float: right;
+    }
+    a.returntolist, a.double-arrow-left {
+      background: url(/images/dbl-arrow-left.png) no-repeat 0px 3px;
+      display: inline-block;
+      padding: 0 0 4px 26px;
+    }
+  }
+
+  .trip_details {
+  width: 500px;
+  float:left;
+  }
+  #trip_title {
+    padding: 0;
+    font-size:x-large;
+    span {
+    }
+  }
+  ul#trip_options {
+    width: 500px;
+    float: left;
+    border-top: 2px solid #777;
+    //border: 1px solid #D9D9D6;
+    //padding: 8px 4px;
+    //.rounded_corners;
+    li {
+      width: inherit;
+      float: left;
+      display: block;
+    }
+    li span.property, li.head {
+      width: 180px;
+      float: left;
+      text-align: left;
+      padding: 4px 0 4px 10px;
+      text-transform: capitalize;
+    }
+    li span.prop_val {
+      max-width: 280px;
+      float: right;
+      text-align: right;
+      padding: 4px 4px 4px 0;
+      word-wrap: break-word;
+    }
+    li span.unused_val {
+      color:gray;
+      font-style: italic;
+    }
+    li:nth-child(even) {
+      background: @grayish;
+    }
+  }
+  #summary {
+    padding: 10px 10px 1px 35px;
+    background: @grayish url(/images/quotes.png) no-repeat 10px 13px;
+    min-height: 5em;
+    width: 455px;
+    margin: 0 0 0 0px;
+    float:left;
+  }
+  #static_map {
+    width: 400px;
+    height:350px;
+  }
+  #right_wrap {
+    float:right;
+    width:400px;
+  }
+} 

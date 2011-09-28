@@ -1,0 +1,164 @@
+@footer_height: 76px;
+html, body {height: 100%;}
+#wrapper {min-height: 100%;}
+#content {
+  overflow:auto;
+  padding-bottom: @footer_height;
+  width:1000px;
+  margin: 0 auto;
+  }  /* must be same height as the footer */
+.centered_shadowed_container {
+  padding: 10px;
+  margin: 10px;
+  background: white;
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  -o-box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+footer {
+  position: relative;
+  margin-top: -@footer_height; /* negative value of footer height */
+  height: @footer_height;
+  clear:both;
+  background:black;
+  color:white;
+  copyright {
+    clear: both;
+  }
+} 
+
+/*Opera Fix*/
+body:before {
+  content:"";
+  height:100%;
+  float:left;
+  width:0;
+  margin-top:-32767px;
+}
+
+body {
+  font-family: "Lucida Grande","Lucida Sans",Arial,sans-serif;
+}
+.rounded_corners (@radius: 5px) {
+  border-radius: @radius;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+}
+
+#directionsPanel {
+  margin: 0 5%;
+  float: left;
+  clear: both;
+}
+.clear {
+  clear:both;
+}
+.rule {
+  clear: both;
+  margin: 15px 0;
+  height: 0;
+  overflow: hidden;
+  border-bottom: 1px solid #DDD;
+}
+.ui-autocomplete {
+  max-height: 100px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: hidden;
+  /* add padding to account for vertical scrollbar */
+  padding-right: 20px;
+}
+header {
+  border-bottom: 1px solid #ddd;
+  overflow: hidden;
+  h1 {
+    font-size: large;
+    font-weight: normal;
+    margin: .4em;
+    float: left;
+    letter-spacing: -0.09em;
+  }
+  nav {
+    float: right;
+    a {
+
+    }
+    ul {
+      padding-left: 0;
+      list-style: none;
+      margin: 8px 0 5px 0;
+      li {
+        display: inline;
+        margin-left: 10px;
+      }
+    }
+  }
+  }
+
+/* Landing Page */
+#find_a_ride, #post_a_ride {
+  float: left;
+  margin: 100px 20px;
+}
+/** Landing Page */
+
+// Straight from touring
+#detail_panel {
+  position: absolute;
+  left: 0;
+  width:35%;
+  height: 100%;
+  overflow: auto;
+  margin-top: .5em;
+  z-index: 2;
+}
+
+span.hint {
+  font-size: x-small;
+  display: block;
+  clear: both;
+  margin-left: 30px;
+  margin-bottom: 0.55em;
+}
+.quiet {
+  color: #A0A098;
+}
+.adp-summary {
+  cursor: pointer;
+  .adp-directions {
+    display:none;  
+  }
+}
+// Home Show Page //
+.highlighted-week {
+  color: green;
+  background: red;
+}
+// end Home Show Page //
+
+#craigslist_container {
+  float:left;
+  width:250px;
+  height:400px;
+  overflow-y:auto;
+  .craigslist_item {
+    background: #eee;
+    background-color: -webkit-gradient(linear, left top, left bottom, from(white), to(white), color-stop(0.5, #EEE))
+  }
+  .approved {
+    background: blue;
+    background-color: -webkit-gradient(linear, left top, left bottom, from(white), to(white), color-stop(0.5, #DD0));
+  }
+  .current_item {
+    background: yellow;
+    background-color: -webkit-gradient(linear, left top, left bottom, from(white), to(white), color-stop(0.5, #DD0));
+  }
+}
+#map_canvas {
+  width: 700px;
+  height: 400px;
+  float: right;
+}
