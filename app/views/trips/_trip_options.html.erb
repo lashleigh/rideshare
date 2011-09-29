@@ -1,5 +1,4 @@
 <ul id="trip_options">
-  <li class="head">Details</li>
   <% @trip.trip_options.all_used_attributes.each do |opt, val| %>
     <li class="opt"> <span class="property"><%= opt.gsub("_", " ") %>:</span> 
     <span class="edit_trip_options prop_val" id="<%=opt%>"><%=@trip.trip_options.view_for(opt)%></span></li>

@@ -14,13 +14,19 @@ class TripOptions
 
   def all_used_attributes
     #self.keys.reject{|k, v| self[k].nil? or k == "_id"}.map{|k,v| [k, self[k]]}
-    self.attributes.reject{|k, v| k=="_id" or v==nil}
+    self.all_attributes.reject{|k, v| v==nil}
   end
   def all_unused_attributes
-    self.attributes.select{|k, v| k!="_id" and v==nil}
+    self.all_attributes.select{|k, v| v==nil}
   end
   def all_attributes
-    self.attributes.select{|k, v| k!="_id"}
+    {"cost" => cost, 
+     "shared_driving" => shared_driving, 
+     "max_passengers" => max_passengers, 
+     "max_luggage" => max_luggage, 
+     "car_type" => car_type,
+     "smoke_breaks" => smoke_breaks
+    } #self.attributes.select{|k, v| k!="_id"}
   end
 
   def choose_from
