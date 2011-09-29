@@ -65,9 +65,14 @@ class TripsControllerTest < ActionController::TestCase
     put(:update, {:id => @trip.to_param, :trip => @trip.attributes}, {:user_id => @trip.user.id})
     assert_redirected_to trip_path(assigns(:trip))
   end
-  test "should not update trip" do
+  test "should not update trip missing user" do
     put :update, :id => @trip.to_param, :trip => @trip.attributes
     assert_redirected_to root_path 
+  end
+  test "should not update trip bad data" do
+    put(:update, {:id => @trip.to_param, :trip => {:route => nil}}, {:user_id => @trip.user.id})
+    assert !@trip.route_changed?
+    assert_response :success
   end
 
   test "should destroy trip" do

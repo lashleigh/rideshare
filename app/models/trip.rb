@@ -2,7 +2,7 @@ class Trip
   include MongoMapper::Document
   before_create :create_google_and_trip_options
   before_create :set_start_date_to_midnight
-  validate   :recalculate_bounds
+  before_save   :recalculate_bounds
 
   key :origin,       String, :required => true
   key :destination,  String, :required => true
@@ -10,7 +10,7 @@ class Trip
   key :duration,     Float,  :required => true #in hours
   key :route,        Array,  :required => true, :typecast => 'Array'
   key :encoded_poly, String, :required => true
-  key :bounds,       Hash
+  key :craigslist_ids,  Array
  
   key :start_date, Time, :required => true
   key :start_time, String, :in => ["any", "e", "m", "a", "l"], :default => "any"
@@ -198,24 +198,10 @@ class Trip
     return bound
   end
   def bounds_to_box(radius = 0.0)
-    if bounds.size ===4 
-      lat_diff = radius/69.0
-      lng_diff = radius/69.0
-      [[bounds['lat_min']-lat_diff, bounds['lng_min']-lng_diff], [bounds['lat_max']+lat_diff, bounds['lng_max']+lng_diff]]
-    else 
-      self.bounds = self.get_bounds
-      self.save
-      self.bounds_to_box(radius)
-    end
-  end
-  def point_in_bounds(point)
-    if bounds.size === 4
-      (bounds["lng_min"]..bounds["lng_max"]).include? point[1] and (bounds["lat_min"]..bounds["lat_max"]).include? point[0]
-    else
-      self.bounds = self.get_bounds
-      self.save
-      self.point_in_bounds(point)
-    end
+    bounds = self.get_bounds
+    lat_diff = radius/69.0
+    lng_diff = radius/69.0
+    [[bounds['lat_min']-lat_diff, bounds['lng_min']-lng_diff], [bounds['lat_max']+lat_diff, bounds['lng_max']+lng_diff]]
   end
 
   def distance_between_points
@@ -235,6 +221,8 @@ class Trip
     self.start_date = self.start_date.utc.midnight
   end
   def recalculate_bounds
-    self.assign(:bounds => self.get_bounds)
+    if self.route_changed?
+      self.assign({:craigslist_ids => Craigslist.find_all_near_route(self)})
+    end
   end
 end

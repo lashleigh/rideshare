@@ -75,7 +75,10 @@ class TripsController < ApplicationController
   end
   def craigslist
     @trip = Trip.find(params[:id])
-    @craigslists = Craigslist.find_all_near_route(@trip)
+    @craigslists =[] #= Craigslist.where(:id => {'$in' => @trip.craigslists}).all #find_all_near_route(@trip)
+    @trip.craigslist_ids.each do |c|
+      @craigslists.push(Craigslist.find(c))
+    end
 
     respond_to do |format|
       format.html #craigslist.html.erb
