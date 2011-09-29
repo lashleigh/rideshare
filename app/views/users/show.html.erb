@@ -7,10 +7,12 @@
         <dd class="fn"><%= val%></dd>
       </dl>
     <% end %>
-    <dl>
-      <dt>Website </dt>
-      <dd class="fn"><%= link_to @user.pretty_website, @user.website %></dd>
-    </dl>
+    <% if @user.website %>
+      <dl>
+        <dt>Website </dt>
+        <dd class="fn"><%= link_to @user.pretty_website, @user.website %></dd>
+      </dl>
+    <% end %>
     <dl>
       <dt>Last Login</dt>
       <dd class="fn"><%= time_ago_in_words(@user.updated_at)%> ago</dd>

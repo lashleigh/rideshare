@@ -11,7 +11,7 @@ class TripsControllerTest < ActionController::TestCase
   end
 
   test "should get search" do
-    get :search
+    get(:search, {:origin => "Seattle, WA"})
     assert_response :success
     assert_not_nil assigns(:trips)
     assert_not_nil assigns(:search)

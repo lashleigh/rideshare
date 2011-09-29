@@ -1,7 +1,8 @@
 class Trip
   include MongoMapper::Document
   before_create :create_google_and_trip_options
-  before_save :set_start_date_to_midnight
+  before_create :set_start_date_to_midnight
+  validate   :recalculate_bounds
 
   key :origin,       String, :required => true
   key :destination,  String, :required => true
@@ -233,7 +234,7 @@ class Trip
   def set_start_date_to_midnight
     self.start_date = self.start_date.utc.midnight
   end
-  def reset_bounds
-    self.bounds = self.get_bounds
+  def recalculate_bounds
+    self.assign(:bounds => self.get_bounds)
   end
 end

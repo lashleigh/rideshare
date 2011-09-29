@@ -87,20 +87,16 @@ class TripsController < ApplicationController
   # GET /trips/1.xml
   def show
     @trip = Trip.find(params[:id])
-    @owner = user_can_modify(@trip) 
-
-    if session[:search]
-      unless session[:search].index(params[:id]) == 0 || -1
-        @prev = Trip.find(session[:search][session[:search].index(params[:id]) - 1]) 
-      end
-      unless session[:search].index(params[:id]) == session[:search].length-1 ||-1
-        @next = Trip.find(session[:search][session[:search].index(params[:id]) + 1]) 
-      end
-    end
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @trip }
+      if @trip
+        @owner = user_can_modify(@trip) 
+        format.html # show.html.erb
+        format.xml  { render :xml => @trip }
+      else
+        format.html { redirect_to root_url, :status => 301} # show.html.erb
+        format.xml  { render :xml => @trip }
+      end
     end
   end
 
@@ -143,11 +139,9 @@ class TripsController < ApplicationController
   # PUT /trips/1.xml
   def update
     @trip = Trip.find(params[:id])
-    @trip.assign(params[:trip])
-    @trip.bounds = @trip.get_bounds
 
     respond_to do |format|
-      if user_can_modify(@trip) and @trip.save
+      if user_can_modify(@trip) and @trip.update_attributes(params[:trip])
         format.html { redirect_to(@trip, :notice => 'Trip was successfully updated.') }
         format.xml  { head :ok }
         format.json { head :ok }
