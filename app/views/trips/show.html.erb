@@ -17,9 +17,9 @@
   </div>
   <div class="trip_details">
     <div id="trip_title">
-      <span><%= link_to @trip.short_title({:origin=>true}), home_show_path({:origin => @trip.origin}) %></span>
+      <span><%= link_to @trip.short_title({:origin=>true}), search_path({:origin => @trip.origin}) %></span>
       to
-      <span><%= link_to @trip.short_title({:destination=>true}), home_show_path({:destination => @trip.destination}) %></span>
+      <span><%= link_to @trip.short_title({:destination=>true}), search_path({:destination => @trip.destination}) %></span>
     </div>
     <%= render :partial => 'owner' %>
     <% if @owner || @trip.summary%>
