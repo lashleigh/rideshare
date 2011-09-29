@@ -1,6 +1,6 @@
 <% if @owner %>
-  <%= javascript_include_tag 'jquery.jeditable.mini' %>
-  <%= javascript_include_tag 'trip_show' %>
+  <%= javascript_include_tag 'jquery.jeditable.mini.js' %>
+  <%= javascript_include_tag 'trip_show.js' %>
   <script type="text/javascript">
     var trip = <%= @trip.to_json.html_safe%>;
     var ops = <%= @trip.trip_options.choose_from.to_json.html_safe %>;
