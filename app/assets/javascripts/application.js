@@ -6,6 +6,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require "jquery-ui-1.8.16.custom.min.js"
 //no dont////= require_tree .
 
 // Removes the overlays from the map, but keeps them in the array
