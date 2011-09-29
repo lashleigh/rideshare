@@ -13,8 +13,6 @@ flag.png: flag-40e9d7ff315763b3d35ff4d63042e6da.png
 gh-icons.png: gh-icons-032b88986e95b87750a33dcec0659ab8.png
 ghostVertex.png: ghostVertex-f86c16d1441478999d0a8ca69d580a69.png
 ghostVertexOver.png: ghostVertexOver-941e587bf4dac6f0c7e093ec2a029948.png
-home-town.png: home-town-59ff3ceae61fbd57f2483c61c337d9b9.png
-homeless.jpeg: homeless-1a5df391d754956774a118ee8bb6787f.jpeg
 icon-envelope.png: icon-envelope-0f435271882c9c47883be702e7533fee.png
 icon-fb.gif: icon-fb-724487bca7fe646f651bd17336f0a4eb.gif
 icon-twitter.png: icon-twitter-9c3d0c84945bd9734ecb8149efb66031.png
@@ -36,3 +34,4 @@ jquery-ui.min.js: jquery-ui-7e33882a28fc84ad0e0e47e46cbf901c.min.js
 jquery.min.js: jquery-8a50feed8d29566738ad005e19fe1c2d.min.js
 application.js: application-42de3703f2c08f917fe798593a8c043f.js
 application.css: application-d0235cfda61be374f3bb7fb9e738f443.css
+trip_show.js: trip_show-17b264efb711dbec30f8f3448c363405.js
