@@ -5,7 +5,7 @@ FactoryGirl.define do
     destination 'San Diego, CA'
     distance    '3098218.0'
     duration    '112080.0'
-    route        [[0,0],[1,1],[2,2]]
+    route        "[[0,0],[1,1],[2,2]]"
     encoded_poly "poly"
     start_flexibility "exact"
 

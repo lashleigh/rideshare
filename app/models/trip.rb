@@ -27,8 +27,6 @@ class Trip
   # ensure_index [[:route, '2d']]
   timestamps!
 
-  scope :contains_longitude, lambda {|lng| where('bounds.lng_min' => {'$lte' => lng}, 'bounds.lng_max' => {'$gte' => lng} )}
-  scope :contains_latitude,  lambda {|lat| where('bounds.lat_min' => {'$lte' => lat}, 'bounds.lat_max' => {'$gte' => lat} )}
   scope :future, where(:start_date.gte => Time.now) 
   scope :by_duration_in_hours, lambda {|low, high| where(:duration.gte => low*3600,  :duration.lte => high*3600) }
   scope :by_distance_in_miles, lambda {|low, high| where(:distance.gte => low*1609.344, :distance.lte => high*1609.344) }
