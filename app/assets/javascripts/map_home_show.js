@@ -3,7 +3,7 @@ var infoWindow = new google.maps.InfoWindow();
 var bounds = new google.maps.LatLngBounds();
 var base_height;
 var current;
-var objects = []
+var objects = {'starting' : [], 'ending' : [], 'passing_through' : [] };
 
 $(function() {
   //set_heights()
@@ -22,33 +22,21 @@ $(function() {
     }
     map.fitBounds(bounds);
   }
-  $('.direction').each(function() {
-    console.log(this);
-  })
-  $('#starting').toggle(function() {
-    $(this).prop('checked', false)
-    objects.filter(function(t) {return t.direction > 0.85;}).forEach(function(t) {t.hide();})
-  }, function() {
-    $(this).prop('checked', true)
-    objects.filter(function(t) {return t.direction > 0.85;}).forEach(function(t) {t.show();})
+  ['starting', 'ending', 'passing_through'].forEach(function(dir) {
+    $('#'+dir).click(function() {
+      if(!$(this).prop('checked')) {
+        objects[dir].forEach(function(t) {t.hide();})
+      } else {
+        objects[dir].forEach(function(t) {t.show();})
+      }
+    });
+    if(objects[dir].length === 0) {
+      //$('#'+dir).prop('checked', false);
+      $('#'+dir).prop('disabled', true);
+      $('#'+dir).prev().css('opacity', 0.3);
+    }
   });
- 
-  $('#ending').toggle(function() {
-    $('#ending').prop('checked', false)
-    objects.filter(function(t) {return t.direction < 0.15; }).forEach(function(t) {t.hide();})
-  }, function() {
-    $('#ending').prop('checked', true)
-    objects.filter(function(t) {return t.direction < 0.15; }).forEach(function(t) {t.show();})
-  });
-  $('#passing_through').toggle(function() {
-    console.log('checkbox', this)
-    $('#passing_through').prop('checked', false)
-    objects.filter(function(t) {return t.direction > 0.15 && t.direction < 0.85;}).forEach(function(t) {t.hide();})
-  }, function() {
-    console.log('uncheckbox', this)
-    $('#passing_through').prop('checked', true)
-    objects.filter(function(t) {return t.direction > 0.15 && t.direction < 0.85;}).forEach(function(t) {t.show();})
-  })
+
 });
 function Trip(trip, index) {
   var me = this;
@@ -66,7 +54,16 @@ function Trip(trip, index) {
   $(me.trip_id).mouseover(function() {
     me.highlight();
   });
-  objects.push(this);
+  me.direct();
+}
+Trip.prototype.direct = function() {
+  if(this.direction < 0.15) {
+    objects['ending'].push(this);
+  } else if(this.direction > 0.85) {
+    objects['starting'].push(this);
+  } else {
+    objects['passing_through'].push(this);
+  }
 }
 Trip.prototype.highlight = function() {
   current ? current.cancel() : false;
@@ -76,14 +73,14 @@ Trip.prototype.highlight = function() {
 }
 Trip.prototype.cancel = function() {
   $(this.trip_id).removeClass("current_item");
-  this.route.setOptions({strokeWeight: 4, strokeOpacity: 0.9, zIndex : this.index});
+  this.route.setOptions({strokeWeight: 4, strokeOpacity: 0.5, zIndex : this.index});
 }
 Trip.prototype.hide = function() {
-  $(this.trip_id).hide();
+  $(this.trip_id).css('opacity', 0.15);
   this.route.setMap(null);
 }
 Trip.prototype.show = function() {
-  $(this.trip_id).show();
+  $(this.trip_id).css('opacity', 1.0);
   this.route.setMap(map);
 }
 function drawRoute(trip_object) {
@@ -92,7 +89,7 @@ function drawRoute(trip_object) {
   var mapLine = new google.maps.Polyline({
       map : map,
       strokeColor   : color,
-      strokeOpacity : 0.9,
+      strokeOpacity : 0.5,
       strokeWeight  : 4,
       path: trip.route.map(function(c) {return new google.maps.LatLng(c[0], c[1]); }) 
   });
