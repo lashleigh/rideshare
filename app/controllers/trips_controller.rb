@@ -4,12 +4,7 @@ class TripsController < ApplicationController
   # GET /trips.xml
   def explore
     @center = Geocoder.coordinates(params[:city])
-    if @center
-      @trips = Trip.where(:route => { '$near' => @center, '$maxDistance' => 1 }).all.uniq
-    else
-      @trips = Trip.all
-    end
-
+    @trips = Trip.nearest_with_index(@center) 
   end
 
   def update_summary

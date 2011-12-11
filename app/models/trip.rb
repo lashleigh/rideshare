@@ -210,6 +210,26 @@ class Trip
     min = distances.min
     return {"avg" => avg, "max" => max, "min" => min}
   end
+
+  def self.nearest_with_index(coords)
+    if coords and coords.length === 2
+      res = MongoMapper.database.command({ 'geoNear' => "trips", 'near' => coords, 'maxDistance' => 2, 'includeLocs' => true, 'uniqueDocs' => true }) 
+      results = []
+      if res['results'].length > 0
+        res['results'].each_with_index do |trip, index|
+          closest_coord = trip['loc']
+          closest_index = trip['obj']['route'].index([closest_coord['0'], closest_coord['1']])
+          results.push(Trip.find(trip['obj']['_id']))
+          results[index]['direction'] = (closest_index - trip['obj']['route'].length).abs/trip['obj']['route'].length.to_f
+        end
+      end
+    else 
+      results = Trip.sort(:start_date).all
+      results.each {|r| r['direction'] = 1.0 }
+    end
+    return results
+  end
+
   private
   def create_google_and_trip_options
     self.google_options = GoogleOptions.new

@@ -1,4 +1,5 @@
 <%= javascript_include_tag 'map_home_show' %>
+<%= javascript_include_tag 'makeColor' %>
 <script type="text/javascript">
   var trips = <%= @trips.to_json.html_safe %>;
   var cities = <%= (Trip.all.map{|t| t.origin} + Trip.all.map{|t| t.destination}).uniq.to_json.html_safe%>; 
@@ -20,9 +21,15 @@
   <%= link_to 'Show options', '#' %>
 <% end %>
 <div id="trips_container" style="float:left;width:450px;height:500px;overflow-y:auto;">
+  <%= label_tag 'starting' %>
+  <%= check_box_tag 'starting', 'starting', true, :class=>'direction' %>
+  <%= label_tag 'ending' %>
+  <%= check_box_tag 'ending', 'ending', true, :class=>'direction' %>
+  <%= label_tag 'passing through' %>
+  <%= check_box_tag 'passing through', 'though', true, :class=>'direction' %>
   <% @trips.each do |trip| %>
     <div id="trip_<%=trip.id%>" class="trip_item" style="padding-left:12px;">
-      <%=link_to trip.short_title, trip %>
+      <%=link_to trip.short_title, trip %> , <%= trip.direction.round(2) %>
     </div>
   <% end %>
 </div>

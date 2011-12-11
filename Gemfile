@@ -5,9 +5,10 @@ gem 'bson_ext'
 gem "mongo_mapper"
 gem 'geocoder'
 gem 'json'
-gem "omniauth"
+gem 'omniauth-twitter'
 gem 'will_paginate', '~> 3.0'
 gem 'feedzirra'
+gem 'minitest'
 group :development, :test do  
   gem "factory_girl_rails"
   gem 'rspec-rails'
