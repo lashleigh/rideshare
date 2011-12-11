@@ -2,6 +2,16 @@ class TripsController < ApplicationController
   before_filter :require_user, :except => [:index, :show, :search, :craigslist]
   # GET /trips
   # GET /trips.xml
+  def explore
+    @center = Geocoder.coordinates(params[:city])
+    if @center
+      @trips = Trip.where(:route => { '$near' => @center, '$maxDistance' => 1 }).all.uniq
+    else
+      @trips = Trip.all
+    end
+
+  end
+
   def update_summary
     @trip = Trip.find(params[:id])
     @trip.assign({params[:type] => params[:value]})

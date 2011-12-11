@@ -1,10 +1,7 @@
 <%= javascript_include_tag 'map_home_show' %>
 <script type="text/javascript">
-  var center = <%= @center.to_json.html_safe %>;
   var trips = <%= @trips.to_json.html_safe %>;
-
   var cities = <%= (Trip.all.map{|t| t.origin} + Trip.all.map{|t| t.destination}).uniq.to_json.html_safe%>; 
-
   $(function() {
     $("#city").autocomplete({
       source: cities
@@ -22,6 +19,13 @@
   <%= submit_tag 'Explore' %>
   <%= link_to 'Show options', '#' %>
 <% end %>
+<div id="trips_container" style="float:left;width:450px;height:500px;overflow-y:auto;">
+  <% @trips.each do |trip| %>
+    <div id="trip_<%=trip.id%>" class="trip_item" style="padding-left:12px;">
+      <%=link_to trip.short_title, trip %>
+    </div>
+  <% end %>
+</div>
 
 <div id="map_canvas" style="width:500px; height: 500px;"> </div>
 

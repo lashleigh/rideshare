@@ -1,4 +1,4 @@
-function Craigslist(craigslist, heights) {
+function Craigslist(craigslist) {
   this.raw = craigslist;
   this.craigs_id = "#craigs_"+craigslist.id;
   this.point = coords_to_google_point(craigslist.coords);
