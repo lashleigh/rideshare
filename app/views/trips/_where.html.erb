@@ -1,7 +1,7 @@
 <%= javascript_include_tag 'new_trip_map' %>
 <%= javascript_include_tag 'autocomplete' %>
 <script type="text/javascript">
-  var trip = <%= @trip.to_json.html_safe%>;
+  var trip = <%= trip.to_json.html_safe%>;
 </script>
 <div id="where_form">
   <%= form_for(trip) do |f| %>
@@ -36,6 +36,8 @@
                                     ["2 days before and after","two"], 
                                     ["3 days before and after","three"]], {:selected => @trip.start_flexibility || "three"} %></br>
     <div class="hidden_fields">
+      <%= f.hidden_field :url %>
+      <%= f.hidden_field :_type %>
       <%= f.hidden_field :distance %>
       <%= f.hidden_field :duration %>
       <%= f.hidden_field :google_options %>
@@ -47,6 +49,7 @@
       <button class="big disable button" id="trip_submit" disabled="disabled" type="submit">Save</button>
       <%= link_to 'Back', :back, :class=>"big button", :id=>"trip_back" %>
     </div>
+    <%= f.text_area :summary %>
   <% end %>
   <div id="directionsPanel" style="display:none;"></div>
 </div>

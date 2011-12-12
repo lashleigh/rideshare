@@ -14,7 +14,7 @@ class RequestsController < ApplicationController
     @trip = @request.migrate
 
     respond_to do |format|
-      format.html { redirect_to edit_trip_path(@trip) }
+      format.html # { redirect_to edit_trip_path(@trip) }
       format.xml  { render :xml => @request }
     end
   end

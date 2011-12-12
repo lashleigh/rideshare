@@ -129,6 +129,8 @@ class TripsController < ApplicationController
   def create
     @trip = Trip.new(params[:trip])
     @trip.user = @current_user
+    r = Request.find_by_url(@trip.url)
+    if r; r.destroy; end
 
     respond_to do |format|
       if @trip.save

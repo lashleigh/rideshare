@@ -1,34 +1,21 @@
-class Trip
-  include MongoMapper::Document
+class Trip < Ride
   before_create :create_google_and_trip_options
   before_create :set_start_date_to_midnight
   before_save   :recalculate_bounds
 
-  key :origin,       String, :required => false
-  key :destination,  String, :required => false
-  key :distance,     Float,  :required => false #in meters
-  key :duration,     Float,  :required => false #in hours
-  key :route,        Array,  :required => false, :typecast => 'Array'
-  key :encoded_poly, String, :required => false
+  key :distance,        Float,  :required => true #in meters
+  key :duration,        Float,  :required => true #in hours
+  key :route,           Array,  :required => true, :typecast => 'Array'
+  key :encoded_poly,    String, :required => true
   key :craigslist_ids,  Array
- 
-  key :start_date, Time, :required => false
-  key :start_time, String, :in => ["any", "e", "m", "a", "l"], :default => "any"
-  key :start_flexibility, String, :in => ["exact", "onebefore", "oneafter", "one", "two", "three"], :default => "one"
-  key :summary, String 
-  key :tags, Array
-  key :views, Integer, :default => 0
-  key :url, String
+  timestamps!
 
   one :google_options
   one :trip_options
   belongs_to :user
-  # many :routes
-  # validates_presence_of :origin, :destination
+  many :craigslists, :in => :craigslist_ids
   ensure_index [[:route, '2d']]
-  timestamps!
 
-  scope :future, where(:start_date.gte => Time.now) 
   scope :by_duration_in_hours, lambda {|low, high| where(:duration.gte => low*3600,  :duration.lte => high*3600) }
   scope :by_distance_in_miles, lambda {|low, high| where(:distance.gte => low*1609.344, :distance.lte => high*1609.344) }
 
@@ -50,6 +37,14 @@ class Trip
     else
       super(x)
     end
+  end
+  def self.starts_near(coords)
+    res = self.nearest_with_index(coords)
+    res.select {|r| r.direction < 0.1 }
+  end
+  def self.ends_near(coords)
+    res = self.nearest_with_index(coords)
+    res.select {|r| r.direction < 0.9 }
   end
   def self.starts_at(coords, options = {}) 
     options[:radius] ||= (options[:origin_radius] || 60)

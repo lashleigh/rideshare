@@ -16,8 +16,8 @@ var selectedMode = "DRIVING"
 var unit_system = "IMPERIAL"
 
 $(function() {
-  on_load();
   geocoder = new google.maps.Geocoder();
+  on_load();
 
   var myOptions = {
     zoom: 4,
@@ -47,6 +47,7 @@ function on_load() {
 
   $("#trip_origin").bind("focusout", origin_destination_not_blank);
   $("#trip_destination").bind("focusout", origin_destination_not_blank);
+  $("#trip_start_date").bind("focusout", origin_destination_not_blank);
   $("#trip_start_date").datepicker({
      dateFormat: 'D, dd M yy', 
      //defaultDate: +2,

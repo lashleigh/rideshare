@@ -1,6 +1,5 @@
 <% @requests.each do |r| %>
   <div class="request">
-    <%= link_to r.title, r.url %>
     <%= link_to 'Edit Request', edit_request_path(r), :class => 'big button' %>
     <%= link_to 'Migrate to trip', migrate_path(r), :class => 'big button' %>
     <%= link_to 'Delete Trip', r, :confirm => 'Are you sure?', :method => :delete, :class=> 'big button danger' %>
