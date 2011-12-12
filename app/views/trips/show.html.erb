@@ -23,7 +23,7 @@
     </div>
     <%= render :partial => 'owner' %>
     <% if @owner || @trip.summary%>
-      <div id="summary" class="edit_summary"><%= @trip.summary %></div>
+      <div id="summary" class="edit_summary"><%= red(@trip.summary) %></div>
     <% end %>
     <%= render 'trip_options' %>
   </div>

@@ -20,4 +20,9 @@ class ApplicationController < ActionController::Base
       redirect_to root_path
     end
   end
+
+  def user_can_modify(thing)
+    thing.user == @current_user || (@current_user and @current_user.admin?)
+  end
+
 end

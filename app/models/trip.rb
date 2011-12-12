@@ -4,20 +4,21 @@ class Trip
   before_create :set_start_date_to_midnight
   before_save   :recalculate_bounds
 
-  key :origin,       String, :required => true
-  key :destination,  String, :required => true
-  key :distance,     Float,  :required => true #in meters
-  key :duration,     Float,  :required => true #in hours
-  key :route,        Array,  :required => true, :typecast => 'Array'
-  key :encoded_poly, String, :required => true
+  key :origin,       String, :required => false
+  key :destination,  String, :required => false
+  key :distance,     Float,  :required => false #in meters
+  key :duration,     Float,  :required => false #in hours
+  key :route,        Array,  :required => false, :typecast => 'Array'
+  key :encoded_poly, String, :required => false
   key :craigslist_ids,  Array
  
-  key :start_date, Time, :required => true
+  key :start_date, Time, :required => false
   key :start_time, String, :in => ["any", "e", "m", "a", "l"], :default => "any"
-  key :start_flexibility, String, :in => ["exact", "onebefore", "oneafter", "one", "two", "three"]
+  key :start_flexibility, String, :in => ["exact", "onebefore", "oneafter", "one", "two", "three"], :default => "one"
   key :summary, String 
   key :tags, Array
   key :views, Integer, :default => 0
+  key :url, String
 
   one :google_options
   one :trip_options

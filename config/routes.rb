@@ -3,7 +3,10 @@ Rideshare::Application.routes.draw do
   resources :users
   match 'craigslists/batch_import' => 'craigslists#batch_import'
   match 'craigslists/batch_save' => 'craigslists#batch_save'
+  match 'craigslists/feeds' => 'craigslists#feeds'
   resources :craigslists
+  resources :requests
+  match 'requests/:id/migrate' => 'requests#migrate', :as => :migrate
 
   match 'home/show' => 'home#show'
 

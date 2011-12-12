@@ -177,10 +177,4 @@ class TripsController < ApplicationController
       end
     end
   end
-
-  private 
-  def user_can_modify(trip)
-    trip.user == @current_user || (@current_user and @current_user.admin?)
-  end
-
 end

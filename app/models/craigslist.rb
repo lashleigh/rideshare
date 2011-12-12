@@ -6,9 +6,12 @@ class Craigslist
   key :href,  String, :required => true
   key :coords, Array, :required => true
   key :approved, Boolean, :default => false
+  key :last_feed, Time
   ensure_index [[ :coords, '2d']]
 
   validate :coordinate_range
+  many :requests
+
   def coords=(x)
     if String === x and !x.blank?
       super(ActiveSupport::JSON.decode(x))
@@ -23,6 +26,23 @@ class Craigslist
     unless (-180..180).include? coords[1]
       errors.add(:origin_coords, "Longitude is not formatted properly")
     end
+  end
+  def feed_url
+    href+'rid/index.rss'
+  end
+  def import_feed
+    feedzirra = Feedzirra::Feed.fetch_and_parse(self.feed_url).entries
+    ashleigh_id = User.find_by_name_and_admin('ashleigh baumgardner', true).id
+    index = 0
+    entry = feedzirra[0]
+    while entry and entry.published and entry.published > self.last_feed
+      Request.from_craigslist(entry, self, ashleigh_id)
+      index+=1
+      entry = feedzirra[index]
+    end
+    self.last_feed = feedzirra[0].published
+    self.save
+    return self.requests
   end
 
   def self.find_all_near_route(trip, options={})

@@ -9,6 +9,7 @@ gem 'omniauth-twitter'
 gem 'will_paginate', '~> 3.0'
 gem 'feedzirra'
 gem 'minitest'
+gem 'RedCloth'
 group :development, :test do  
   gem "factory_girl_rails"
   gem 'rspec-rails'

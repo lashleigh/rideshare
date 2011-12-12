@@ -20,6 +20,11 @@ class CraigslistsController < ApplicationController
       end
     end
   end
+  def feeds
+    @city = Craigslist.find_by_city('bellingham')
+    @feed = @city.import_feed
+  end
+
   def batch_save
     @craigslists = ActiveSupport::JSON::decode(params[:craigslists])
     @new =[]
