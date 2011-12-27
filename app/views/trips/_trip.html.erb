@@ -14,7 +14,7 @@
       <%= link_to trip.user.name, trip.user %>
     </span>
     <p class="date">Departing <%=trip.start_date.to_formatted_s(:custom_short)%> </p>
-    <p class="summary"><%=trip.summary%></p>
+    <p class="summary"><%=red(trip.summary)%></p>
   </div>
 </div>
 

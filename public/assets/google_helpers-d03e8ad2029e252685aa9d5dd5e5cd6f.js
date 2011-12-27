@@ -1,1 +1,0 @@
-function coords_to_google_point(a){return new google.maps.LatLng(a[0],a[1])}function point_to_coords(a){return"["+[a.lat(),a.lng()]+"]"}

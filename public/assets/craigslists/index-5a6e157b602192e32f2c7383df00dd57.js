@@ -1,1 +1,0 @@
-var map,current_city,base_height,cities=[];$(function(){var a={zoom:4,mapTypeId:google.maps.MapTypeId.ROADMAP,center:coords_to_google_point([41.33288934687839,-96.05537127265626])};map=new google.maps.Map(document.getElementById("map_canvas"),a),base_height=-1*$("#craigslist_container").height()/2;for(var b=0;b<craigslists.length;b++)cities.push(new Craigslist(craigslists[b]))})
