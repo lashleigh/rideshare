@@ -1,0 +1,2 @@
+// Do Awesome Things With Colors!
+function makeColor(a){function b(a){a%=1530;var b;return a<255?b=a:a<765?b=255:a<1020?b=255-(a-765):b=0,b=b.toString(16),b.length==1?"0"+b:b}function c(a){return b(a+510)}function d(a){return b(a)}function e(a){return b(a+1020)}return a=Math.floor(a)||Math.floor(Math.random()*1530),"#"+c(a)+d(a)+e(a)}
